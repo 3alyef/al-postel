@@ -1,4 +1,4 @@
-import { Locale } from "@/i18n-config";
+import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 
 export default async function Login({

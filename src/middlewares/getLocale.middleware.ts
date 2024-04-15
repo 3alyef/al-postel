@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-import { i18n } from '@/i18n-config';
+import { i18n } from '@/i18n';
 
 export default function getLocale(request: NextRequest): string | undefined {
     // O negociador espera um objeto simples, então precisamos transformar os cabeçalhos

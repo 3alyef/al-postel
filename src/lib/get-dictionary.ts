@@ -1,5 +1,5 @@
 import 'server-only'
-import type { Locale } from '@/i18n-config'
+import type { Locale } from '@/i18n'
 
 // Enumeramos todos os dicionários aqui para melhor suporte a linting e typescript
 // Também obtemos a importação padrão para tipos
