@@ -16,7 +16,7 @@ export default async function Login({
           <div className="loginMenu">
 
             <div className="questionMarkContainer">
-              <button className="questionMark">?</button>
+              <button className="questionMark _animation_questionMark">?</button>
             </div>
 
             <div className="optionsLogin">
