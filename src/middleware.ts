@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
       )
     )
   }
-
+  /*
   if (pathname.match(/^\/[a-z]{2}\/?$/)) { // Verificar se a rota é `/:locale/`
     const locale = pathname.split('/')[1];
     return NextResponse.redirect(
@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
         request.url
       )
     );
-  }
+  }*/
 }
 
 export const config = {
