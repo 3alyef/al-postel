@@ -19,6 +19,7 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
     return (
         <div className={`languageSwitch`}>
             
+        
             <select className="select_Language" name="languages" id="languages" value={locale} onChange={(e) =>{
                     const newPath = redirectedPathName(e.target.value);
                     router.push(newPath);
@@ -27,7 +28,9 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
                 >
                 {
                     Object.entries(languages).map(([key, value]) => (
-                        <option key={key} value={key}>{`${value[0]} ${value[1]}`}</option>
+                        <option key={key} value={key} >
+                            {`${value[0]} ${value[1]}`}
+                        </option>
                     ))
                     // Object.entries() retorna uma matriz de pares chave-valor, onde cada par é uma matriz de duas posições, onde a primeira posição é a chave e a segunda é o valor tipo isso => {key, value => ['', '']}
                 }

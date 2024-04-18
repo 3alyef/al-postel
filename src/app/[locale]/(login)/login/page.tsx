@@ -16,7 +16,6 @@ export default async function Login({
           <div className={`to2Container `}>
             <div className={`loginMenu `}>
 
-            <input type="text" name="dd" id="dd" />
 
             </div>
             

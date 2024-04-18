@@ -1,21 +1,25 @@
 .languageSwitch {
-    background-color: rgba(0, 0, 0, 0.171);
     color: black;
     width: 7.375em;
-    display: flex;
-    gap: 0.4375em;
     
     .select_Language {
-        width: 100%;
         option {
             display: flex;
-            
+            background-color: #161E1F;
             padding: 0.625em;
             gap: 0.4375em;
         }
+        width: 100%;
+        color: white;
+        background-color: transparent;
         padding: 0em .2em;
-        overflow: hiden !important;
+        overflow-x: hidden !important;
         border: none;
+
+        .semiticOption {
+            direction: rtl;
+            text-align: right;
+        }
     }
     
 }
