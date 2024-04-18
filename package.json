@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sass": "sass --watch src/app/[locale]/globals.scss:src/app/[locale]/globals.css --style compressed"
+    "sass": "sass --watch src/app/globals.scss:src/app/[locale]/globals.css --style compressed"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.4",
@@ -15,7 +15,8 @@
     "next": "14.2.1",
     "next-intl": "^3.11.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^5.1.0"
   },
   "devDependencies": {
     "@types/negotiator": "^0.6.3",

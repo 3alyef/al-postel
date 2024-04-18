@@ -1,7 +1,7 @@
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 import React from "react";
-import LanguageSwitch from "@/components/languageSwitch/languageSwitch";
+import LanguageSwitch from "@/app/components/languageSwitch/languageSwitch";
 export default async function Login({
   params: { locale }
 }: { params: { locale: Locale } }) {
@@ -13,15 +13,15 @@ export default async function Login({
         <div className={`container ${locale === "he" ? "semitic" : ""}`}>
 
           {/*<h1>{dictionary.Login.Title}</h1>*/}
-          <div className={`to2Container ${locale === "he"? "items-start": "items-end"}`}>
+          <div className={`to2Container `}>
             <div className={`loginMenu `}>
 
-            
+            <input type="text" name="dd" id="dd" />
 
             </div>
-            <div className="languageSwitch">
-              <LanguageSwitch locale={locale}/>
-            </div>
+            
+            <LanguageSwitch locale={locale}/>
+            
           </div>
           
         </div>
