@@ -18,15 +18,20 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
         segments[1] = locale;
         return segments.join("/");
     };
+    
 
-    const [openLangToggle, setOpenLangToggle] = useState<boolean>(true);
+    const [openLangToggle, setOpenLangToggle] = useState<boolean>(false);
     const [maxHeightMenu, setMaxHeightMenu] = useState<string>("0em");
-    const [topMenu, setTopMenu] = useState<string>("0px");
-    const [widthVar, setWidthVar] = useState<string>("55%");
-    const barMenuLanguageRef = useRef<HTMLDivElement>(null);
+    const [widthVar, setWidthVar] = useState<string>("55%");;
     useEffect(() => {
-        const handleClickOutside = () => {
-            toggleMenuLanguages({openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar,barMenuLanguageRef, setTopMenu});
+        const handleClickOutside = (event: MouseEvent) => {
+            // Verificar se o clique foi fora do menu de idiomas
+            const target = event.target as Element;
+            
+            if (openLangToggle && !target.closest('.languagesSubContainer')) {
+                const onlyClose = true;
+                toggleMenuLanguages({ openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose});
+            }
         };
 
         document.addEventListener("click", handleClickOutside);
@@ -38,10 +43,17 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
     
     return (
         <div className={`languageSwitchContainer`}>
-            <div className="languagesSubContainer" onClick={()=>toggleMenuLanguages({openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar,barMenuLanguageRef, setTopMenu})}>
+            <div className="languagesSubContainer" 
+            onClick={()=>{
+                const onlyClose = false
+                toggleMenuLanguages(
+                    {
+                        openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
+                    })
+                }}>
                 
                 <div className="parentLanguagesMenu" style={{width: widthVar}}>
-                    <div className="languagesMenu menuApparence" style={{top: ("-"+topMenu), maxHeight: maxHeightMenu,}}  ref={barMenuLanguageRef}>
+                    <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu}}  >
                         <ul  style={{ maxHeight: maxHeightMenu, opacity: (maxHeightMenu != "0em" ? "1": "0")}}>
                             {
                                 Object.entries(languages).map(([key, value]) => key === locale && (

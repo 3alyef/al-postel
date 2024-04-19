@@ -1,10 +1,11 @@
 .languageFlag {
     display: flex;
     gap: 0.4375em;
+    align-items: center;
+    justify-content: space-between;
 
-    
 }
 
 .languageFlagCostumer {
-    padding: 0.22em 0.3em;
+    padding: 0.2em .5em;
 }
