@@ -8,23 +8,23 @@ export default async function Login({
   const dictionary = await getDictionary(locale);
 
   return (
-    <main className="main_Login">
+    <div className="main_Login">
       <div className="barLogin">
         <div className={`container ${locale === "he" ? "semitic" : ""}`}>
 
           {/*<h1>{dictionary.Login.Title}</h1>*/}
           <div className={`to2Container `}>
-            <div className={`loginMenu `}>
+            <main className={`loginMenu `}>
 
 
-            </div>
-            
-            <LanguageSwitch locale={locale}/>
-            
+            </main>
+            <footer>
+              <LanguageSwitch locale={locale}/>
+            </footer>
           </div>
           
         </div>
       </div>
-    </main>
+    </div>
   );
 }
