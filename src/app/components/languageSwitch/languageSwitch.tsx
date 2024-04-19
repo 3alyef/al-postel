@@ -87,9 +87,9 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
                 <div className="languageSwitch">         
                     <LanguageFlagName languageName={languages[locale][0]} flag={languages[locale][1]}/>
                     {openLangToggle ? (
-                        <IoMdArrowDropdown className="dropStyle"/>
-                    ): (
                         <IoMdArrowDropup className="dropStyle"/>
+                    ): (
+                        <IoMdArrowDropdown className="dropStyle"/>
                     )}
                 
                 </div>
