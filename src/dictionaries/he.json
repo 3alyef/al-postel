@@ -1,8 +1,13 @@
-{
+{   
+    "Metadata": {
+        "title": "אָל פוסטאֶל"
+    },
     "Login": {
         "Create_Account": "צור חשבון",
         "Forgot_your_email": "שכחת מייל?",
         "Next": "באה",
-        "Email": "מייל"
+        "Email": "מייל",
+        "Enter_your_password": "מהי הסיסמה שלך",
+        "Forgot_password": "שכחת את הסיסמה?"
     }
 }

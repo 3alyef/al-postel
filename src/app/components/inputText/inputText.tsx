@@ -1,7 +1,17 @@
 "use client";
-import { useRef } from "react";
+import { Dispatch, SetStateAction, useRef } from "react";
 
-export default function InputText({text, _isSemitic}: {text:string, _isSemitic: boolean}){
+interface propsInputText{
+    text:string;
+    _isSemitic: boolean;
+    type: string;
+    costumerClass?: string;
+    value: string;
+    setValue: Dispatch<SetStateAction<string>>;
+    _isRequired: boolean
+}
+
+export default function InputText({text, _isSemitic, type, costumerClass, value, setValue, _isRequired}: propsInputText){
     const inputRef = useRef<HTMLInputElement>(null);
     const focusInput = ()=>{
         inputRef.current?.focus();
@@ -12,7 +22,10 @@ export default function InputText({text, _isSemitic}: {text:string, _isSemitic: 
         <div className="formData_ContainerEmail ">
                     
             <div className={`container_Input_Div `}>
-                <input type="text" className="emailInput" placeholder=" " id="aqui" ref={inputRef} />
+                <input type={type} className={`emailInput ${costumerClass}`} placeholder=" " id="aqui" ref={inputRef} value={value} 
+                onChange={
+                    (e)=>setValue(e.target.value)
+                } required={_isRequired}/>
                 <div className={`labelEmail ${!_isSemitic && "left-[7px]"}`} onClick={focusInput} style={{cursor: "text"}}>
                     <span>{text}</span>
                 </div>

@@ -1,8 +1,13 @@
 {
+    "Metadata": {
+        "title": "Al Postel"
+    },
     "Login": {
         "Create_Account": "Create Account",
         "Forgot_your_email": "Forgot email?",
         "Next": "Next",
-        "Email": "E-mail"
+        "Email": "E-mail",
+        "Enter_your_password": "Enter_your_password",
+        "Forgot_password": "Forgot password?"
     }
 }

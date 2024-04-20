@@ -1,0 +1,70 @@
+.forgetEmail {
+    width: 85%;
+    display: flex;
+    justify-content: flex-start;
+    padding-top: .6em;
+    .forgetEmailSubcontainer{
+        display: inline-flex;
+        
+        border-radius: 6px;
+        input {
+            
+            padding: .15em .3em;
+            border-radius: 10px;
+            font-size: 12.25px;
+            color: #71BA00;
+            font-weight: 700;
+            word-wrap: break-word;
+            cursor: pointer;
+        }
+
+       
+    }
+
+    .forgetEmailSubcontainer input:hover{
+        background-color: #263327;
+    }
+    .forgetEmailSubcontainer input:active {
+        background-color: #1f2b20;
+    }
+    
+}
+
+.nextNewAccountMenu {
+    width: 85%;
+    padding-top: .5em;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    gap: .35em;
+    .btnNextAccount {
+        color:white;
+        width: 43%;
+        justify-content: center; 
+        align-items: center; 
+        display: inline-flex;
+
+        input {
+            width: 100%;
+            aspect-ratio: 1/.32;
+            font-size: 14.75px;
+            font-weight: 500;
+            word-wrap: break-word;
+            padding: 2px; 
+            border-radius: 15px; 
+            cursor: pointer;
+        }
+
+        .nextBtnAccount {
+            background: #21331A; 
+        }
+        
+        .createAccount:hover, .nextBtnAccount:hover {
+            background-color: #263327;
+        }
+
+        .createAccount:active, .nextBtnAccount:active {
+            background-color: #1f2b20;
+        }
+    }
+}
