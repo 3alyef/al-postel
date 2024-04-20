@@ -8,27 +8,11 @@ export default async function Login({
 }: { params: { locale: Locale } }) {
   const dictionary = await getDictionary(locale);
 
-  /*
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    const labelEmail = document.getElementById("labelEmail");
-
-    const handleClick = () => {
-      inputRef.current.focus();
-    };
-
-    labelEmail.addEventListener("click", handleClick);
-
-    return () => {
-      labelEmail.removeEventListener("click", handleClick);
-    };
-  }, []); // Executar apenas uma vez após a montagem do componente
-*/
+  const _isSemitic: boolean = locale === "he";
   return (
     <div className="main_Login">
       <div className="barLogin">
-        <div className={`container ${locale === "he" ? "semitic" : ""}`}>
+        <div className={`container ${_isSemitic ? "semitic" : ""}`}>
 
           {/*<h1>{dictionary.Login.Title}</h1>*/}
           <div className={`to2Container `}>
@@ -38,24 +22,25 @@ export default async function Login({
               </section>
               <section className="dataUser">
                 <div className="dataUser_Container ">
-                  <form>
-                    <InputText text={"E-mail"}/>
+                  <form className="w-[85%]">
+                    <InputText text={dictionary.Login.Email} _isSemitic={_isSemitic}/>
                   </form>
-                  <div className="forgetEmail">
+                  <div className={`forgetEmail w-[85%]`}>
                     
                     <div className="forgetEmailSubcontainer">
-                      <input type="button" value="Esqueceu seu email?"/>
+                      <input type="button" value={dictionary.Login.Forgot_your_email}/>
                     </div>
                     
                   </div>
-
-                  <div className="nextNewAccountMenu">
+                  
+                  {/*${_isSemitic ? "justify-start" : "justify-end"}*/}
+                  <div className={`nextNewAccountMenu justify-end`}>
                     
                     <div className="btnNextAccount">
-                      <input type="button" value="Criar conta" className="createAccount"/>
+                      <input type="button" value={dictionary.Login.Create_Account} className="createAccount"/>
                     </div>
                     <div className="btnNextAccount">
-                      <input type="button" value="Avançar" className="nextBtnAccount"/>
+                      <input type="button" value={dictionary.Login.Next} className="nextBtnAccount"/>
                     </div>
                     
                   </div>

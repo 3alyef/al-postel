@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 100%;
     .container_Input_Div {
         border: 1.8px solid rgb(0, 0, 0);
         border-radius: 6.5px;
@@ -27,7 +27,7 @@
             bottom: .36em;
             font-size: 16.5px;
             font-weight: 500;
-            left: 5px;
+            
             max-width: calc(100% - 16px);
             overflow: hidden;
             padding: 0 7px;
@@ -41,17 +41,20 @@
 
     
 
-    .emailInput:focus ~ .labelEmailFocus,
-    .emailInput:not(:placeholder-shown) ~ .labelEmailFocus {
+    .emailInput:focus ~ .labelEmail,
+    .emailInput:not(:placeholder-shown) ~ .labelEmail {
         transform: scale(0.78) translateY(-27px) translateX(-6px);
         color: #71BA00;
         background-image: linear-gradient(to top, #1C241F, #1F2921);
         border-radius: 15px;
     }
-
+    
     .container_Input_Div input:focus{
         border: 1.8px solid #71BA00;
         border-radius: 6.5px;
     }
     
 }
+
+
+

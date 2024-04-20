@@ -74,7 +74,7 @@
                     justify-content: center;
                    
                     .forgetEmail {
-                        width: 90%;
+                        //width: 85%;
                         display: flex;
                         justify-content: flex-start;// SEMITIC
                         padding-top: .6em;
@@ -106,10 +106,10 @@
                     }
 
                     .nextNewAccountMenu {
-                        width: 90%;
+                        width: 85%;
                         padding-top: .5em;
                         display: flex;
-                        justify-content: flex-end;
+                        //justify-content: flex-end;
                         flex-direction: row;
                         gap: .35em;
                         .btnNextAccount {

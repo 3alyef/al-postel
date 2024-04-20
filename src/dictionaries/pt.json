@@ -1,8 +1,8 @@
 {
     "Login": {
-        "Title": "Al PostEl",
-        "Register": "Cadastrar",
-        "Or": "ou",
-        "Already_have_an_account": "Já tem uma conta?"
+        "Create_Account": "Criar conta",
+        "Forgot_your_email": "Esqueceu seu e-mail?",
+        "Next": "Avançar",
+        "Email": "E-mail"
     }
 }
