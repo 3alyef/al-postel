@@ -22,11 +22,11 @@ export default function InputText({text, _isSemitic, type, costumerClass, value,
         <div className="formData_ContainerEmail ">
                     
             <div className={`container_Input_Div `}>
-                <input type={type} className={`emailInput ${costumerClass}`} placeholder=" " id="aqui" ref={inputRef} value={value} 
+                <input type={type} className={`Inputs ${costumerClass}`} placeholder=" " id="aqui" ref={inputRef} value={value} 
                 onChange={
                     (e)=>setValue(e.target.value)
                 } required={_isRequired}/>
-                <div className={`labelEmail ${!_isSemitic && "left-[7px]"}`} onClick={focusInput} style={{cursor: "text"}}>
+                <div className={`labels ${!_isSemitic && "left-[7px]"}`} onClick={focusInput} style={{cursor: "text"}}>
                     <span>{text}</span>
                 </div>
             </div>

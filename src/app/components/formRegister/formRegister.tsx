@@ -2,8 +2,10 @@
 import { useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
+import { Locale } from "@/i18n";
 
 interface propsFormRegister {
+    locale: Locale;
     formCostumerClass: string;
     textLabelEmail: string;
     _isSemitic: boolean;
@@ -16,17 +18,18 @@ interface propsFormRegister {
 }
 
 
-export default function FormRegister({formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, forgotPassword, createAccount, next, textLabelPassword}: propsFormRegister){
+export default function FormRegister({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, forgotPassword, createAccount, next, textLabelPassword}: propsFormRegister){
     const [emailValue, setEmailValue] = useState<string>('');
-    const [passwordValue, setPasswordValue] = useState<string>('');
+    //const [passwordValue, setPasswordValue] = useState<string>('');
    
     const router = useRouter();
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        console.log(emailValue)
-        router.push(`/login/signin?email=${emailValue}`)
-            
-       
+    
+        const emailEncoded = encodeURIComponent(emailValue);
+        const redirectPath = `/${locale}/login/signin`;
+        const query = `?email=${emailEncoded}`;
+        router.push(`${redirectPath}${query}`);
     }
     return(
         <form className="w-[100%]" onSubmit={dataToLogin2}>

@@ -10,18 +10,20 @@
         border-radius: 6.5px;
         width: 100%;
         position: relative;
-        .emailInput{
+        min-height: 40px;
+        .Inputs{
             background-color: transparent;
             width: 100%;
             padding: .35em .5em;
             font-size: 16.5px;
             outline: none;
+            font-weight: 400;
             
         }
         
-        .labelEmail {
+        .labels{
             color: rgba(255, 255, 255, 0.473);
-            
+            max-height: 25px;
             position: absolute;
             width: auto;
             bottom: .36em;
@@ -36,20 +38,36 @@
             z-index: 1;
             cursor: pointer
         }
+
+        .Inputs:-internal-autofill-selected { 
+            appearance: initial;
+            background-color: transparent !important;
+            background-color: initial !important;
+            color: initial !important;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+            -webkit-transition-delay: 9999s;
+        }
+
         
     }
 
     
 
-    .emailInput:focus ~ .labelEmail,
-    .emailInput:not(:placeholder-shown) ~ .labelEmail {
+    .Inputs:focus ~ .labels,
+    .Inputs:not(:placeholder-shown) ~ .labels {
         transform: scale(0.78) translateY(-27px) translateX(-6px);
         color: #71BA00;
         background-image: linear-gradient(to top, #1C241F, #1F2921);
         border-radius: 15px;
     }
     
-    .container_Input_Div input:focus{
+    .container_Input_Div input:focus, .container_Input_Div input:not(:placeholder-shown) {
         border: 1.8px solid #71BA00;
         border-radius: 6.5px;
     }

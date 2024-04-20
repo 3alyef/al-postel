@@ -1,32 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-.loginMenu {
-    color: black;
-    display: flex;
-    background-image: linear-gradient(65deg, rgba(17, 27, 33, 0.75) 0%, rgba(30, 30, 30, 0.75) 100%);
-    width: 26.75em;
-    aspect-ratio: 1.25 / .9;
-    border-radius: 5px;
-    section {
-        width: 50%;
-    }
+.commomSectionMenu {
+    width: 50%;
+}
 
-    .dataUser {
+.dataUser {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    .dataUser_Container {
+        min-height: 40%;
+        width: 100%;
         display:flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        .dataUser_Container {
-            min-height: 40%;
-            width: 100%;
-            display:flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-    
     }
+
 }
+
 
         
     

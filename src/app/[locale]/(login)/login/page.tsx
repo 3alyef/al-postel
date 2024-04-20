@@ -11,14 +11,13 @@ export default async function Login({
   const _isSemitic: boolean = locale === "he";
 
   return (
-    <DefaultBackground _isSemitic={_isSemitic}>
-      <main className={`loginMenu `}> 
-        <section className="">
+      <> 
+        <section className="commomSectionMenu">
           deww
         </section>
-        <section className="dataUser">
+        <section className="commomSectionMenu dataUser">
           <div className="dataUser_Container">
-            <FormRegister formCostumerClass="w-[85%]" textLabelEmail={dictionary.Login.Email} _isSemitic={_isSemitic} textLabelPassword={dictionary.Login.Enter_your_password}
+            <FormRegister locale={locale} formCostumerClass="w-[85%]" textLabelEmail={dictionary.Login.Email} _isSemitic={_isSemitic} textLabelPassword={dictionary.Login.Enter_your_password}
             createAccount={dictionary.Login.Create_Account} 
             forgotEmail={dictionary.Login.Forgot_your_email}
             forgotPassword={dictionary.Login.Forgot_password}
@@ -26,10 +25,6 @@ export default async function Login({
             />  
           </div>
         </section>
-      </main>
-      <footer>
-        <LanguageSwitch locale={locale}/>
-      </footer>
-    </DefaultBackground>          
+      </>       
   );
 }
