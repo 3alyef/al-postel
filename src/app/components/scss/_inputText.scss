@@ -1,0 +1,57 @@
+.formData_ContainerEmail {
+                        
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    .container_Input_Div {
+        border: 1.8px solid rgb(0, 0, 0);
+        border-radius: 6.5px;
+        width: 100%;
+        position: relative;
+        .emailInput{
+            background-color: transparent;
+            width: 100%;
+            padding: .35em .5em;
+            font-size: 16.5px;
+            outline: none;
+            
+        }
+        
+        .labelEmail {
+            color: rgba(255, 255, 255, 0.473);
+            
+            position: absolute;
+            width: auto;
+            bottom: .36em;
+            font-size: 16.5px;
+            font-weight: 500;
+            left: 5px;
+            max-width: calc(100% - 16px);
+            overflow: hidden;
+            padding: 0 7px;
+            transition: transform .15s cubic-bezier(0.4, 0, 0.2, 1), opacity .15s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            z-index: 1;
+            cursor: pointer
+        }
+        
+    }
+
+    
+
+    .emailInput:focus ~ .labelEmailFocus,
+    .emailInput:not(:placeholder-shown) ~ .labelEmailFocus {
+        transform: scale(0.78) translateY(-27px) translateX(-6px);
+        color: #71BA00;
+        background-image: linear-gradient(to top, #1C241F, #1F2921);
+        border-radius: 15px;
+    }
+
+    .container_Input_Div input:focus{
+        border: 1.8px solid #71BA00;
+        border-radius: 6.5px;
+    }
+    
+}
