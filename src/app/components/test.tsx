@@ -3,16 +3,16 @@
 import { useEffect } from "react"
 import Globals from "./global/Globals"
 import { useRouter } from "next/navigation";
+import { Locale } from "@/i18n";
 
-export default function Test(){
+export default function Test({locale}:{locale: Locale}){
     const router = useRouter();
-    const userEmailLocalStorage = localStorage.getItem('userEmail');
+    const userEmailLocalStorage = localStorage.getItem('userEmailToLogin');
     console.log(userEmailLocalStorage)
     useEffect(()=>{
-        const userEmailLocalStorage = localStorage.getItem('userEmail')
+        const userEmailLocalStorage = localStorage.getItem('userEmailToLogin')
         if(!Globals.userEmail && !userEmailLocalStorage){
-            router.push("/login");
-            
+            router.push(`/${locale}/login`);   
         }
     }, [])
     return (

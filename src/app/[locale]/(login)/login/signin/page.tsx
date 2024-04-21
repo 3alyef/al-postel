@@ -14,7 +14,7 @@ export default async function Singnin({
     return(
         <>
             <section className="commomSectionMenu">
-                <Test/>
+                <Test locale={locale}/>
             </section>
             <section className="commomSectionMenu dataUser">
                 <div className="dataUser_Container">

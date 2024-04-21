@@ -11,6 +11,11 @@ export function middleware(request: NextRequest) {
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   )
 
+  // Verifique se a rota começa com `/imgs`, se for, retorne a resposta atual
+  if (pathname.startsWith('/imgs')) {
+  return NextResponse.next();
+  }
+
   NextResponse.redirect(new URL('/home', request.url))
   // Redirecionar se não houver localidade
   if (pathnameIsMissingLocale) {

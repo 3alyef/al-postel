@@ -20,7 +20,7 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
     const [emailValue, setEmailValue] = useState<string>('');
 
     useEffect(()=>{
-        const userEmailLocalStorage = localStorage.getItem("userEmail")
+        const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
         if(Globals.userEmail){
             setEmailValue(Globals.userEmail); // Vai recarregar o email que já foi digitado
        
@@ -30,13 +30,13 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
         
     }, [])
     useEffect(()=>{
-        let userEmailLocalStorage = localStorage.getItem("userEmail")
+        let userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
        
         if(emailValue != Globals.userEmail && emailValue != ""){
             Globals.userEmail = emailValue;// Toda vez que o email foi alterado o novo valor vai sobrescrever userEmail
         }
         if(!userEmailLocalStorage || (emailValue != userEmailLocalStorage && emailValue != "")){
-            localStorage.setItem("userEmail", emailValue)
+            localStorage.setItem("userEmailToLogin", emailValue)
             console.log("Effect formEmail: ",localStorage.getItem("userEmail"))
         }
       
