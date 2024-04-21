@@ -14,7 +14,7 @@ export default async function RootLayout({
         <DefaultBackground _isSemitic={_isSemitic}>
             <main className={`loginMenuLayout flex-col`}>
                 <LogoAlPostel locale={locale} postelLabel={dictionary.Metadata.title}/>
-                <div className="w-[100%] flex">
+                <div className="w-[100%] flex pt-3">
                     {children}
                 </div>
                

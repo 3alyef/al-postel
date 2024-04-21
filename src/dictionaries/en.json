@@ -3,6 +3,7 @@
         "title": "Al Postel"
     },
     "Login": {
+        "Login": "Login",
         "Create_Account": "Create Account",
         "Forgot_your_email": "Forgot email?",
         "Next": "Next",

@@ -39,18 +39,18 @@
     gap: .35em;
     .btnNextAccount {
         color:white;
-        width: 43%;
+        width: auto;
         justify-content: center; 
         align-items: center; 
         display: inline-flex;
 
         input {
             width: 100%;
-            aspect-ratio: 1/.32;
+            aspect-ratio: 1/.25;
             font-size: 14.75px;
             font-weight: 500;
             word-wrap: break-word;
-            padding: 2px; 
+            padding: 6px 1.5em; 
             border-radius: 15px; 
             cursor: pointer;
         }
