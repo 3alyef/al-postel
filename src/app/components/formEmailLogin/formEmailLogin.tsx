@@ -1,8 +1,9 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
+import Globals from "../global/Globals";
 
 interface propsFormRegister {
     locale: Locale;
@@ -10,26 +11,42 @@ interface propsFormRegister {
     textLabelEmail: string;
     _isSemitic: boolean;
     forgotEmail: string;
-    forgotPassword: string;
     createAccount: string;
     next: string;
-    textLabelPassword: string
-
 }
 
 
-export default function FormRegister({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, forgotPassword, createAccount, next, textLabelPassword}: propsFormRegister){
+export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next}: propsFormRegister){
     const [emailValue, setEmailValue] = useState<string>('');
-    //const [passwordValue, setPasswordValue] = useState<string>('');
-   
+
+    useEffect(()=>{
+        const userEmailLocalStorage = localStorage.getItem("userEmail")
+        if(Globals.userEmail){
+            setEmailValue(Globals.userEmail); // Vai recarregar o email que já foi digitado
+       
+        } else if(userEmailLocalStorage){
+            setEmailValue(userEmailLocalStorage)
+        }
+        
+    }, [])
+    useEffect(()=>{
+        let userEmailLocalStorage = localStorage.getItem("userEmail")
+       
+        if(emailValue != Globals.userEmail && emailValue != ""){
+            Globals.userEmail = emailValue;// Toda vez que o email foi alterado o novo valor vai sobrescrever userEmail
+        }
+        if(!userEmailLocalStorage || (emailValue != userEmailLocalStorage && emailValue != "")){
+            localStorage.setItem("userEmail", emailValue)
+            console.log("Effect formEmail: ",localStorage.getItem("userEmail"))
+        }
+      
+    }, [emailValue])
+    
     const router = useRouter();
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-    
-        const emailEncoded = encodeURIComponent(emailValue);
         const redirectPath = `/${locale}/login/signin`;
-        const query = `?email=${emailEncoded}`;
-        router.push(`${redirectPath}${query}`);
+        router.push(`${redirectPath}`);
     }
     return(
         <form className="w-[100%]" onSubmit={dataToLogin2}>
