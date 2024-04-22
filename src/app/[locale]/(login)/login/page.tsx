@@ -11,7 +11,7 @@ export default async function Login({
       <> 
         <section className="commomSectionMenu">
           <div className=" inline-flex items-center text-white min-h-[5em] px-[1.2em] gap-2 font-semibold ">
-            <div className="relative w-[2.85em] aspect-[1/1] pt-[.25em]">
+            <div className="relative w-[2.85em] aspect-[1/1] pt-[.2em]">
               <h2 className={`text-[2em]`}>{dictionary.Login.Login}</h2>
             </div>
           </div>
