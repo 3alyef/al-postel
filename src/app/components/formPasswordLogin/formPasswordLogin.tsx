@@ -20,6 +20,7 @@ interface propsFormRegister {
 export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword}: propsFormRegister){
     //const [emailValue, setEmailValue] = useState<string>('');
     const [passwordValue, setPasswordValue] = useState<string>('');
+    const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
 
     /*useEffect(()=>{
         setEmailValue(Globals.userEmail); // Vai recarregar o email que já foi digitado
@@ -42,7 +43,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         <form className="w-[100%]" onSubmit={dataToM1}>
             <div className={formCostumerClass}>
         
-                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true}/>
+                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle}/>
 
             </div>
             <div className="forgetEmail">

@@ -10,6 +10,7 @@
         "Email": "E-mail",
         "Enter_your_password": "Enter your password",
         "Forgot_password": "Forgot password?",
-        "Welcome": "Welcome"
+        "Welcome": "Welcome",
+        "could_not_find_your_Al_PostEl_account": "Couldn't find your Al PostEl account"
     }
 }

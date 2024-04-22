@@ -10,6 +10,7 @@
         "Email": "E-mail",
         "Enter_your_password": "Digite sua senha",
         "Forgot_password": "Esqueceu a senha?",
-        "Welcome": "Bem vindo"
+        "Welcome": "Bem vindo",
+        "could_not_find_your_Al_PostEl_account": "Não foi possível encontrar sua conta Al PostEl"
     }
 }

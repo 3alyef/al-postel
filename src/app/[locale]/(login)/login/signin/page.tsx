@@ -1,6 +1,5 @@
+import EmailLoginProfile from "@/app/components/emailLoginProfile/emailLoginProfile";
 import FormPasswordLogin from "@/app/components/formPasswordLogin/formPasswordLogin";
-import Test from "@/app/components/test";
-
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 
@@ -22,7 +21,7 @@ export default async function Singnin({
             <section className="commomSectionMenu dataUser">
                 <div className="dataUser_Container flex flex-col items-center justify-center gap-2 mb-[1.85em]">
                     <div className="w-[100%]">
-                        <Test locale={locale} _isSemitic={_isSemitic}/>
+                        <EmailLoginProfile locale={locale}/>
                     </div>
                     <FormPasswordLogin locale={locale} formCostumerClass="w-[85%]" _isSemitic={_isSemitic} textLabelPassword={dictionary.Login.Enter_your_password}
                     createAccount={dictionary.Login.Create_Account} 

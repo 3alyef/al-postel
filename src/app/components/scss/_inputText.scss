@@ -5,8 +5,9 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+
     .container_Input_Div {
-        border: 1.8px solid rgb(0, 0, 0);
+        //border: 1.8px solid rgb(0, 0, 0);
         border-radius: 6.5px;
         width: 100%;
         position: relative;
@@ -21,7 +22,7 @@
             
         }
         
-        .labels{
+        .labels, .labelsAllert{
             color: rgba(255, 255, 255, 0.473);
             max-height: 25px;
             position: absolute;
@@ -57,7 +58,13 @@
         
     }
 
-    
+    .Inputs:focus ~ .labelsAllert,
+    .Inputs:not(:placeholder-shown) ~ .labelsAllert {
+        transform: scale(0.78) translateY(-27px) translateX(-6px);
+        color: #ff2424;
+        background-image: linear-gradient(to top, #1C241F, #1F2921);
+        border-radius: 15px;
+    }
 
     .Inputs:focus ~ .labels,
     .Inputs:not(:placeholder-shown) ~ .labels {
@@ -67,10 +74,26 @@
         border-radius: 15px;
     }
     
-    .container_Input_Div input:focus, .container_Input_Div input:not(:placeholder-shown) {
-        border: 1.8px solid #71BA00;
+    /*.container_Input_Div input:focus, 
+    .container_Input_Div input:not(:placeholder-shown) {
+        //border: 1.8px solid #71BA00;
+        border-width: 2px;
         border-radius: 6.5px;
+    }*/
+
+    /*.errorCostumer {
+        //border: 1.8px solid #ff2424 !important;
     }
+
+    .normalBorderContainer { 
+        //border: 1.8px solid #71BA00 !important;
+    }
+*/
+    /*.errorCostumer.normalBorderContainer input:focus, 
+    .errorCostumer.normalBorderContainer input:not(:placeholder-shown) {
+        border: 1.8px solid #ff2424 !important;
+        border-radius: 6.5px !important;
+    }*/
     
 }
 

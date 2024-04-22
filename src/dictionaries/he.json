@@ -10,6 +10,7 @@
         "Email": "מייל",
         "Enter_your_password": "מהי הסיסמה שלך",
         "Forgot_password": "שכחת את הסיסמה?",
-        "Welcome": "ברוכים הבאים"
+        "Welcome": "ברוכים הבאים",
+        "could_not_find_your_Al_PostEl_account": "לא הצלחתי למצוא את חשבון אָל פוסטאֶל שלך"
     }
 }
