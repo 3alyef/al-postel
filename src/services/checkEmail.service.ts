@@ -1,6 +1,6 @@
-import { getImageByEmail } from "@/interfaces/checkEmail.interface";
+import { getImageByEmail, tokenGetImageByEmail } from "@/interfaces/checkEmail.interface";
 
-export default async function checkEmail(email: string): Promise<getImageByEmail | null> {
+export default async function checkEmail(email: string): Promise<tokenGetImageByEmail | null> {
     try {
         const body = JSON.stringify({email: email})
         const response = await fetch(`http://localhost:8282/login/email`, {
@@ -13,7 +13,7 @@ export default async function checkEmail(email: string): Promise<getImageByEmail
         if(!response.ok){
             return null
         }
-        const contain: getImageByEmail | null = await response.json();
+        const contain: tokenGetImageByEmail | null = await response.json();
         return contain
     } catch(erro) {
         return null

@@ -15,7 +15,7 @@ export default function EmailLoginProfile({locale}:{locale: Locale}){
     const ImagemProfile = localStorage.getItem("userImagemProfile")
     useEffect(()=>{
         const userEmailLocalStorage = localStorage.getItem('userEmailToLogin')
-
+        //const isPreLogin = localStorage.getItem("userEmailPreLogin") || !isPreLogin
         if(!userEmailLocalStorage){
             returnLogin();
         } else {

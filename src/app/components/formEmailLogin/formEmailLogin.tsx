@@ -4,7 +4,7 @@ import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
 import checkEmail from "@/services/checkEmail.service";
-import { getImageByEmail } from "@/interfaces/checkEmail.interface";
+import { tokenGetImageByEmail } from "@/interfaces/checkEmail.interface";
 
 interface propsFormRegister {
     locale: Locale;
@@ -25,27 +25,37 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
         const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
         if(userEmailLocalStorage){      
             setEmailValue(userEmailLocalStorage);
-            localStorage.setItem("userEmailToLogin", "")
+            //localStorage.setItem("userEmailToLogin", "")
         }
-        
+        //localStorage.setItem("userEmailPreLogin", "") // Limpa o history
         
     }, [])
+
+    /* TODO: GERAR TOKEN EM M1 E CONFERI-LO NO PASSWORD ENQUANTO FOR VALIDO O LOGIN ESTA DISPONIVEL */
+
+    /*useEffect(()=>{
+        let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
+        if(userEmailLocalStorage != emailValue){
+            localStorage.setItem("userEmailToLogin", emailValue)
+            
+            localStorage.setItem("userEmailPreLogin", "") // Limpa o history
+        
+        }
+    }, [emailValue])*/
   
     
     const router = useRouter();
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        const emailDataUser: getImageByEmail | null = await checkEmail(emailValue);
-        console.log("emailDataUser",emailDataUser)
+        const emailDataUser: tokenGetImageByEmail | null = await checkEmail(emailValue);
+        
         if(emailDataUser){
             
             let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
             
-            if(!userEmailLocalStorage || (emailValue != userEmailLocalStorage && emailValue != "")){
+            if(emailValue != userEmailLocalStorage){
                 localStorage.setItem("userEmailToLogin", emailValue);
-                localStorage.setItem("userImagemProfile", emailDataUser.image);
-                localStorage.setItem("userImagemProfileLastUpdateIn", emailDataUser.lastUpdateIn);
-                console.log("oi", emailValue)
+                localStorage.setItem("userTokenPreLogin", emailDataUser.token);
             }
 
 
