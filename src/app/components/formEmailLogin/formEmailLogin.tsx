@@ -52,10 +52,10 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
         if(emailDataUser){
             
             let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
-            
+            localStorage.setItem("userTokenPreLogin", emailDataUser.token);
             if(emailValue != userEmailLocalStorage){
                 localStorage.setItem("userEmailToLogin", emailValue);
-                localStorage.setItem("userTokenPreLogin", emailDataUser.token);
+                
             }
 
 

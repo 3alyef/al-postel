@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
   )
 
   // Verifique se a rota começa com `/imgs`, se for, retorne a resposta atual
-  if (pathname.startsWith('/imgs')) {
+  if (pathname.startsWith('/imgs') || pathname.startsWith('/api')) {
   return NextResponse.next();
   }
 
