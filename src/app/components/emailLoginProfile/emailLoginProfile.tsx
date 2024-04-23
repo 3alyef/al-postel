@@ -12,7 +12,8 @@ export default function EmailLoginProfile({locale}:{locale: Locale}){
         router.push(`/${locale}/login`); 
     }
 
-    const ImagemProfile = localStorage.getItem("userImagemProfile")
+    const ImagemProfile = localStorage.getItem("userImagemProfile");
+    // TODO: Decriptar o token e depositar a imagem na variavel ImagemProfile
     useEffect(()=>{
         const userEmailLocalStorage = localStorage.getItem('userEmailToLogin')
         //const isPreLogin = localStorage.getItem("userEmailPreLogin") || !isPreLogin
