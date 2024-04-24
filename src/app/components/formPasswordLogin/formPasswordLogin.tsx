@@ -2,8 +2,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { Locale } from "@/i18n";
-import { dataLoginToM1 } from "@/services/dataLoginToM1.service";
-
+import { dataLoginToM1, tokenAuthenticate } from "@/services/dataLoginToM1.service";
+import { useRouter } from "next/navigation";
 interface propsFormRegister {
     locale: Locale;
     formCostumerClass: string;
@@ -15,26 +15,36 @@ interface propsFormRegister {
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
     onFocusFunction: ()=>void;
+    messageError: string
 }
 
 
-export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, onFocusFunction, onFocusStyle, setOnFocusStyle}: propsFormRegister){
-
+export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, onFocusFunction, onFocusStyle, setOnFocusStyle, messageError}: propsFormRegister){
     const [passwordValue, setPasswordValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
+
+    const router = useRouter(); 
+    const redirectToAlpostel = () => {
+        router.push(`/${locale}/alpostel`); // Redireciona para a página de login
+    }
 
     async function dataToM1(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         const email = localStorage.getItem("userEmailToLogin")
         const password = passwordValue;
         if(email){
-            console.log({email, password})
-            const response = await dataLoginToM1({email, password});
-            if(response){
-                // Redirecionar para iniciar a conexão com M2
-
+          
+            const response: tokenAuthenticate | {message: string} = await dataLoginToM1({email, password});
+            if("message" in response){
+                // error
+                if(response.message === "Password Invalid!"){
+                    setProcessErrorStyle(true)
+                }
             } else {
-                // Menssagem de erro
+                if(response.auth && response.token){
+                    localStorage.setItem("tokenToM2", response.token);
+                    redirectToAlpostel();
+                }
             }
         }
         
@@ -43,7 +53,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         <form className="w-[100%]" onSubmit={dataToM1}>
             <div className={formCostumerClass}>
         
-                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} />
+                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} messageError={messageError}/>
 
             </div>
             <div className="forgetEmail">
@@ -52,9 +62,9 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
                     <input type="button" value={forgotPassword}/>
                 </div>
                 
-                </div>
+            </div>
                 
-                <div className="nextNewAccountMenu">
+            <div className="nextNewAccountMenu">
                 
                 <div className="btnNextAccount">
                     <input type="button" value={createAccount} className="createAccount"/>

@@ -3,7 +3,7 @@ import { getImageByEmail, tokenGetImageByEmail } from "@/interfaces/checkEmail.i
 export default async function checkEmail(email: string): Promise<tokenGetImageByEmail | null> {
     try {
         const body = JSON.stringify({email: email})
-        const response = await fetch(`${process.env.NEXT_PUBLIC_M1_URL}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_M1_URL}/login/email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

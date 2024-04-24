@@ -10,7 +10,7 @@ interface propsInputText {
     setValue: Dispatch<SetStateAction<string>>;
     _isRequired: boolean;
     processErrorStyle: boolean;
-    messageError?: string;
+    messageError: string;
     onFocusFunction: () => void;
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>

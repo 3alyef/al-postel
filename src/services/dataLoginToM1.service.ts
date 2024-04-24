@@ -1,24 +1,29 @@
-export async function dataLoginToM1({email, password}: {email: string, password: string}): Promise<{token: string} | null>{
+export interface tokenAuthenticate {
+    auth: string;
+    token: string;
+    URL_M2: string;
+}
+
+export async function dataLoginToM1({email, password}: {email: string, password: string}): Promise<tokenAuthenticate | {message: string} >{
     try {
         const body = JSON.stringify({email, password})
-        const response = await fetch(`${process.env.NEXT_PUBLIC_M1_URL}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_M1_URL}/login`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: body
         })
-        if (!response.ok) {
-            throw new Error();
+
+        const data: tokenAuthenticate | {message: string} = await response.json();
+        if("message" in data){
+            throw {message: data.message};
         }
-        const data: {token: string} | null = await response.json();
-        if(!data){
-            throw new Error("");
-        }
-        console.log(data)
+
         return data;
     } catch(error) {
         console.error(error)
-        return null
+        const err = error as {message: string}
+        return {message: err.message}
     }
 }
