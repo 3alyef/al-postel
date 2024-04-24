@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
-import Globals from "../global/Globals";
 
 interface propsFormRegister {
     locale: Locale;
@@ -12,38 +11,25 @@ interface propsFormRegister {
     forgotPassword: string;
     createAccount: string;
     next: string;
-    textLabelPassword: string
+    textLabelPassword: string;
+    costumerOnFocusFunction?: ()=> void
 
 }
 
 
-export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword}: propsFormRegister){
-    //const [emailValue, setEmailValue] = useState<string>('');
+export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, costumerOnFocusFunction}: propsFormRegister){
+
     const [passwordValue, setPasswordValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
-
-    /*useEffect(()=>{
-        setEmailValue(Globals.userEmail); // Vai recarregar o email que já foi digitado
-       
-    }, [])
-    useEffect(()=>{
-        if(emailValue != Globals.userEmail && emailValue != ""){
-            Globals.userEmail = emailValue;// Toda vez que o email foi alterado o novo valor vai sobrescrever userEmail
-        }
-      
-    }, [emailValue])*/
-    
-    //const router = useRouter();
+  
     async function dataToM1(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        //const redirectPath = `/${locale}/login/signin`;
-        //router.push(`${redirectPath}`);
     }
     return(
         <form className="w-[100%]" onSubmit={dataToM1}>
             <div className={formCostumerClass}>
         
-                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle}/>
+                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} costumerOnFocusFunction={costumerOnFocusFunction}/>
 
             </div>
             <div className="forgetEmail">

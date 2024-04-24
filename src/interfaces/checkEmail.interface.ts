@@ -1,6 +1,6 @@
 export interface getImageByEmail {
-    image: string;
-    lastUpdateIn: string
+    image: string | null;
+    lastUpdateIn: string | null
 }
 
 export interface tokenGetImageByEmail {

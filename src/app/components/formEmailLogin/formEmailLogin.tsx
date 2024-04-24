@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
-import checkEmail from "@/services/checkEmail.service";
-import { tokenGetImageByEmail } from "@/interfaces/checkEmail.interface";
+import { verifyAll } from "@/services/toServerAndVerifyToken.service";
 
 interface propsFormRegister {
     locale: Locale;
@@ -17,61 +16,37 @@ interface propsFormRegister {
     could_not_find_your_Al_PostEl_account: string
 }
 
-export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account}: propsFormRegister){
+export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account}: propsFormRegister, costumerOnFocusFunction?: ()=>void){
     const [emailValue, setEmailValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
+    const router = useRouter(); 
+
+
+    const redirectToNextPage = () => {
+        router.push(`/${locale}/login/signin`); // Redireciona para a página de login
+    }
 
     useEffect(()=>{
         const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
         if(userEmailLocalStorage){      
             setEmailValue(userEmailLocalStorage);
-            //localStorage.setItem("userEmailToLogin", "")
         }
-        //localStorage.setItem("userEmailPreLogin", "") // Limpa o history
         
     }, [])
 
-    /* TODO: GERAR TOKEN EM M1 E CONFERI-LO NO PASSWORD ENQUANTO FOR VALIDO O LOGIN ESTA DISPONIVEL */
-
-    /*useEffect(()=>{
-        let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
-        if(userEmailLocalStorage != emailValue){
-            localStorage.setItem("userEmailToLogin", emailValue)
-            
-            localStorage.setItem("userEmailPreLogin", "") // Limpa o history
-        
-        }
-    }, [emailValue])*/
-  
-    
-    const router = useRouter();
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        const emailDataUser: tokenGetImageByEmail | null = await checkEmail(emailValue);
-        
-        if(emailDataUser){
-            
-            let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
-            localStorage.setItem("userTokenPreLogin", emailDataUser.token);
-            if(emailValue != userEmailLocalStorage){
-                localStorage.setItem("userEmailToLogin", emailValue);
-                
-            }
-
-
-            const redirectPath = `/${locale}/login/signin`;
-            router.push(`${redirectPath}`);
-        } else {
-            setProcessErrorStyle(true);
+        const ok:boolean = await verifyAll(locale, emailValue, setProcessErrorStyle);
+        if(ok){
+            redirectToNextPage();
         }
-        
     }
     return(
         <form className="w-[100%]" onSubmit={dataToLogin2}>
             <div className={`${formCostumerClass} min-h-[68px]`}>
        
                     <InputText text={textLabelEmail} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyle}
-                    messageError={could_not_find_your_Al_PostEl_account}/>
+                    messageError={could_not_find_your_Al_PostEl_account} costumerOnFocusFunction={costumerOnFocusFunction}/>
             </div>
             <div className="forgetEmail">
                         
@@ -124,3 +99,33 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
         
     }, [emailValue])
 */
+
+/* TODO: GERAR TOKEN EM M1 E CONFERI-LO NO PASSWORD ENQUANTO FOR VALIDO O LOGIN ESTA DISPONIVEL */
+
+    /*useEffect(()=>{
+        let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
+        if(userEmailLocalStorage != emailValue){
+            localStorage.setItem("userEmailToLogin", emailValue)
+            
+            localStorage.setItem("userEmailPreLogin", "") // Limpa o history
+        
+        }
+    }, [emailValue])
+    
+     if(emailDataUser){
+            
+                let userEmailLocalStorage = localStorage.getItem("userEmailToLogin");
+                localStorage.setItem("userTokenPreLogin", emailDataUser.token);
+                if(emailValue != userEmailLocalStorage){
+                    localStorage.setItem("userEmailToLogin", emailValue);
+                    
+                }
+    
+    
+                
+            } else {
+                setProcessErrorStyle(true);
+            }
+    
+    
+    */
