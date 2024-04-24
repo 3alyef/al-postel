@@ -4,6 +4,7 @@ import EmailLoginProfile from "../emailLoginProfile/emailLoginProfile";
 import FormPasswordLogin from "../formPasswordLogin/formPasswordLogin";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { verifyAll } from "@/services/toServerAndVerifyToken.service";
 interface propsDataUser {
     locale: Locale;
     _isSemitic: boolean;
@@ -18,26 +19,27 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
     const [email, setEmail] = useState<string>('');
     const router = useRouter();
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
+
+    const [bannerReturn, setBannerReturn] = useState<boolean>(false)
     const returnLogin = ()=>{
         router.push(`/${locale}/login`); 
     }
 
-    const onFocus = ()=>{
+    const onFocus = async ()=>{
         setOnFocusStyle(true);
-        console.log('oi')
+        console.log('oi, password')
+
+        const ok:boolean = await verifyAll(locale, email, setBannerReturn, true);
+        console.log(ok)
+        if(!ok){
+            console.log("tera de reiniciar")
+            // Quando o token da senha expirar voltará para a primeira tela
+            returnLogin();
+        }
     }
-    
-    
 
     useEffect(()=>{
-        /*
-        const userTokenPreLogin = localStorage.getItem("userTokenPreLogin");
-        if(userTokenPreLogin){
-            validateToken(locale, userTokenPreLogin)
-        } else {
-            returnLogin();
-        }*/
-       
+        
         const userEmailLocalStorage = localStorage.getItem('userEmailToLogin')
         const image = localStorage.getItem("imagemUserToPreLogin")
         if(image){

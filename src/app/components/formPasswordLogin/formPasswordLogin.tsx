@@ -1,8 +1,8 @@
 "use client"
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
-import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
+import { dataLoginToM1 } from "@/services/dataLoginToM1.service";
 
 interface propsFormRegister {
     locale: Locale;
@@ -15,8 +15,6 @@ interface propsFormRegister {
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
     onFocusFunction: ()=>void;
-    
-
 }
 
 
@@ -24,9 +22,22 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
 
     const [passwordValue, setPasswordValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
-  
+
     async function dataToM1(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
+        const email = localStorage.getItem("userEmailToLogin")
+        const password = passwordValue;
+        if(email){
+            console.log({email, password})
+            const response = await dataLoginToM1({email, password});
+            if(response){
+                // Redirecionar para iniciar a conexão com M2
+
+            } else {
+                // Menssagem de erro
+            }
+        }
+        
     }
     return(
         <form className="w-[100%]" onSubmit={dataToM1}>

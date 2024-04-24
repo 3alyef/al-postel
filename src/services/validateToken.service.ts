@@ -3,7 +3,6 @@ import { getImageByEmail } from "@/interfaces/checkEmail.interface";
 export async function validateToken(token: string): Promise<{ decryptedToken: getImageByEmail } | { error: string }> {
     try {
         const body = JSON.stringify({ token: token });
-        console.log(body);
         const response = await fetch("/api/decrypt-token", {
             method: "POST",
             headers: {
