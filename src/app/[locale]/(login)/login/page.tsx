@@ -1,6 +1,6 @@
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
-import FormEmailLogin from "@/app/components/formEmailLogin/formEmailLogin";
+import DataUserFormEmail from "@/app/components/dataUserFormEmail/dataUserFormEmail";
 export default async function Login({
   params: { locale }
 }: { params: { locale: Locale } }) {
@@ -18,8 +18,7 @@ export default async function Login({
         </section>
         <section className="commomSectionMenu dataUser">
           <div className="dataUser_Container">
-            <FormEmailLogin locale={locale} formCostumerClass="w-[85%]" textLabelEmail={dictionary.Login.Email} _isSemitic={_isSemitic} createAccount={dictionary.Login.Create_Account} forgotEmail={dictionary.Login.Forgot_your_email} next={dictionary.Login.Next}
-            could_not_find_your_Al_PostEl_account={dictionary.Login.could_not_find_your_Al_PostEl_account}/>  
+            <DataUserFormEmail Create_Account={dictionary.Login.Create_Account} Email={dictionary.Login.Email} Forgot_your_email={dictionary.Login.Forgot_password} Next={dictionary.Login.Next} _isSemitic={_isSemitic} could_not_find_your_Al_PostEl_account={dictionary.Login.could_not_find_your_Al_PostEl_account} locale={locale}/>
           </div>
         </section>
       </>       

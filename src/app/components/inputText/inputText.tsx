@@ -11,12 +11,14 @@ interface propsInputText {
     _isRequired: boolean;
     processErrorStyle: boolean;
     messageError?: string;
-    costumerOnFocusFunction?: () => void
+    onFocusFunction: () => void;
+    onFocusStyle: boolean;
+    setOnFocusStyle: Dispatch<SetStateAction<boolean>>
 }
 
-export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, costumerOnFocusFunction }: propsInputText) {
+export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle }: propsInputText) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
+    
     const [borderStyle, setBorderStyle] = useState<string>('1.8px solid rgb(0, 0, 0)');
     const [confirmOneTurnAllert, setConfirmOneTurnAllert] = useState<boolean>(false)
     const focusInput = () => {
@@ -44,10 +46,7 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
         }
     },[onFocusStyle, processErrorStyle])
 
-    const onFocus = ()=>{
-        setOnFocusStyle(true);
-        costumerOnFocusFunction && costumerOnFocusFunction()
-    }
+    
     
     return (
         <div className="w-[100%] h-[100%]">
@@ -62,7 +61,7 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         required={_isRequired}
-                        onFocus={onFocus}
+                        onFocus={onFocusFunction}
                         onBlur={() => setOnFocusStyle(false)}
                     />
                     <div

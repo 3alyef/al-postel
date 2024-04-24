@@ -35,6 +35,8 @@ const verifyToken = async (locale: Locale, token: string, emailValue: string, se
 
             if (tokenDecrypted.decryptedToken.image) { // Se houver uma imagem associada ao token
                 localStorage.setItem("imagemUserToPreLogin", tokenDecrypted.decryptedToken.image); // Armazena a imagem do usuário
+            } else {
+                localStorage.removeItem("imagemUserToPreLogin")
             }
             return true // Redireciona para a próxima página
         } else {

@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
@@ -13,12 +13,17 @@ interface propsFormRegister {
     forgotEmail: string;
     createAccount: string;
     next: string;
-    could_not_find_your_Al_PostEl_account: string
+    could_not_find_your_Al_PostEl_account: string;
+    onFocusStyle: boolean;
+    setOnFocusStyle: Dispatch<SetStateAction<boolean>>
+    onFocusFunction: ()=> void;
+
 }
 
-export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account}: propsFormRegister, costumerOnFocusFunction?: ()=>void){
+export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account, onFocusStyle, setOnFocusStyle, onFocusFunction}: propsFormRegister){
     const [emailValue, setEmailValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
+    
     const router = useRouter(); 
 
 
@@ -36,6 +41,7 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
 
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
+        console.log("emailValue", emailValue)
         const ok:boolean = await verifyAll(locale, emailValue, setProcessErrorStyle);
         if(ok){
             redirectToNextPage();
@@ -46,7 +52,8 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
             <div className={`${formCostumerClass} min-h-[68px]`}>
        
                     <InputText text={textLabelEmail} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyle}
-                    messageError={could_not_find_your_Al_PostEl_account} costumerOnFocusFunction={costumerOnFocusFunction}/>
+                    messageError={could_not_find_your_Al_PostEl_account}
+                    onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>
             </div>
             <div className="forgetEmail">
                         

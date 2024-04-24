@@ -4,8 +4,6 @@ import EmailLoginProfile from "../emailLoginProfile/emailLoginProfile";
 import FormPasswordLogin from "../formPasswordLogin/formPasswordLogin";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getImageByEmail } from "@/interfaces/checkEmail.interface";
-import { validateToken } from "@/services/validateToken.service";
 interface propsDataUser {
     locale: Locale;
     _isSemitic: boolean;
@@ -19,13 +17,14 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
     const [profileImage, setProfileImage] = useState<string>('/imgs/logo.png');
     const [email, setEmail] = useState<string>('');
     const router = useRouter();
-
+    const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const returnLogin = ()=>{
         router.push(`/${locale}/login`); 
     }
 
-    function costumerOnFocusFunction(): void {
-        console.log('focus on!!!!')
+    const onFocus = ()=>{
+        setOnFocusStyle(true);
+        console.log('oi')
     }
     
     
@@ -59,7 +58,7 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
             <FormPasswordLogin locale={locale} formCostumerClass="w-[85%]" _isSemitic={_isSemitic} textLabelPassword={Enter_your_password}
             createAccount={Create_Account} 
             forgotPassword={Forgot_password}
-            next={Next} costumerOnFocusFunction={costumerOnFocusFunction}/>
+            next={Next} onFocusFunction={onFocus} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>
         </>
     )
 }

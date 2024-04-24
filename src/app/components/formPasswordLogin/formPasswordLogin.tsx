@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
@@ -12,12 +12,15 @@ interface propsFormRegister {
     createAccount: string;
     next: string;
     textLabelPassword: string;
-    costumerOnFocusFunction?: ()=> void
+    onFocusStyle: boolean;
+    setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
+    onFocusFunction: ()=>void;
+    
 
 }
 
 
-export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, costumerOnFocusFunction}: propsFormRegister){
+export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, onFocusFunction, onFocusStyle, setOnFocusStyle}: propsFormRegister){
 
     const [passwordValue, setPasswordValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
@@ -29,7 +32,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         <form className="w-[100%]" onSubmit={dataToM1}>
             <div className={formCostumerClass}>
         
-                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} costumerOnFocusFunction={costumerOnFocusFunction}/>
+                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} />
 
             </div>
             <div className="forgetEmail">

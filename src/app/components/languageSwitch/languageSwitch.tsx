@@ -71,6 +71,7 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
                                 Object.entries(languages).map(([key, value]) => key != locale && (
                                         <li key={key} onClick={()=>{
                                                 const newPath = redirectedPathName(key);
+                                                //localStorage.setItem("languagePadron", key)
                                                 router.push(newPath)
                                             }   
                                         }>
