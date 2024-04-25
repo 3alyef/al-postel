@@ -4,10 +4,10 @@ import InputText from "../inputText/inputText";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
 import { verifyAll } from "@/services/toServerAndVerifyToken.service";
+import Link from "next/link";
 
 interface propsFormRegister {
     locale: Locale;
-    formCostumerClass: string;
     textLabelEmail: string;
     _isSemitic: boolean;
     forgotEmail: string;
@@ -20,15 +20,15 @@ interface propsFormRegister {
 
 }
 
-export default function FormEmailLogin({locale, formCostumerClass, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account, onFocusStyle, setOnFocusStyle, onFocusFunction}: propsFormRegister){
+export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forgotEmail, createAccount, next, could_not_find_your_Al_PostEl_account, onFocusStyle, setOnFocusStyle, onFocusFunction}: propsFormRegister){
     const [emailValue, setEmailValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
     
     const router = useRouter(); 
 
 
-    const redirectToNextPage = () => {
-        router.push(`/${locale}/login/signin`); // Redireciona para a página de login
+    const redirectToNextPage = (address: string) => {
+        router.push(`/${locale}/${address}`); // Redireciona para a página de login
     }
 
     useEffect(()=>{
@@ -44,21 +44,24 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
         console.log("emailValue", emailValue)
         const ok:boolean = await verifyAll(locale, emailValue, setProcessErrorStyle, false);
         if(ok){
-            redirectToNextPage();
+            redirectToNextPage("login/signin");
         }
     }
+
+    
     return(
         <form className="w-[100%]" onSubmit={dataToLogin2}>
-            <div className={`${formCostumerClass} min-h-[68px]`}>
+            <div className={`w-[85%] min-h-[68px]`}>
        
-                    <InputText text={textLabelEmail} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyle}
-                    messageError={could_not_find_your_Al_PostEl_account}
-                    onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>
+                <InputText text={textLabelEmail} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyle}
+                messageError={could_not_find_your_Al_PostEl_account}
+                onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>
             </div>
             <div className="forgetEmail">
                         
                 <div className="forgetEmailSubcontainer">
                     <input type="button" value={forgotEmail}/>
+                    
                 </div>
                 
                 </div>
@@ -66,7 +69,10 @@ export default function FormEmailLogin({locale, formCostumerClass, textLabelEmai
                 <div className="nextNewAccountMenu">
                 
                 <div className="btnNextAccount">
-                    <input type="button" value={createAccount} className="createAccount"/>
+                    <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/register`} className=" flex items-center">
+                        <div className="createAccount"
+                        >{createAccount}</div>
+                    </Link>
                 </div>
                 <div className="btnNextAccount">
                     <input type="submit" value={next} className="nextBtnAccount"/>

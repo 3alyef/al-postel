@@ -13,5 +13,12 @@
         "Incorrect_password": "Incorrect password",
         "Welcome": "Welcome",
         "could_not_find_your_Al_PostEl_account": "Couldn't find your Al PostEl account"
+    },
+    "Register": {
+        "Create_a_Al_Postel_Account": "Create a Al Postel Account",
+        "First_Name": "First Name",
+        "Last_Name_(optional)": "Last Name (optional)",
+        "Next": "Next",
+        "Already_have_an_account": "Already have an account?"
     }
 }

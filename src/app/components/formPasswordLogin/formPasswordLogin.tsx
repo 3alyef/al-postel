@@ -65,10 +65,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
             </div>
                 
             <div className="nextNewAccountMenu">
-                
-                <div className="btnNextAccount">
-                    <input type="button" value={createAccount} className="createAccount"/>
-                </div>
+         
                 <div className="btnNextAccount">
                     <input type="submit" value={next} className="nextBtnAccount"/>
                 </div>

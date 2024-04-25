@@ -22,7 +22,7 @@ export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Acc
     
     return (
         <>
-            <FormEmailLogin locale={locale} formCostumerClass="w-[85%]" textLabelEmail={Email} _isSemitic={_isSemitic} createAccount={Create_Account} forgotEmail={Forgot_your_email} next={Next}
+            <FormEmailLogin locale={locale} textLabelEmail={Email} _isSemitic={_isSemitic} createAccount={Create_Account} forgotEmail={Forgot_your_email} next={Next}
             could_not_find_your_Al_PostEl_account={could_not_find_your_Al_PostEl_account} onFocusFunction={onFocus} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>  
         </>
     )
