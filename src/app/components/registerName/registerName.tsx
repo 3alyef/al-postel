@@ -16,12 +16,14 @@ interface propsRegisterName {
 
 export default function RegisterName({locale, _isSemitic, first_name, last_name, next, already_have_an_account}: propsRegisterName){
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false); // Não vai mudar
-
-    const [firstNameValue, setFirstNameValue] = useState<string>("");
     const [onFocusStyleFirstName, setOnFocusStyleFirstName] = useState<boolean>(false);
+    const [firstNameValue, setFirstNameValue] = useState<string>("");
+    
 
     const [lastNameValue, setLastNameValue] = useState<string>("");
     const [onFocusStyleLastName, setOnFocusStyleLastName] = useState<boolean>(false);
+
+    const [send, setSend] = useState<boolean>(false);
 
     const onFocusFunctionFirstName = ()=>{
         setOnFocusStyleFirstName(true);
@@ -34,43 +36,50 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
     const redirectToNextPage = (address: string) => {
         router.push(`/${locale}/${address}`); // Redireciona para a página de login
     }
-    async function dataToRegister2(event: React.FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        if(firstNameValue){
-            localStorage.setItem("fNameReg", firstNameValue);
-            if(lastNameValue) {
-                localStorage.setItem("lNameReg", lastNameValue);
-            }
-            redirectToNextPage("register/email-password")
-        }    
-        
-    }
+    
 
-    async function teste(event: React.FormEvent<HTMLFormElement>){
-        const fName = localStorage.getItem("fNameReg");
-        console.log(fName)
-        GlobalVariables.previousURL = "register/email-password";
-    }
+    useEffect(()=>{
+        if(send){
+            localStorage.setItem("fNameReg", firstNameValue);
+            localStorage.setItem("lNameReg", lastNameValue);
+
+            // Em caso do LocalStorage esteja indisponivel...
+            GlobalVariables.fNameReg = firstNameValue;
+            GlobalVariables.lNameReg = lastNameValue;
+
+            //redirectToNextPage("register/email-password")
+        }
+        
+      
+    }, [send])
     
   
     useEffect(()=>{
         const previousURL = GlobalVariables.previousURL;
-        //console.log("hine", previousURL, previousURL.includes("register/email-password"))
         if(previousURL.includes("register/email-password")){
             const fName = localStorage.getItem("fNameReg");
             console.log("fName", fName)
             if(fName){
                 setFirstNameValue(fName);
                 const lName = localStorage.getItem("lNameReg");
-                console.log(fName, "passou")
+         
                 if(lName){ 
                     setLastNameValue(lName)
                 }
 
                 if(fName === firstNameValue){
                     GlobalVariables.previousURL = "";
+                    GlobalVariables.fNameReg = "";
+                    GlobalVariables.lNameReg = "";
                 }
-            }         
+            } else {
+                setFirstNameValue(GlobalVariables.fNameReg);
+                setLastNameValue(GlobalVariables.lNameReg);
+                GlobalVariables.previousURL = "";
+                GlobalVariables.fNameReg = "";
+                GlobalVariables.lNameReg = "";
+                
+            }          
         } 
 
         localStorage.removeItem("fNameReg");
@@ -79,7 +88,11 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
     }, [])
     return (
     
-        <form className="w-[100%]" onSubmit={dataToRegister2}>
+        <form className="w-[100%]" onSubmit={(e)=>{
+            e.preventDefault();
+            setSend(true)
+            redirectToNextPage("register/email-password")
+        }}>
             <div className={`min-h-[68px] flex flex-col gap-2 w-[85%]`}>
                 <InputText text={first_name} _isSemitic={_isSemitic} type="text" costumerClass="text-white" setValue={setFirstNameValue} value={firstNameValue} _isRequired={true} processErrorStyle={processErrorStyle}
                 messageError={""}
@@ -99,7 +112,19 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
                     </Link>
                 </div>
                 <div className="btnNextAccount w-[35%]">
-                    <input type="submit" value={next} className="nextBtnAccount flex justify-center"/>
+
+                    <button type="submit" className="nextBtnAccount  flex justify-center" 
+                    style={{padding: "0px"}} onClick={()=>setSend(true)}>
+                        {firstNameValue ? (
+                            <>
+                                <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/register/email-password`} className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">{next}</Link>
+                            </>
+                        ):(
+                            <div className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">
+                                {next}
+                            </div>
+                        )}              
+                    </button>
                 </div>
                 
             </div>
@@ -107,3 +132,15 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
 
     )
 }
+
+/*async function dataToRegister2(event: React.FormEvent<HTMLFormElement>){
+        event.preventDefault();
+        if(firstNameValue){
+            localStorage.setItem("fNameReg", firstNameValue);
+            if(lastNameValue) {
+                localStorage.setItem("lNameReg", lastNameValue);
+            }
+            //redirectToNextPage("register/email-password")
+        }       
+        
+    }*/

@@ -84,13 +84,13 @@ export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forg
                 
                 <div className="nextNewAccountMenu">
                 
-                <div className="btnNextAccount">
-                    <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/register`} className=" flex items-center">
-                        <div className="createAccount"
+                <div className="btnNextAccount w-[65%]">
+                    <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/register`} className=" flex items-center w-[80%]">
+                        <div className="createAccount flex items-center justify-center"
                         >{createAccount}</div>
                     </Link>
                 </div>
-                <div className="btnNextAccount">
+                <div className="btnNextAccount w-[35%]">
                     <input type="submit" value={next} className="nextBtnAccount"/>
                 </div>
                 

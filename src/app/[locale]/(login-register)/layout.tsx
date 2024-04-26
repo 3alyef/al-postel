@@ -5,14 +5,17 @@ import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 
 export default async function RootLayout({
-    children,
+  children,
     params: { locale }
   }: Readonly<{children: React.ReactNode; params: { locale: Locale }}>) {
-    const dictionary = await getDictionary(locale);
-    const _isSemitic: boolean = locale === "he";
-    return (
-        <DefaultBackground _isSemitic={_isSemitic}>
-            <main className={`loginMenuLayout flex-col relative items-center justify-center`}>
+  const dictionary = await getDictionary(locale);
+  const _isSemitic: boolean = locale === "he";
+  return (
+    <body
+    className="min-h-[100vh] bg-black flex flex-col "
+    >
+      <DefaultBackground _isSemitic={_isSemitic}>
+            <main className={`loginRegisterMenuLayout flex-col relative items-center justify-center`}>
                 <div className={`absolute top-0 ${_isSemitic ? "right-0 ":"left-0 "}`}>
                     <LogoAlPostel locale={locale} postelLabel={dictionary.Metadata.title} />
                 </div>
@@ -24,7 +27,7 @@ export default async function RootLayout({
             <footer>
                 <LanguageSwitch locale={locale}/>
             </footer>
-        </DefaultBackground>  
-    );
-  }
-  
+        </DefaultBackground> 
+    </body>
+  );
+}
