@@ -21,7 +21,7 @@ export default async function EmailPassword({
             <section className="commomSectionMenu dataUser">
             
                 <div className="dataUser_Container flex flex-col items-center justify-center gap-2 mb-[1.85em] ">
-                   <RegisterEmailPassword/>
+                   <RegisterEmailPassword locale={locale}/>
                 </div>
             
             </section>

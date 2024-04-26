@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
 import { verifyAll } from "@/services/toServerAndVerifyToken.service";
 import Link from "next/link";
+import { GlobalVariables } from "../global/global";
 
 interface propsFormRegister {
     locale: Locale;
@@ -32,10 +33,25 @@ export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forg
     }
 
     useEffect(()=>{
-        const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
+        /*const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
         if(userEmailLocalStorage){      
             setEmailValue(userEmailLocalStorage);
-        }
+        }*/
+
+        const previousURL = GlobalVariables.previousURL;
+        //console.log("hine", previousURL, previousURL.includes("register/email-password"))
+        if(previousURL.includes("login/signin")){
+            const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
+            if(userEmailLocalStorage){      
+                setEmailValue(userEmailLocalStorage);
+                if(emailValue === userEmailLocalStorage){
+                    GlobalVariables.previousURL = "";
+                }
+            }
+                   
+        } 
+
+        localStorage.removeItem("userEmailToLogin");
         
     }, [])
 

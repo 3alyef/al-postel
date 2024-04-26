@@ -36,31 +36,45 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
     }
     async function dataToRegister2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        localStorage.setItem("firstNameReg", firstNameValue);
-        localStorage.setItem("lastNameReg", lastNameValue);
-        redirectToNextPage("register/email-password")
+        if(firstNameValue){
+            localStorage.setItem("fNameReg", firstNameValue);
+            if(lastNameValue) {
+                localStorage.setItem("lNameReg", lastNameValue);
+            }
+            redirectToNextPage("register/email-password")
+        }    
+        
+    }
+
+    async function teste(event: React.FormEvent<HTMLFormElement>){
+        const fName = localStorage.getItem("fNameReg");
+        console.log(fName)
+        GlobalVariables.previousURL = "register/email-password";
     }
     
   
     useEffect(()=>{
-        const previousURL = GlobalVariables.previousURL
-
+        const previousURL = GlobalVariables.previousURL;
+        //console.log("hine", previousURL, previousURL.includes("register/email-password"))
         if(previousURL.includes("register/email-password")){
-            const firstName = localStorage.getItem("firstNameReg");
+            const fName = localStorage.getItem("fNameReg");
+            console.log("fName", fName)
+            if(fName){
+                setFirstNameValue(fName);
+                const lName = localStorage.getItem("lNameReg");
+                console.log(fName, "passou")
+                if(lName){ 
+                    setLastNameValue(lName)
+                }
 
-            setFirstNameValue(firstName?firstName:"");
-
-            const lastName = localStorage.getItem("lastNameReg");
-
-            setLastNameValue(lastName?lastName:"")
-            
-            localStorage.removeItem("firstNameReg");
-            localStorage.removeItem("lastNameReg")
-            GlobalVariables.previousURL = "";
+                if(fName === firstNameValue){
+                    GlobalVariables.previousURL = "";
+                }
+            }         
         } 
 
-        localStorage.removeItem("firstNameReg");
-        localStorage.removeItem("lastNameReg")
+        localStorage.removeItem("fNameReg");
+        localStorage.removeItem("lNameReg");
         
     }, [])
     return (

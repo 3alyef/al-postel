@@ -5,6 +5,7 @@ import FormPasswordLogin from "../formPasswordLogin/formPasswordLogin";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { verifyAll } from "@/services/toServerAndVerifyToken.service";
+import { GlobalVariables } from "../global/global";
 interface propsDataUser {
     locale: Locale;
     _isSemitic: boolean;
@@ -41,7 +42,9 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
     }
 
     useEffect(()=>{
-        
+
+        GlobalVariables.previousURL = "login/signin";
+     
         const userEmailLocalStorage = localStorage.getItem('userEmailToLogin')
         const image = localStorage.getItem("imagemUserToPreLogin")
         if(image){
