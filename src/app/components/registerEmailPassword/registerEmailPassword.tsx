@@ -14,7 +14,7 @@ interface propsRegisterEmailPassword {
     _isSemitic: boolean;
     email: string;
     password: string;
-    reapeatPassword: string;
+    repeatPassword: string;
     next: string;
     back: string;
     Those_passwords_did_not_match_Try_again: string;
@@ -23,7 +23,7 @@ interface propsRegisterEmailPassword {
     Email_already_exists: string
 }
 
-export default function RegisterEmailPassword({locale, _isSemitic, email, password, reapeatPassword, next, back, Those_passwords_did_not_match_Try_again, Confirm_your_password, Use_8_characters_or_more_for_your_password, Email_already_exists}:propsRegisterEmailPassword){
+export default function RegisterEmailPassword({locale, _isSemitic, email, password, repeatPassword, next, back, Those_passwords_did_not_match_Try_again, Confirm_your_password, Use_8_characters_or_more_for_your_password, Email_already_exists}:propsRegisterEmailPassword){
 
     const [firstNameValue, setFirstNameValue] = useState<string>("");
     const [lastNameValue, setLastNameValue] = useState<string>("");
@@ -70,7 +70,9 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
 
     const clickRegister = async ()=>{
         if(passwordValue.length < 8){
-            setProcessErrorStylePass(true)   
+            if(passwordValue.length > 0){
+                setProcessErrorStylePass(true) 
+            }   
         } else {
             if(repeatPasswordValue.length === 0) {
                 setProcessErrorStylePass(false)
@@ -84,12 +86,16 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
                     setRepeatPasswordValue("")
                 } else {
                     
-                    if(passwordValue.length >= 8){
+                    if(passwordValue.length >= 8 && !processErrorStyleEmail){
                     //
                         setProcessErrorStylePass(false) 
                         setProcessErrorStyleRPass(false)
-                        await registerUser(firstNameValue, lastNameValue, emailValue, password, reapeatPassword);
-                        redirectToNextPage("register/email-password")
+                        const resp: {message: string, status: number} = await registerUser(firstNameValue, lastNameValue, emailValue, passwordValue, repeatPasswordValue);
+                        console.log("RESPOSTA", resp)
+                        if(resp.status === 201){
+                            redirectToNextPage("login")
+                        }
+                        
                     //
                     }
                     
@@ -98,7 +104,7 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
         }
     }
     
-    const [register, setRegister] = useState<boolean>(false)
+    //const [register, setRegister] = useState<boolean>(false)
     
     
 
@@ -150,67 +156,65 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
     }
 
     return (
-        <>
-            <form className="w-[100%]" onSubmit={(e)=>{
-                e.preventDefault();
-                clickRegister()
-                //redirectToNextPage("register/email-password")
-            }}>
-            <div className={`min-h-[68px] flex flex-col w-[85%]`}>
+    
+    <form className="w-[100%]" onSubmit={(e)=>{
+            e.preventDefault();
+            clickRegister()
+            //redirectToNextPage("register/email-password")
+    }}>
+        <div className={`min-h-[68px] flex flex-col w-[85%]`}>
 
-                {/* Email */}
-                <div className="w-[100%] min-h-[65px]">
-                    <InputText text={email} _isSemitic={_isSemitic} type="text" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyleEmail}
-                    messageError={Email_already_exists}
-                    onFocusFunction={onFocusFunctionEmailValue} onFocusStyle={onFocusStyleEmail} setOnFocusStyle={setOnFocusStyleEmail}
-                    onBlur={onBlur}/>
-                </div>
-
-                {/* Password */}
-                <div className="w-[100%] min-h-[65px]">
-                    <InputText text={password} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStylePass}
-                    messageError={Use_8_characters_or_more_for_your_password}
-                    onFocusFunction={onFocusFunctionPassword} onFocusStyle={onFocusStylePassword} setOnFocusStyle={setOnFocusStylePassword}/>
-                </div>    
-
-                {/* Repeat Password */}
-                <div className="w-[100%] min-h-[65px]">
-                    <InputText text={reapeatPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setRepeatPasswordValue} value={repeatPasswordValue} _isRequired={false} processErrorStyle={processErrorStyleRPass}
-                    messageError={
-                        erroMsg
-                    }
-                    onFocusFunction={onFocusFunctionRepeatPassword} onFocusStyle={onFocusStyleRepeatPassword} setOnFocusStyle={setOnFocusStyleRepeatPassword}/>
-                </div>
+            {/* Email */}
+            <div className="w-[100%] min-h-[65px]" key={email}>
+                <InputText text={email} _isSemitic={_isSemitic} type="email" costumerClass="text-white" setValue={setEmailValue} value={emailValue} _isRequired={true} processErrorStyle={processErrorStyleEmail}
+                messageError={Email_already_exists}
+                onFocusFunction={onFocusFunctionEmailValue} onFocusStyle={onFocusStyleEmail} setOnFocusStyle={setOnFocusStyleEmail}
+                onBlur={onBlur}/>
             </div>
-            
-            <div className="nextNewAccountMenu">
-            
-                <div className="btnNextAccount w-[65%]">      
-                    <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/login`} className=" flex items-center h-[100%] justify-center">
-                        <div className="createAccount"
-                        style={{fontSize: "13px", height: "100%"}}>{back}</div>
-                    </Link>
-                </div>
-                <div className="btnNextAccount w-[35%]">
 
-                    <button type="submit" className="nextBtnAccount  flex justify-center" 
-                    style={{padding: "0px"}} onClick={()=>clickRegister()}>
-                        {(passwordValue.length > 8 && emailValue && passwordValue === repeatPasswordValue) ? (
-                            <>
-                                <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/login`} className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">{next}</Link>
-                            </>
-                        ):(
-                            <div className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">
-                                {next}
-                            </div>
-                        )}              
-                    </button>
-                </div>
-                
+            {/* Password */}
+            <div className="w-[100%] min-h-[65px]" key={password}>
+                <InputText text={password} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStylePass}
+                messageError={Use_8_characters_or_more_for_your_password}
+                onFocusFunction={onFocusFunctionPassword} onFocusStyle={onFocusStylePassword} setOnFocusStyle={setOnFocusStylePassword}/>
+            </div>    
+
+            {/* Repeat Password */}
+            <div className="w-[100%] min-h-[65px]" key={repeatPassword}>
+                <InputText text={repeatPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setRepeatPasswordValue} value={repeatPasswordValue} _isRequired={false} processErrorStyle={processErrorStyleRPass}
+                messageError={
+                    erroMsg
+                }
+                onFocusFunction={onFocusFunctionRepeatPassword} onFocusStyle={onFocusStyleRepeatPassword} setOnFocusStyle={setOnFocusStyleRepeatPassword}/>
             </div>
-        </form>
-
+        </div>
         
-        </>
+        <div className="nextNewAccountMenu">
+        
+            <div className="btnNextAccount w-[65%]">      
+                <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/login`} className=" flex items-center h-[100%] justify-center">
+                    <div className="createAccount"
+                    style={{fontSize: "13px", height: "100%"}}>{back}</div>
+                </Link>
+            </div>
+            <div className="btnNextAccount w-[35%]">
+
+                <button type="submit" className="nextBtnAccount  flex justify-center" 
+                style={{padding: "0px"}} onClick={()=>clickRegister()}>
+                    {(passwordValue.length > 8 && emailValue && passwordValue === repeatPasswordValue) ? (
+                        <>
+                            <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/login`} className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">{next}</Link>
+                        </>
+                    ):(
+                        <div className=" w-[100%] py-[6px] px-[.48em] flex justify-center cursor-pointer">
+                            {next}
+                        </div>
+                    )}              
+                </button>
+            </div>
+            
+        </div>
+    </form>       
+        
     );
 }

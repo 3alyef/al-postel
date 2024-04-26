@@ -57,7 +57,6 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
                         type={type}
                         className={`Inputs ${costumerClass}`}
                         placeholder=" " 
-                        id="aqui"
                         ref={inputRef}
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
