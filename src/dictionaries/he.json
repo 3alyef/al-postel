@@ -19,6 +19,14 @@
         "First_Name": "שם פרטי",
         "Last_Name_(optional)": "שם משפחה (אופציונלי)",
         "Next": "הבא",
-        "Already_have_an_account": "כבר יש לך חשבון?"
+        "Already_have_an_account": "כבר יש לך חשבון?",
+        "Those_passwords_did_not_match_Try_again": "הסיסמאות אינן תואמות. יש לנסות שוב.",
+        "Use_8_characters_or_more_for_your_password": "יש להשתמש ב-8 תווים או יותר לסיסמה שלך",
+        "Confirm_your_password": "יש לאשר את הסיסמה",
+        "back": "חזרה",
+        "Email": "מייל",
+        "Password": "סיסמה",
+        "Confirm": "אישור",
+        "Email_already_exists": "האימייל כבר קיים!"
     }
 }

@@ -1,4 +1,4 @@
-import { getImageByEmail, tokenGetImageByEmail } from "@/interfaces/checkEmail.interface";
+import { tokenGetImageByEmail } from "@/interfaces/checkEmail.interface";
 
 export default async function checkEmail(email: string): Promise<tokenGetImageByEmail | null> {
     try {
