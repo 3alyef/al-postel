@@ -191,9 +191,9 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
         
         <div className="nextNewAccountMenu">
         
-            <div className="btnNextAccount w-[65%]">      
-                <Link href={`${process.env.NEXT_PUBLIC_ALPOSTELURL}/${locale}/login`} className=" flex items-center h-[100%] justify-center">
-                    <div className="createAccount"
+            <div className="btnNextAccount w-[65%]" onClick={()=>GlobalVariables.previousURL="register/email-password"}>      
+                <Link href={`/${locale}/register`} className=" flex items-center h-[100%] justify-center w-[85%]">
+                    <div className="createAccount flex items-center justify-center"
                     style={{fontSize: "13px", height: "100%"}}>{back}</div>
                 </Link>
             </div>

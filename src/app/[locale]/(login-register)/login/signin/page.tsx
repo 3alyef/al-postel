@@ -21,7 +21,7 @@ export default async function Singnin({
             </section>
             <section className="commomSectionMenu dataUser">
             
-                <div className="dataUser_Container flex flex-col items-center justify-center gap-2 mb-[1.85em] ">
+                <div className="dataUser_Container flex flex-col items-center justify-center gap-2 ">
                     <DataUserForm Create_Account={dictionary.Login.Create_Account} Enter_your_password={dictionary.Login.Enter_your_password} Forgot_password={dictionary.Login.Forgot_password} Next={dictionary.Login.Next} _isSemitic={_isSemitic} locale={locale}
                     messageError={dictionary.Login.Incorrect_password}/>
                 </div>

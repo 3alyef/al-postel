@@ -19,7 +19,7 @@ export default async function RootLayout({
                 <div className={`absolute top-0 ${_isSemitic ? "right-0 ":"left-0 "}`}>
                     <LogoAlPostel locale={locale} postelLabel={dictionary.Metadata.title} />
                 </div>
-                <div className="w-[100%] flex pt-3 gap-4 justify-center items-center">            
+                <div className="padronDivContainerInputs w-[100%] flex pt-3 gap-4 justify-center items-center mt-[100px] pb-[1.5em]">            
                     {children}
                 </div>
                

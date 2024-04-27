@@ -59,7 +59,7 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
     }, [])
     return(
         <>
-            <div className="w-[100%]">
+            <div className="w-[100%] costumerToMediaQueryPerfilEmail">
                 <EmailLoginProfile locale={locale} email={email} profileImage={profileImage}/>
             </div>
             <FormPasswordLogin locale={locale} formCostumerClass="w-[85%] min-h-[65px]" _isSemitic={_isSemitic} textLabelPassword={Enter_your_password}

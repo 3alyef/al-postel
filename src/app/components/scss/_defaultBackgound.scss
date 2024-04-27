@@ -20,6 +20,7 @@
     background-image: linear-gradient(180deg, #21331A 37%, #1E1E1E 100%); justify-content: flex-end; 
     align-items: center; 
     min-height: 100vh;
+    position: relative;
     .barLogin {
         width: 100%; 
         height: 37vh; 
@@ -31,14 +32,17 @@
         align-items: center; 
         padding-top: 2em;
         .container {
+            top: 0;
+            position: absolute;
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: absolute;
-            min-width: 20em;
-
+            width: 20em;
+            max-width: 100vw;
+            min-height: 100vh;
             .to2Container {
                 display: flex;
                 flex-direction: column;
