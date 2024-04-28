@@ -1,0 +1,68 @@
+.contactsContainer {
+    .headerBarContacts {
+        min-width: 100%;
+        background-color: $bg-color-header;
+        min-height: 12.5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 15px;
+        
+        .profilePhotoMainContacts {
+            position: relative;
+            width: 2.25em;
+            aspect-ratio: 1/1;
+            padding: 0px .2em;
+
+            img {
+                border-radius: 30px;
+            }
+        }
+
+    }
+
+    .mainContacts {
+        min-width: 100%;
+        min-height: 75%;
+    }
+
+    .footerBarContacts {
+        min-width: 100%;
+        background-color: $bg-color-footer;
+        min-height: 12.5%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        .msgsBtn, .searchBtn, .groupsBtn {
+            cursor: pointer;
+
+        }
+
+        .msgsBtn, .groupsBtn {
+            //background-color: $btn-color;
+            width: 52px;
+            padding: .2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1;
+            border-radius: 30px;
+        }
+
+        .msgsBtn:hover, .groupsBtn:hover {
+            background-color: $btn-color;
+            
+        }
+
+        .msgsBtn:active, .groupsBtn:active {
+            background-color: $btn-color-active;  
+              
+        }
+
+        .searchBtn:active {
+            scale: .95;
+        }
+
+    }
+}
