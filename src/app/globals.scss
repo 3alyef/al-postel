@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    z-index: 50;
 }
 
 @import "./[locale]/(login-register)/scss/global.scss";
