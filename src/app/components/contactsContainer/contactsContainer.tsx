@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
+import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
@@ -16,7 +17,7 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [onAlPostelLogo, setOnAlPostelLogo] = useState<boolean>(false);
     const [onGroups, setOnGroups] = useState<boolean>(false);
-    const [onMessages, setOnMessages] = useState<boolean>(false);
+    const [onMessages, setOnMessages] = useState<boolean>(true);
 
     return (
         <div className="flex flex-col w-full h-full relative">
@@ -59,17 +60,7 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                     <div className="contactsGroupsList">
                        
 
-                        {/*
-                            <div>
-                                <div className="contactGroupPhoto">
-                                </div>
-                                <div className="aboutContactMsgs">
-                                    <h3 className="nameContactGroup"></h3>
-                                    <p className="lastMsg"></p>
-                                    <p className="lastTime"></p>
-                                </div>
-                            </div>
-                        */}
+                        
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
 
@@ -78,9 +69,18 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                         style={{top: onGroups ? "0%":"-100%"}}>
 
                         </div>
-                        <div className="messagesScreen"
+                        <div className="flex flex-col messagesScreen pt-[7px] gap-[2px]"
                         style={{top: onMessages ? "0%":"-100%"}}>
-
+                            {true && (
+                                <>
+                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={500}/>
+                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={250}/>
+                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={235}/>
+                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={0}/>
+                                    
+                                </>
+                            )}
+                            
                         </div>
 
                         <div className="absolute bg-black top-[-100%] w-[100%] h-[100%]">Para correcao de Cor</div>
@@ -95,7 +95,8 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                                 competitors: [onProfile, onAlPostelLogo, onGroups, settings],  
                                 setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setSettings], 
                                 setRoot: setOnMessages,
-                                setOnMessages: setOnMessages
+                                setOnMessages: setOnMessages,
+                                _isMsg:true
                             }
                         )  
                     }}>

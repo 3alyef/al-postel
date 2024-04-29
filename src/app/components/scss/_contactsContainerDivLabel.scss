@@ -1,0 +1,81 @@
+.contactsContainerDiv {
+    cursor: pointer;
+    padding: 0px 10px;
+    min-height: 3.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    .contactGroupPhoto{
+        position: relative;
+        width: 2.25em;
+        aspect-ratio: 1/1;
+        padding: 0px .2em;
+        cursor: pointer;
+        img {
+            border-radius: 30px;
+        }
+    }
+
+    .aboutContactMsgs {
+        min-width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .subTitle, .footerTitle {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+
+            p {
+                font-size: 15px;
+            }
+            h3 {
+                font-size: 20px;
+                font-weight: 500;
+            }
+        }
+        .subTitle {
+            .padronDataColor {
+                color: $bg-isjTest;
+                font-weight: 600;
+            }
+            .nameContactGroup {
+
+            }
+
+            .lastTime {
+                user-select: none;
+
+            }
+        }
+        .footerTitle {
+            
+            .lastMsg {
+                user-select: none;
+            }
+            .unreadMessages {
+                background-color: $bg-isjTest;
+                border-radius: 30px;
+                padding: 2px;
+                text-align: center;
+                min-width: 35px;
+                user-select: none;
+            }
+        }
+        
+        
+    }
+}
+
+.contactsContainerDiv:hover {
+    background-color: rgba(46, 46, 46, 0.24);
+}
+
+.contactsContainerDiv:active {
+    background-color: rgba(27, 27, 27, 0.384);
+}

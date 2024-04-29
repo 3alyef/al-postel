@@ -43,7 +43,9 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
             } else {
                 if(response.auth && response.token){
                     localStorage.setItem("tokenToM2", response.token);
+                    localStorage.setItem("linkM2", response.URL_M2)
                     redirectToAlpostel();
+                    
                 }
             }
         }
