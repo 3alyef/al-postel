@@ -1,0 +1,31 @@
+.searchUserComponent {
+
+    padding-top: 10px;
+
+    .searchUserContainer {
+        //position: relative;
+        display: flex;
+        //flex-direction: column;
+        //align-items: flex-start;
+        justify-content: center;
+        //align-items: stretch;
+        //align-content: stretch;
+        height: 100%;
+        .costumerClassDivContainer {
+            border-radius: 0 !important;
+        }
+
+        .btnSearchContainer {
+            display: flex;
+            align-items: center;
+            .searchBTN {
+                background-color: black;
+                cursor: pointer;
+                color: white;
+                min-width: 4em;
+                height: 80%;
+            }
+        }
+        
+    }
+}

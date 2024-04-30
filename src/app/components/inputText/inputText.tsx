@@ -6,6 +6,7 @@ interface propsInputText {
     _isSemitic: boolean;
     type: string;
     costumerClass?: string;
+    costumerClassDivContainer?: string;
     value: string;
     setValue: Dispatch<SetStateAction<string>>;
     _isRequired: boolean;
@@ -17,7 +18,7 @@ interface propsInputText {
     onBlur?:(value: boolean)=>void
 }
 
-export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur }: propsInputText) {
+export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer }: propsInputText) {
     const inputRef = useRef<HTMLInputElement>(null);
     
     const [borderStyle, setBorderStyle] = useState<string>('1.8px solid rgb(0, 0, 0)');
@@ -52,7 +53,7 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
     return (
         <div className="w-[100%] h-[100%]">
             <div className="formData_ContainerEmail">
-                <div className={`container_Input_Div`} style={{border: borderStyle}}>
+                <div className={`container_Input_Div ${costumerClassDivContainer}`} style={{border: borderStyle}}>
                     <input
                         type={type}
                         className={`Inputs ${costumerClass}`}

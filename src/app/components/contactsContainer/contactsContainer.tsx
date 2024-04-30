@@ -1,11 +1,12 @@
 "use client";
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
+import { SearchUser } from "../searchUser/searchUser";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
@@ -13,11 +14,21 @@ interface propsContactsContainer {
 
 export default function ContactsContainer({_isSemitic}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
+
+    const [testImg, setTestImg] = useState<string>("/imgs/assets/person.png");
+
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [onAlPostelLogo, setOnAlPostelLogo] = useState<boolean>(false);
     const [onGroups, setOnGroups] = useState<boolean>(false);
     const [onMessages, setOnMessages] = useState<boolean>(true);
+
+    useEffect(()=>{
+        const meImage = localStorage.getItem("imagemUserToPreLogin")
+        if(meImage) {
+            setImg(meImage)
+        }
+    }, [])
 
     return (
         <div className="flex flex-col w-full h-full relative">
@@ -57,13 +68,10 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                     </div>
                 </div>
                 <div className="mainContacts">
-                    <div className="contactsGroupsList">
-                       
-
-                        
+                    <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-
+                            <SearchUser _isSemitic={_isSemitic}/>
                         </div>
                         <div className="groupsScreen"
                         style={{top: onGroups ? "0%":"-100%"}}>
@@ -73,10 +81,10 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                         style={{top: onMessages ? "0%":"-100%"}}>
                             {true && (
                                 <>
-                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={500}/>
-                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={250}/>
-                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={235}/>
-                                    <ContactsContainerDivLabel sourceImage={meImg} unreadMessages={0}/>
+                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={500}/>
+                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={250}/>
+                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={235}/>
+                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={0}/>
                                     
                                 </>
                             )}

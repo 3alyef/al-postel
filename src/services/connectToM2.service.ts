@@ -1,4 +1,4 @@
-"use client"
+
 import { io, Socket } from "socket.io-client";
 
 export class ConnectM2 {
@@ -25,7 +25,7 @@ export class ConnectM2 {
     public searchUser(email: string){
         this.socket.emit("searchByEmail", {email})
         this.socket.on("searchByEmail", (el)=>{
-            console.log("user soul:",el)
+            console.log("informations:",el)
         })
     }
     public connectFriend(soulName: string){
