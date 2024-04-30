@@ -1,0 +1,32 @@
+{
+    "Metadata": {
+        "title": "Al Postel"
+    },
+    "Login": {
+        "Login": "Acceso",
+        "Create_Account": "Crear cuenta",
+        "Forgot_your_email": "¿Olvidaste el email?",
+        "Next": "Próximo",
+        "Email": "Email",
+        "Enter_your_password": "Ingresa tu contraseña",
+        "Forgot_password": "¿Has olvidado tu contraseña?",
+        "Incorrect_password": "Contraseña incorrecta",
+        "Welcome": "Bienvenido",
+        "could_not_find_your_Al_PostEl_account": "No pude encontrar tu cuenta de Al PostEl"
+    },
+    "Register": {
+        "Create_a_Al_Postel_Account": "Crear una cuenta en Al Postel",
+        "First_Name": "Nombre de pila",
+        "Last_Name_(optional)": "Apellido (opcional)",
+        "Next": "Próximo",
+        "Already_have_an_account": "¿Ya tienes una cuenta?",
+        "Those_passwords_did_not_match_Try_again": "Esas contraseñas no coincidían. Intentar otra vez.",
+        "Use_8_characters_or_more_for_your_password": "Utilice 8 caracteres o más para su contraseña",
+        "Confirm_your_password": "Confirmar la contraseña",
+        "back": "atrás",
+        "Email": "E-mail",
+        "Password": "Contraseña",
+        "Confirm": "Confirmar",
+        "Email_already_exists": "¡El Email ya existe!"
+    }
+}
