@@ -2,20 +2,20 @@
 import Image from "next/image";
 
 interface propsContactView {
-    sourceImage: string | null;
-    user_name: string;
+    sourceImage: string | null | undefined;
+    first_name: string;
     email: string
 }
-export default function ContactSearchView({sourceImage, user_name, email}:propsContactView){
+export default function ContactSearchView({sourceImage, first_name, email}:propsContactView){
     return (
         <div className="contactsContainerDiv">
             <div className="contactGroupPhoto">
-                <Image alt="profile photo" src={sourceImage || "/imgs/assets/person.png"} fill/>
+                <Image alt="profile photo" src={sourceImage ? sourceImage: "/imgs/assets/person.png"} fill/>
             </div>
             <div className="aboutContactMsgs">
                 <div className="subTitle">
                     <h3 className="nameContactGroup">
-                        {user_name}
+                        {first_name}
                     </h3>
                     <p className={`lastTime text-white font-[500]`}>        
                         {email}

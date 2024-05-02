@@ -24,11 +24,19 @@ export class ConnectM2 {
             console.log("Desconectado do servidor Socket.IO");
         });
     }
-    public searchUser(email: string, setSearchResp: Dispatch<SetStateAction<DataUser | undefined>>){
-        this.socket.emit("searchByEmail", {email})
-        this.socket.on("searchByEmail", (el: DataUser)=>{
-            setSearchResp(el)
-        })
+    public searchUser(email: string): Promise<DataUser> {
+        return new Promise((resolve, reject) => {
+            this.socket.emit("searchByEmail", { email });
+            this.socket.on("searchByEmail", (el: DataUser) => {
+                resolve(el);
+                // remove o listener após a resolução da promessa
+                this.socket.off("searchByEmail");
+            });
+            this.socket.on("searchByEmailError", (error: any) => {
+                reject(error);
+                this.socket.off("searchByEmailError");
+            });
+        });
     }
     public connectFriend(soulName: string){
         this.socket.emit("connectFriend", {soulName})

@@ -6,6 +6,7 @@ export interface MessageUserResponse {
 
 export interface DataUser {
     userSoul: string | null;
+    first_name: string;
     userImageData: imageResp
 }
 

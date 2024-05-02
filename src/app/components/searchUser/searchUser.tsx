@@ -22,9 +22,10 @@ export function SearchUser({_isSemitic, serverIo}: propsSearchUser) {
     function onFocusSearchFunc() {
         setOnFocusSearchStyle(true)
     }
-    function searchUserFunc(event: React.FormEvent<HTMLFormElement>){
+    async function searchUserFunc(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        serverIo.searchUser(searchEmailFormValue, setSearchResp)
+        const dataUser: DataUser = await serverIo.searchUser(searchEmailFormValue)
+        setSearchResp(dataUser)
         //console.log(searchEmailFormValue, searchResp)
     }
 
@@ -45,7 +46,7 @@ export function SearchUser({_isSemitic, serverIo}: propsSearchUser) {
                 <div className="contactsDivSearch">
                     {
                         searchResp && (
-                            <ContactSearchView email={searchEmailFormValue} sourceImage={searchResp.userImageData.userImage} user_name={"Test"}/>
+                            <ContactSearchView email={searchEmailFormValue} sourceImage={searchResp.userImageData.userImage} first_name={searchResp.first_name}/>
                         )
                     }
                 </div>
