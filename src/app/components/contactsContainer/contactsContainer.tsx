@@ -7,12 +7,14 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
+import { ConnectM2 } from "@/services/connectToM2.service";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
+    serverIo: ConnectM2;
 }
 
-export default function ContactsContainer({_isSemitic}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
 
     const [testImg, setTestImg] = useState<string>("/imgs/assets/person.png");
@@ -71,7 +73,7 @@ export default function ContactsContainer({_isSemitic}:propsContactsContainer){
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-                            <SearchUser _isSemitic={_isSemitic}/>
+                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo}/>
                         </div>
                         <div className="groupsScreen"
                         style={{top: onGroups ? "0%":"-100%"}}>

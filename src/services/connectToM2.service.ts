@@ -1,4 +1,6 @@
 
+import { DataUser } from "@/interfaces/searchByEmail.interface";
+import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
 
 export class ConnectM2 {
@@ -22,10 +24,10 @@ export class ConnectM2 {
             console.log("Desconectado do servidor Socket.IO");
         });
     }
-    public searchUser(email: string){
+    public searchUser(email: string, setSearchResp: Dispatch<SetStateAction<DataUser | undefined>>){
         this.socket.emit("searchByEmail", {email})
-        this.socket.on("searchByEmail", (el)=>{
-            console.log("informations:",el)
+        this.socket.on("searchByEmail", (el: DataUser)=>{
+            setSearchResp(el)
         })
     }
     public connectFriend(soulName: string){

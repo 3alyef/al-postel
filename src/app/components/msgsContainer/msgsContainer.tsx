@@ -1,6 +1,6 @@
 "use client"
 
-export default async function MsgsContainer(){
+export default function MsgsContainer(){
     return(
         <>
         </>
