@@ -24,9 +24,9 @@ export class ConnectM2 {
             console.log("Desconectado do servidor Socket.IO");
         });
     }
-    public searchUser(email: string): Promise<DataUser> {
+    public searchUser(userDataMethod: string): Promise<DataUser>{
         return new Promise((resolve, reject) => {
-            this.socket.emit("searchByEmail", { email });
+            this.socket.emit("searchByEmail", { userDataMethod });
             this.socket.on("searchByEmail", (el: DataUser) => {
                 resolve(el);
                 // remove o listener após a resolução da promessa
@@ -37,7 +37,9 @@ export class ConnectM2 {
                 this.socket.off("searchByEmailError");
             });
         });
+        
     }
+    
     public connectFriend(soulName: string){
         this.socket.emit("connectFriend", {soulName})
     }

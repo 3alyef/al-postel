@@ -8,26 +8,35 @@ interface propsAlpostelMain {
 }
 
 export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
-    const [searchEmailValue, setSearchEmailValue] = useState<string>("");
-    let serverIo: ConnectM2;
-    const tokenToM2 = localStorage.getItem("tokenToM2");
-    const m2URL = localStorage.getItem("linkM2")
-    if(tokenToM2 && m2URL){
-        serverIo = new ConnectM2(m2URL, tokenToM2)
-        serverIo.initialize()
-    } else {
-        return
-    }
-    
+    const [serverIo, setServerIo] = useState<ConnectM2 | null>(null);
+
+    useEffect(() => {
+        const tokenToM2 = localStorage.getItem("tokenToM2");
+        const m2URL = localStorage.getItem("linkM2");
+
+        if (tokenToM2 && m2URL) {
+            const server = new ConnectM2(m2URL, tokenToM2);
+            server.initialize();
+            setServerIo(server);
+        }
+    }, []); // O array vazio garante que este efeito só será executado uma vez, semelhante ao componentDidMount
+
+
     return(
         <>
-            <section className="sectionContact" style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo}/>
-            </section>
-            <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
-                <MsgsContainer/>
-            </section>
+            {
+                serverIo && (
+                    <>
 
+                        <section className="sectionContact" style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo}/>
+                        </section>
+                        <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
+                            <MsgsContainer/>
+                        </section>
+                    </>
+                )
+            }
         </>
     )
 }

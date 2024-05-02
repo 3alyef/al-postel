@@ -7,7 +7,15 @@ export interface MessageUserResponse {
 export interface DataUser {
     userSoul: string | null;
     first_name: string;
-    userImageData: imageResp
+    email: string;
+    userImageData: imageResp;
+    costumName: costumName
+}
+
+
+export interface costumName {
+    custom_name: string | undefined;
+    lastUpdateIn: string | undefined
 }
 
 export interface Message {

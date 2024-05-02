@@ -141,8 +141,11 @@ export default function ContactsContainer({_isSemitic, serverIo}:propsContactsCo
                 </div>
             </div>
             <div className="settingsScreen flex flex-col w-full h-full absolute bg-slate-100"
-            style={{left: settings ? "0%": "100%", zIndex: settings ? 1:-1}}>
-
+            style={{...(_isSemitic 
+                ? { right: settings ? "0%" : "100%" }
+                : { left: settings ? "0%" : "100%" }
+            ), zIndex: settings ? 50:-1}}>
+    
             </div>
         </div>
     )
