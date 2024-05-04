@@ -6,8 +6,9 @@ interface propsDivLabel {
     _isGroup?: boolean;
     _howLeast?: string;
     unreadMessages: number;
+    _custom_name_contact?: string
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact}: propsDivLabel){
 
     return(
         <div className="contactsContainerDiv">
@@ -17,7 +18,7 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
             <div className="aboutContactMsgs">
                 <div className="subTitle">
                     <h3 className="nameContactGroup">
-                        Alef
+                        {_custom_name_contact}
                     </h3>
                     
                     <p className={`lastTime ${unreadMessages > 0 ? "padronDataColor": "text-white font-[400]"}`}>

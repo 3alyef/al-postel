@@ -1,20 +1,23 @@
 "use client";
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
 import { ConnectM2 } from "@/services/connectToM2.service";
+import { propsRoom } from "../alpostelMain/alpostelMain";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
+    updateRooms: Map<string, propsRoom[]>;
+    setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>
 }
 
-export default function ContactsContainer({_isSemitic, serverIo}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
 
     const [testImg, setTestImg] = useState<string>("/imgs/assets/person.png");
@@ -73,7 +76,7 @@ export default function ContactsContainer({_isSemitic, serverIo}:propsContactsCo
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo}/>
+                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms}/>
                         </div>
                         <div className="groupsScreen"
                         style={{top: onGroups ? "0%":"-100%"}}>
@@ -83,7 +86,8 @@ export default function ContactsContainer({_isSemitic, serverIo}:propsContactsCo
                         style={{top: onMessages ? "0%":"-100%"}}>
                             {true && (
                                 <>
-                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={500}/>
+                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={500}
+                                    _custom_name_contact="" _howLeast=""/>
                                     <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={250}/>
                                     <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={235}/>
                                     <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={0}/>
