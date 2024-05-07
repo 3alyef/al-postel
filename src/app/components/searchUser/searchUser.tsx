@@ -27,7 +27,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
     }
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData(repeat: boolean) {
             if(searchEmailFormValue.length > 5){
                 try {
                     const dataUser = await serverIo.searchUser(searchEmailFormValue);
@@ -35,6 +35,10 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
                     if (Array.isArray(dataUser)) {
                         console.log("entrou")
                         setSearchResp(dataUser);
+                    } else {
+                        if(dataUser === 'Usuário não encontrado na base de dados' && repeat){
+                            return fetchData(false);
+                        }
                     }
                     
                                      
@@ -45,7 +49,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
             }
         }
     
-        fetchData();
+        fetchData(true);
         //console.log('oi');
     
         // Lembre-se de adicionar todas as dependências usadas na função assíncrona para evitar problemas de atualização
