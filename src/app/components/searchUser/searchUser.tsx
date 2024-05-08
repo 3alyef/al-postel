@@ -29,9 +29,8 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
             setDataSearchFormChange(!dataSearchFormChange);
         }, 2000);
 
-        return (
-            clearTimeout(timeOut)
-        )
+        return ()=> clearTimeout(timeOut)
+        
     }, [searchFormValue])
 
     useEffect(() => {
