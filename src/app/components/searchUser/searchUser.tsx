@@ -16,28 +16,46 @@ interface propsSearchUser {
 export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: propsSearchUser) {
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
     const [searchError, setSearchError] = useState<boolean>(false)
-    const [searchEmailFormValue, setSearchEmailFormValue] = useState<string>("");
+    const [searchFormValue, setSearchFormValue] = useState<string>("");
     const [searchResp, setSearchResp] = useState<DataUser[]>([])
-    /** 
-     * {dataUser: {userSoul: null, userImageData: {lastUpdateIn: null, userImage: null}}}
-    */
+    const [dataSearchFormChange, setDataSearchFormChange] = useState<boolean>(false)
 
     function onFocusSearchFunc() {
         setOnFocusSearchStyle(true);
     }
 
+    useEffect(()=>{
+        const timeOut = setTimeout(() => {
+            setDataSearchFormChange(!dataSearchFormChange);
+        }, 2000);
+
+        return (
+            clearTimeout(timeOut)
+        )
+    }, [searchFormValue])
+
     useEffect(() => {
-        async function fetchData(repeat: boolean) {
-            if(searchEmailFormValue.length > 5){
+    
+        async function fetchData(repeat2: boolean, repeat3: boolean) {
+            if(searchFormValue.length > 5){
                 try {
-                    const dataUser = await serverIo.searchUser(searchEmailFormValue);
+                    const dataUser = await serverIo.searchUser(searchFormValue);
                     console.log(dataUser)
                     if (Array.isArray(dataUser)) {
                         console.log("entrou")
                         setSearchResp(dataUser);
                     } else {
-                        if(dataUser === 'Usuário não encontrado na base de dados' && repeat){
-                            return fetchData(false);
+                        const isDataUser = dataUser === 'Usuário não encontrado na base de dados'
+                        if(isDataUser && repeat2 && !repeat3){
+                            setTimeout(() => {
+                               return fetchData(false, true); 
+                            }, 2000);        
+                        }
+
+                        if(isDataUser && !repeat2 && repeat3){
+                            setTimeout(() => {
+                                return fetchData(false, false); 
+                            }, 2000); 
                         }
                     }
                     
@@ -49,11 +67,11 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
             }
         }
     
-        fetchData(true);
-        //console.log('oi');
+        fetchData(true, false);
+        
     
         // Lembre-se de adicionar todas as dependências usadas na função assíncrona para evitar problemas de atualização
-    }, [searchEmailFormValue]);
+    }, [dataSearchFormChange]);
     
     async function makeNetwork(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         console.log(e.currentTarget.dataset.soulValue);
@@ -80,7 +98,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
         <div className="searchUserComponent">
             <div className="searchUserContainer">
                 <div className="flex justify-center px-2">
-                        <InputText _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={searchError} setOnFocusStyle={setOnFocusSearchStyle} setValue={setSearchEmailFormValue} text="Search" type="text" value={searchEmailFormValue}  costumerClassDivContainer="costumerClassDivContainer"/>
+                        <InputText _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={searchError} setOnFocusStyle={setOnFocusSearchStyle} setValue={setSearchFormValue} text="Search" type="text" value={searchFormValue}  costumerClassDivContainer="costumerClassDivContainer"/>
                
                         
                         {/*
