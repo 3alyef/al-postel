@@ -50,7 +50,7 @@ const verifyToken = async (locale: Locale, token: string, emailValue: string, se
 
 const handleTokenError = async (locale: Locale, emailValue: string, setProcessErrorStyle: Dispatch<SetStateAction<boolean>>, error: string, isPassword: boolean): Promise<boolean> => {
     if (error === "Token expirado" || error === "Token inválido") { // Se o token expirou ou é inválido
-        
+        console.log("entrou no retry...")
         localStorage.removeItem(emailValue); // Remove o token do armazenamento local
         if(isPassword){
             return false;

@@ -27,7 +27,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
     useEffect(()=>{
         const timeOut = setTimeout(() => {
             setDataSearchFormChange(!dataSearchFormChange);
-        }, 2000);
+        }, 750);
 
         return ()=> clearTimeout(timeOut)
         
@@ -79,14 +79,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
         if(!userSoul) return
         try {       
             const content = await serverIo.makeNetwork(userSoul);
-            console.log(content)
-            /*if(content.includes("rukh")){
-                 
-                setUpdateRooms((prevRooms) => [...prevRooms, content]);  
-                console.log("updateRooms", updateRooms) 
-            }*/
-                   
-                        
+            console.log(content)     
         } catch (error) {
             console.error("Erro ao buscar usuário:", error);
             // Trate o erro conforme necessário

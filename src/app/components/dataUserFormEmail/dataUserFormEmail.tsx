@@ -17,7 +17,7 @@ export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Acc
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
         setOnFocusStyle(true);
-        console.log('oi')
+        //console.log('oi')
     }
     
     return (

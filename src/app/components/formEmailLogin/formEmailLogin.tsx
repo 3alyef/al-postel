@@ -57,7 +57,7 @@ export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forg
 
     async function dataToLogin2(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        console.log("emailValue", emailValue)
+        //console.log("emailValue", emailValue)
         const ok:boolean = await verifyAll(locale, emailValue, setProcessErrorStyle, false);
         if(ok){
             redirectToNextPage("login/signin");
