@@ -50,7 +50,11 @@ export class ConnectM2 {
                         last_name: el.friendData.last_name
                     };
                     if (newRooms.has(el.content)) {
-                        newRooms.get(el.content)?.push(newRoom);
+                        const rooms = newRooms.get(el.content)
+                        //?.push(newRoom);
+                        if(rooms?.length === 0) {
+                            rooms?.push(newRoom);
+                        }
                     } else {
                         newRooms.set(el.content, [newRoom]);
                     }
