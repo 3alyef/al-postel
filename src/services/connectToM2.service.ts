@@ -52,6 +52,7 @@ export class ConnectM2 {
                     if (newRooms.has(el.content)) {
                         const rooms = newRooms.get(el.content)
                         //?.push(newRoom);
+                        console.log('them ----')
                         if(rooms?.length === 0) {
                             rooms?.push(newRoom);
                         }

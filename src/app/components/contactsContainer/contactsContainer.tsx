@@ -37,10 +37,15 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
     }, [])
 
-    function showMessages(el: React.MouseEvent<HTMLDivElement, MouseEvent>){
+    /*function showMessages(el: React.MouseEvent<HTMLDivElement, MouseEvent>){
         const roomName = (el.target as HTMLElement).dataset.room;
         console.log(roomName);
         console.log("updateRooms", updateRooms)
+    }*/
+
+    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        console.log(e.currentTarget.dataset.room);
+        
     }
     return ( 
         <div className="flex flex-col w-full h-full relative">
