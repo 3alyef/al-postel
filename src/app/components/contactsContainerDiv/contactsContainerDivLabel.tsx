@@ -15,7 +15,7 @@ interface propsDivLabel {
 export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName}: propsDivLabel){
 
     return(
-        <div className="contactsContainerDiv" onClick={(el)=>onClick(el)} data-room={roomName}>
+        <div className="contactsContainerDiv" onClick={(e)=>{ e.stopPropagation(); onClick(e); }} data-room={roomName}>
             <div className="contactGroupPhoto">
                 <Image alt="profile photo" src={sourceImage ? sourceImage : '/imgs/assets/person.png'} fill/>
             </div>
