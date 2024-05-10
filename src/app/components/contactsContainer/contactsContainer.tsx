@@ -14,10 +14,11 @@ interface propsContactsContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
     updateRooms: Map<string, propsRoom[]>;
-    setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>
+    setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>,
+    userSoul: string
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
 
     const [testImg, setTestImg] = useState<string>("/imgs/assets/person.png");
@@ -84,7 +85,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         </div>
                         <div className="flex flex-col messagesScreen pt-[7px] gap-[2px]"
                         style={{top: onMessages ? "0%":"-100%"}}>
-                            {true && (
+                            {/*true && (
                                 <>
                                     <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={500}
                                     _custom_name_contact="" _howLeast=""/>
@@ -93,7 +94,26 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={0}/>
                                     
                                 </>
-                            )}
+                            )*/}
+
+                            {
+                                // Iterar sobre os elementos em updateRooms e renderizar ContactsContainerDivLabel para cada um
+                               
+                                Array.from(updateRooms).map(([key, propsRoomArray]) =>
+                                    propsRoomArray.map((propsRoom, index) => (
+                                        <ContactsContainerDivLabel
+                                            key={key + "-" + index}
+                                            sourceImage={propsRoom.imageData?.userImage}
+                                            unreadMessages={0}
+                                            _custom_name_contact={propsRoom.costumName?.custom_name} _isGroup={false} email={propsRoom.email} onClick={()=>{
+                                                console.log("propsRoomArray", propsRoomArray)
+                                                console.log('updateRooms', updateRooms)
+                                            }}
+                                        />
+                                    ))
+                                )
+                            }
+                            
                             
                         </div>
 

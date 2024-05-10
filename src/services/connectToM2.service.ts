@@ -15,11 +15,14 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(updateRooms: Map<string, propsRoom[]> | undefined, setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>) {
+    public initialize(updateRooms: Map<string, propsRoom[]> | undefined, setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
 
+        this.socket.on("updateSoul", (el: {soulName: string})=>{
+            setUserSoul(el.soulName)
+        })
         // Adicionando um ouvinte para o evento "disconnect"
         this.socket.on("disconnect", () => {
             console.log("Desconectado do servidor Socket.IO");
@@ -28,35 +31,37 @@ export class ConnectM2 {
         this.socket.on("updateAll", (el: {
             message: string, 
             content: any, 
-            friendData: 
-            {
-                userSoul: string, 
-                email: string, 
-                customName: costumName 
-            }
+            friendData: propsRoom, 
+            userSoul: string | undefined    
         }) => {
-            console.log("aqui",el)
+            //console.log("aqui",el)
             if (el.message === "add_room" && typeof el.content === "string") {
-                const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(updateRooms || []);
-
-                // Cria uma nova sala de bate-papo com as informações do amigo
-                const newRoom: propsRoom = {
-                    userSoul: el.friendData.userSoul,
-                    email: el.friendData.email,
-                    custom_name: el.friendData.customName
-                };
-
-                // Adiciona a nova sala de bate-papo ao mapa
-                if (newRooms.has(el.content)) {
-                    newRooms.get(el.content)?.push(newRoom);
-                } else {
-                    newRooms.set(el.content, [newRoom]);
-                }
-
-                // Atualiza o estado com o novo mapa
-                setUpdateRooms(newRooms);
-                
-                console.log("updateRooms", newRooms);
+                setUpdateRooms((previous) => {
+                    // Criamos uma cópia do mapa existente, ou criamos um novo mapa vazio se o mapa atual for nulo
+                    const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(previous || []);
+        
+                    // Adicionamos a nova sala de bate-papo, se necessário
+                    const newRoom: propsRoom = {
+                        userSoul: el.friendData.userSoul,
+                        email: el.friendData.email,
+                        costumName: el.friendData.costumName,
+                        first_name: el.friendData.first_name,
+                        imageData: el.friendData.imageData,
+                        last_name: el.friendData.last_name
+                    };
+                    if (newRooms.has(el.content)) {
+                        newRooms.get(el.content)?.push(newRoom);
+                    } else {
+                        newRooms.set(el.content, [newRoom]);
+                    }
+        
+                    console.log("updateRooms", newRooms);
+                    return newRooms;
+                });
+            }
+        
+            if(typeof el.userSoul === "string") {
+                setUserSoul(el.userSoul)
             }
         });
     }
@@ -78,14 +83,7 @@ export class ConnectM2 {
     public makeNetwork(soulName: string): Promise<string>{
         return new Promise((resolve, reject) => {
             this.socket.emit("connectFriend", { friendName: soulName });
-            /*this.socket.on("updateAll", (el: {message: string, content: any}) => {
-                if (el.message === "add_room" && typeof el.content === "string") {
-                    console.log(el.content)
-                    resolve(el.content)   
-                    this.socket.off("updateAll");              
-                }
-            });*/
-            //resolve('ok')
+            
             this.socket.on("connectFriendError", (error: any) => {
                 reject(error);
                 this.socket.off("connectFriendError");

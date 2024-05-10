@@ -2,23 +2,25 @@
 import Image from "next/image";
 
 interface propsDivLabel {
-    sourceImage: string;
+    sourceImage: string | undefined;
     _isGroup?: boolean;
     _howLeast?: string;
     unreadMessages: number;
-    _custom_name_contact?: string
+    _custom_name_contact?: string | undefined
+    email: string | undefined;
+    onClick?: ()=>void
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick}: propsDivLabel){
 
     return(
-        <div className="contactsContainerDiv">
+        <div className="contactsContainerDiv" onClick={onClick}>
             <div className="contactGroupPhoto">
-                <Image alt="profile photo" src={sourceImage} fill/>
+                <Image alt="profile photo" src={sourceImage ? sourceImage : ''} fill/>
             </div>
             <div className="aboutContactMsgs">
                 <div className="subTitle">
                     <h3 className="nameContactGroup">
-                        {_custom_name_contact}
+                        {_custom_name_contact ? _custom_name_contact : email+'' }
                     </h3>
                     
                     <p className={`lastTime ${unreadMessages > 0 ? "padronDataColor": "text-white font-[400]"}`}>
