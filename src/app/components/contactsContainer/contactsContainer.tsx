@@ -1,7 +1,7 @@
 "use client";
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from "react";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
@@ -14,8 +14,9 @@ interface propsContactsContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
     updateRooms: Map<string, propsRoom[]>;
-    setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>,
-    userSoul: string
+    setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>;
+    userSoul: string;
+    setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
 }
 
 export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul}:propsContactsContainer){
@@ -36,7 +37,11 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
     }, [])
 
-    return (
+    function showMessages(el: React.MouseEvent<HTMLDivElement, MouseEvent>){
+        const roomName = (el.target as HTMLElement).dataset.room;
+        console.log(roomName);
+    }
+    return ( 
         <div className="flex flex-col w-full h-full relative">
             <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
             style={{right: onProfile ? "0%": "150%", zIndex: onProfile ? 1:-1}}>
@@ -85,17 +90,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         </div>
                         <div className="flex flex-col messagesScreen pt-[7px] gap-[2px]"
                         style={{top: onMessages ? "0%":"-100%"}}>
-                            {/*true && (
-                                <>
-                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={500}
-                                    _custom_name_contact="" _howLeast=""/>
-                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={250}/>
-                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={235}/>
-                                    <ContactsContainerDivLabel sourceImage={testImg} unreadMessages={0}/>
-                                    
-                                </>
-                            )*/}
-
+ 
                             {
                                 // Iterar sobre os elementos em updateRooms e renderizar ContactsContainerDivLabel para cada um
                                
@@ -105,10 +100,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                             key={key + "-" + index}
                                             sourceImage={propsRoom.imageData?.userImage}
                                             unreadMessages={0}
-                                            _custom_name_contact={propsRoom.costumName?.custom_name} _isGroup={false} email={propsRoom.email} onClick={()=>{
-                                                console.log("propsRoomArray", propsRoomArray)
-                                                console.log('updateRooms', updateRooms)
-                                            }}
+                                            _custom_name_contact={propsRoom.costumName?.custom_name} _isGroup={false} email={propsRoom.email} onClick={showMessages}
+                                            roomName={key}
                                         />
                                     ))
                                 )

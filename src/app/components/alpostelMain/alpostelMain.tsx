@@ -20,6 +20,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [serverIo, setServerIo] = useState<ConnectM2 | null>(null);
     const [updateRooms, setUpdateRooms] = useState<Map<string, propsRoom[]>>(new Map());
     const [userSoul, setUserSoul] = useState<string>('')
+    const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
@@ -40,10 +41,10 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                     <>
 
                         <section className="sectionContact" style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul}/>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg}/>
                         </section>
                         <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
-                            <MsgsContainer/>
+                            <MsgsContainer screenMsg={screenMsg}/>
                         </section>
                     </>
                 )

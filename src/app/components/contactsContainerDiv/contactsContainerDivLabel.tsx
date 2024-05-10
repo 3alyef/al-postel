@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { MouseEventHandler } from "react";
 
 interface propsDivLabel {
     sourceImage: string | undefined;
@@ -8,14 +9,15 @@ interface propsDivLabel {
     unreadMessages: number;
     _custom_name_contact?: string | undefined
     email: string | undefined;
-    onClick?: ()=>void
+    onClick: (el: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    roomName: string
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName}: propsDivLabel){
 
     return(
-        <div className="contactsContainerDiv" onClick={onClick}>
+        <div className="contactsContainerDiv" onClick={(el)=>onClick(el)} data-room={roomName}>
             <div className="contactGroupPhoto">
-                <Image alt="profile photo" src={sourceImage ? sourceImage : ''} fill/>
+                <Image alt="profile photo" src={sourceImage ? sourceImage : '/imgs/assets/person.png'} fill/>
             </div>
             <div className="aboutContactMsgs">
                 <div className="subTitle">
