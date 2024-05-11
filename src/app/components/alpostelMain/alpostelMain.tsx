@@ -16,24 +16,36 @@ export interface propsRoom {
     imageData: {userImage: string | undefined, lastUpdateIn: string | undefined}
 
 }
+
+export interface propsMessagesContent {
+    fromUser: string,
+    toUser: string,
+    message: string,
+    createdIn:  string
+}
 export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [serverIo, setServerIo] = useState<ConnectM2 | null>(null);
     const [updateRooms, setUpdateRooms] = useState<Map<string, propsRoom[]>>(new Map());
-    const [userSoul, setUserSoul] = useState<string>('')
-    const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map())
+    const [userSoul, setUserSoul] = useState<string>('');
+    const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map());
+
+    const [messagesContent, setMessagesContent] = useState<Map <string, propsMessagesContent[]>>(new Map())
+
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
             const server = new ConnectM2(m2URL, tokenToM2);
-            server.initialize(updateRooms, setUpdateRooms, setUserSoul);
+            server.initialize(setUpdateRooms, setUserSoul, setMessagesContent);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
     }, []); // O array vazio garante que este efeito só será executado uma vez, semelhante ao componentDidMount
 
-
+    useEffect(()=>{
+        console.log('screenMsg', screenMsg)
+    }, [screenMsg])
     return(
         <>
             { 

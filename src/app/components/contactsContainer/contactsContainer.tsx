@@ -19,11 +19,8 @@ interface propsContactsContainer {
     setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
-
-    const [testImg, setTestImg] = useState<string>("/imgs/assets/person.png");
-
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [onAlPostelLogo, setOnAlPostelLogo] = useState<boolean>(false);
@@ -37,15 +34,17 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
     }, [])
 
-    /*function showMessages(el: React.MouseEvent<HTMLDivElement, MouseEvent>){
-        const roomName = (el.target as HTMLElement).dataset.room;
-        console.log(roomName);
-        console.log("updateRooms", updateRooms)
-    }*/
 
     async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        console.log(e.currentTarget.dataset.room);
-        
+        const roomName = e.currentTarget.dataset.room;
+        console.log(roomName);
+        const roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === roomName)?.[1];
+        if(roomProps && roomName){
+            const roomMap: Map<string, propsRoom> = new Map();
+            roomMap.set(roomName, roomProps[0])
+            setScreenMsg(roomMap)  
+        }
+       
     }
     return ( 
         <div className="flex flex-col w-full h-full relative">

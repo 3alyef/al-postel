@@ -9,15 +9,15 @@ interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
 }
 export default function MsgsContainer({screenMsg}: propsMsgContainer){
-    const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [onProfile, setOnProfile] = useState<boolean>(false);
+    const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
     useEffect(()=>{
-        const meImage = localStorage.getItem("imagemUserToPreLogin")
-        if(meImage) {
-            setImg(meImage)
-        }
-    }, [])
+        const msgArray = Array.from(screenMsg.values());
+        setScreenProps(msgArray[0]);
+        console.log("msgArray", msgArray)
+       
+    }, [screenMsg])
     return(
         <div className="flex flex-col w-full h-full">
             <div className="contactsContainer flex flex-col w-full h-full">
@@ -34,7 +34,7 @@ export default function MsgsContainer({screenMsg}: propsMsgContainer){
                                 }
                             )                                       
                         }}>
-                            <Image alt="me" src={meImg} fill/>
+                            <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
                         </div>
                         <div className="settingsContacts"
                         style={{transform: menu ? "rotate(180deg)": "rotate(0deg)"}} onClick={()=>{

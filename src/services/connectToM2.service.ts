@@ -1,5 +1,5 @@
 
-import { propsRoom } from "@/app/components/alpostelMain/alpostelMain";
+import { propsMessagesContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
@@ -15,7 +15,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(updateRooms: Map<string, propsRoom[]> | undefined, setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setMessagesContainer: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
