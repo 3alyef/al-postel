@@ -33,13 +33,7 @@ export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forg
     }
 
     useEffect(()=>{
-        /*const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
-        if(userEmailLocalStorage){      
-            setEmailValue(userEmailLocalStorage);
-        }*/
-
         const previousURL = GlobalVariables.previousURL;
-        //console.log("hine", previousURL, previousURL.includes("register/email-password"))
         if(previousURL.includes("login/signin")){
             const userEmailLocalStorage = localStorage.getItem("userEmailToLogin")
             if(userEmailLocalStorage){      

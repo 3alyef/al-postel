@@ -60,7 +60,7 @@ export class ConnectM2 {
                         newRooms.set(el.content, [newRoom]);
                     }
         
-                    console.log("updateRooms", newRooms);
+                    //console.log("updateRooms", newRooms);
                     return newRooms;
                 });
             }
@@ -69,6 +69,35 @@ export class ConnectM2 {
                 setUserSoul(el.userSoul)
             }
         });
+
+        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent, room: string})=>{
+            //console.log(el, el.messageData)
+            setMessagesContainer((previous) => {
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
+                
+                if (el.messageData && el.messageData._id) {
+                    const newMessage: propsMessagesContent = {
+                        _id: el.messageData._id,
+                        fromUser: el.messageData.fromUser,
+                        toUser: el.messageData.toUser,
+                        message: el.messageData.message,
+                        createdIn: el.messageData.createdIn
+                        // outras propriedades, se houver
+                    };
+                    if (newMessages.has(el.room)) {
+                        const rooms = newMessages.get(el.room)
+                        rooms?.push(newMessage);
+                        
+                    } else {
+                        newMessages.set(el.room, [newMessage]);
+                    }
+        
+                    console.log("previousMsgs", newMessages, el);
+                    return newMessages;
+                }
+                return newMessages;
+            });
+        })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {

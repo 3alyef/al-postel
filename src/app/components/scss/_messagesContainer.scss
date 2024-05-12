@@ -1,0 +1,33 @@
+.messagesContainer {
+    .footerBarMsgs {
+        
+
+        .emojiBtn, .messageInput, .sendMsg {
+            cursor: pointer;
+
+        }
+
+        .emojiBtn, .sendMsg {
+            //background-color: $btn-color;
+            width: 52px;
+            padding: .2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1;
+            border-radius: 30px;
+        }
+
+        .emojiBtn:hover, .sendMsg:hover {
+            background-color: $btn-color;
+            
+        }
+
+        .emojiBtn:active, .sendMsg:active {
+            background-color: $btn-color-active;  
+              
+        }
+
+        
+    }
+}

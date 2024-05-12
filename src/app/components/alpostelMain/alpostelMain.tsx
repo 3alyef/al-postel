@@ -18,6 +18,7 @@ export interface propsRoom {
 }
 
 export interface propsMessagesContent {
+    _id?: string;
     fromUser: string,
     toUser: string,
     message: string,
@@ -56,7 +57,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                             <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg}/>
                         </section>
                         <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
-                            <MsgsContainer screenMsg={screenMsg}/>
+                            <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic}/>
                         </section>
                     </>
                 )
