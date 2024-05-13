@@ -4,6 +4,17 @@ import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
 
+
+export interface sendMsg {
+    fromUser: string;
+    toUser: string;
+    toRoom?: string;
+    message: string;
+    chatName?: string;
+    toGroup?: string;
+    createdIn: string
+}
+
 export class ConnectM2 {
     public socket: Socket;
 
@@ -75,9 +86,36 @@ export class ConnectM2 {
             setMessagesContainer((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
                 
-                if (el.messageData && el.messageData._id) {
+                if (el.messageData) {
                     const newMessage: propsMessagesContent = {
-                        _id: el.messageData._id,
+                        fromUser: el.messageData.fromUser,
+                        toUser: el.messageData.toUser,
+                        message: el.messageData.message,
+                        createdIn: el.messageData.createdIn
+                        // outras propriedades, se houver
+                    };
+                    if (newMessages.has(el.room)) {
+                        const rooms = newMessages.get(el.room)
+                        rooms?.push(newMessage);
+                        
+                    } else {
+                        newMessages.set(el.room, [newMessage]);
+                    }
+        
+                    console.log("previousMsgs", newMessages, el);
+                    return newMessages;
+                }
+                return newMessages;
+            });
+        })
+
+        this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
+            //console.log(el, el.messageData)
+            setMessagesContainer((previous) => {
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
+                
+                if (el.messageData) {
+                    const newMessage: propsMessagesContent = {
                         fromUser: el.messageData.fromUser,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
@@ -130,8 +168,13 @@ export class ConnectM2 {
     public connectFriend(soulName: string){
         this.socket.emit("connectFriend", {soulName})
     }
-    public sendMsg(soulName: string, message: string) {
-        this.socket.emit("sendMsg", {soulName, message})
+    public sendMsg(isGroup: boolean, msgData: sendMsg) {
+        
+        if(!isGroup && msgData.toRoom){
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
+        }else if(isGroup && msgData.toGroup){
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
+        } 
     }
     public newGroup(soulName: string){
         this.socket.emit("newGroup", {soulName})

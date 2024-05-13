@@ -29,7 +29,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [updateRooms, setUpdateRooms] = useState<Map<string, propsRoom[]>>(new Map());
     const [userSoul, setUserSoul] = useState<string>('');
     const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map());
-
+    const [roomNameNow, setRoomNameNow] = useState<string>("")
     const [messagesContent, setMessagesContent] = useState<Map <string, propsMessagesContent[]>>(new Map())
 
     useEffect(() => {
@@ -54,10 +54,11 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                     <>
 
                         <section className="sectionContact" style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg}/>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setRoomNameNow={setRoomNameNow}/>
                         </section>
                         <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
-                            <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic}/>
+                            <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
+                            userSoul={userSoul} roomNameNow={roomNameNow} setMessagesContent={setMessagesContent}/>
                         </section>
                     </>
                 )

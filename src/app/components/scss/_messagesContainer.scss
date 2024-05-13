@@ -1,4 +1,89 @@
 .messagesContainer {
+    .mainMsgs {
+        position: relative;
+        .main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75em;
+            width: 100%;
+            padding: 0.25em 1em;
+            position: absolute;
+            overflow-y: auto;
+            /* top: 0; */
+            max-height: 100%;
+            width: 100%;
+            align-items: flex-start;
+
+            
+            .messageRender {
+                //
+                //background-color: white;
+                //
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-end;
+                padding: 0.5em .25em;
+                border-radius: .5em;
+                position: relative;
+                min-width: 25%;
+                .rtL {
+                    //
+                    //color: #3cff00;
+                    //
+                    position: absolute;
+                    font-size: 1.5em;
+                    //
+                    //right: -12px;
+                    //
+                    top: -8px;
+
+                }
+                .rtLColorSender{
+                    color: $bg-isjTest;
+                }
+
+                .rtLColorReceive {            
+                    color: $bg-color-header;
+                }
+                .msgContainer {
+                    font-size: 1.15em;
+                    display: inline-block;
+                    width: 100%;
+                    word-wrap: break-word;
+                    font-weight: 400;
+                    padding: .2em .25em;
+                    margin-top: .2em;
+                }
+
+         
+            }
+
+            .messageRenderBgSender{
+                background-color: $bg-isjTest;
+                
+            }
+
+            .messageRenderBgReceive {
+                background-color: $bg-color-header;
+                .msgContainer, .msgCreatedIn {
+                    color: white
+                }
+            }
+        }
+
+        .main::-webkit-scrollbar {
+            width: 7px; /* largura da barra de rolagem */
+        }
+        .main::-webkit-scrollbar-thumb {
+            background-color: #888888d0; /* cor de fundo do polegar */
+            border-radius: 5px; /* borda arredondada do polegar */
+        }
+
+        .main {
+            font-size: .75em;
+        }
+    }
     .footerBarMsgs {
         
 
