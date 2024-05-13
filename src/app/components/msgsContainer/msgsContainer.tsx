@@ -156,7 +156,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="footerBarContacts footerBarMsgs">
-                            <form onSubmit={sendMsg} className="flex w-full items-center justify-around">
+                            <form onSubmit={sendMsg} className="flex w-full items-center justify-between">
                                 <div className="emojiBtn">
                                     <MdOutlineEmojiEmotions className="text-white w-[75%] h-[75%]"/>
                                 </div>   
