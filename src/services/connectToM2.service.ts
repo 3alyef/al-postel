@@ -88,6 +88,7 @@ export class ConnectM2 {
                 
                 if (el.messageData) {
                     const newMessage: propsMessagesContent = {
+                        _id: el.messageData._id,
                         fromUser: el.messageData.fromUser,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
