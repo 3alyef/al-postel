@@ -1,6 +1,7 @@
 .contactsContainer {
     border: 1px solid black;
     justify-content: center;
+    background-color: $bg-color-msg;
     img {
         user-select: none;
     }
@@ -40,7 +41,7 @@
         z-index: 1;
         .contactsGroupsList {
             position: relative;
-            background-color: $bg-color-msg;
+            
             height: 100%;
             width: 100%;
             display: flex;
