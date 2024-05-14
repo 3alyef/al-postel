@@ -26,7 +26,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
     const [msg, setMsg] = useState<string>("");
-    const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([])
+    const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     useEffect(()=>{
         const msgArray = Array.from(screenMsg.values());
@@ -38,12 +39,17 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     useEffect(()=>{
         const scrollToBottom = () => {
             if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
             }
         };
-        console.log('messagesContent', messagesContent)
-        scrollToBottom();
-    }, [messagesContent])
+    
+        console.log('messagesContent', messagesContent);
+        const timeoutId = setTimeout(() => {
+            scrollToBottom();
+        }, 100);
+    
+        return () => clearTimeout(timeoutId);
+    }, [messagesContainerByRoom])
 
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
