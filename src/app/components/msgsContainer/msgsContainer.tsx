@@ -94,7 +94,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         const updateMessages = () => {
             const messagesForRoom = messagesContent.get(roomNameNow);
             if (messagesForRoom) {
@@ -112,7 +112,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         };
     
         updateMessages();
-    }, [roomNameNow, messagesContent]);
+    }, [roomNameNow, messagesContent]);*/
     return(
         <>
             {screenProps?.userSoul && (

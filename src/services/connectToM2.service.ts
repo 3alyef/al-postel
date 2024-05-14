@@ -83,10 +83,10 @@ export class ConnectM2 {
 
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent, room: string})=>{
             //console.log(el, el.messageData)
-            setMessagesContent(() => {
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>([]);
+            setMessagesContent((prev) => {
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
                 
-                if (el.messageData) {
+                if (el.messageData && !prev) {
                     const newMessage: propsMessagesContent = {
                         _id: el.messageData._id,
                         fromUser: el.messageData.fromUser,
@@ -105,8 +105,10 @@ export class ConnectM2 {
         
                     console.log("previousMsgs", newMessages, el);
                     return newMessages;
+                }else {
+                    return newMessages;
                 }
-                return newMessages;
+                
             });
         })
 
@@ -130,22 +132,13 @@ export class ConnectM2 {
                     } else {
                         newMessages.set(el.room, [newMessage]);
                     }
-        
-                    // Ordena as mensagens da sala atualizadas
-                    const sortedMessages = newMessages.get(el.room)?.sort((a, b) => 
-                        new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
-                    );
-
-                    if (sortedMessages) {
-                        newMessages.set(el.room, sortedMessages);
-                    }
-
-                    //console.log("previousMsgs", newMessages, el);
                     return newMessages;
+                } else {
+                    return previous;
                 }
-                return previous;
+                
             });
-            if(el.messageData){
+            /*if(el.messageData){
                 const sortMessagesContent = (messagesContent: Map<string, propsMessagesContent[]>) => {
                     // Converta o Map para um array de [chave, valor] para facilitar a ordenação
                     const entries = Array.from(messagesContent.entries());
@@ -163,7 +156,7 @@ export class ConnectM2 {
                     const sortedMessagesContent = sortMessagesContent(prev);
                     return sortedMessagesContent;
                 })
-            }
+            }*/
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
