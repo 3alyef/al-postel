@@ -144,11 +144,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                                 return (
                                                     <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
-                                                        <div className={`rtL ${
+                                                        {/*<div className={`rtL ${
                                                             el.fromUser === userSoul ? "rtLColorSender" : "rtLColorReceive"
                                                         }`} style={el.fromUser === userSoul ? (_isSemitic ? {right: '-12px'} : {left: '-12px'}) : (_isSemitic ? {left: '-12px'} : {right: '-12px'})}>
                                                             <GoTriangleDown />
-                                                        </div>
+                                                        </div>*/}
                                                         <p className="msgContainer">{el.message}</p>
                                                         <p className="msgCreatedIn">{createdTime}</p>
                                                     </div>
