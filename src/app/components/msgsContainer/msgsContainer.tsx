@@ -11,6 +11,7 @@ import InputText from "../inputText/inputText";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { GoTriangleDown } from "react-icons/go";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
     messagesContent: Map<string, propsMessagesContent[]>;
@@ -18,9 +19,10 @@ interface propsMsgContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
     userSoul: string;
-    roomNameNow: string
+    roomNameNow: string;
+    setRoomNameNow: Dispatch<SetStateAction<string>>
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, roomNameNow, setMessagesContent}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, roomNameNow, setMessagesContent, setRoomNameNow}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
@@ -82,19 +84,31 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 <div className="flex flex-col w-full h-full">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts">
-                                <div className="profilePhotoMainContacts"
-                                onClick={()=>{
-                                    desactiveScreens(
-                                        {
-                                            root: onProfile, 
-                                            competitors: [menu],  
-                                            setCompetitors: [setMenu], 
-                                            setRoot: setOnProfile,
-                                            setOnMessages: setOnProfile
-                                        }
-                                    )                                       
-                                }}>
-                                    <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                <div className="flex items-center gap-[.5em] cursor-pointer" onClick={()=>setRoomNameNow('')}>
+                                    <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
+                                        {_isSemitic ? (
+                                            <FaArrowRight />
+                                        ):
+                                        (
+                                            <FaArrowLeft />      
+                                        )}
+                                    
+                                    </div>
+                                    
+                                    <div className="profilePhotoMainContacts"
+                                    onClick={()=>{
+                                        desactiveScreens(
+                                            {
+                                                root: onProfile,
+                                                competitors: [menu],
+                                                setCompetitors: [setMenu],
+                                                setRoot: setOnProfile,
+                                                setOnMessages: setOnProfile
+                                            }
+                                        )
+                                    }}>
+                                        <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                    </div>
                                 </div>
                                 <div className="settingsContacts"
                                 style={{transform: menu ? "rotate(180deg)": "rotate(0deg)"}} onClick={()=>{

@@ -33,3 +33,16 @@
         }
     }
 }
+
+@media (max-width: 810px) {
+    .sectionContact, .sectionMsg {
+        width: 100% !important;
+    }
+
+    .sectionDisplayNone {
+        display: none;
+    }
+    .sectionDisplayOk{
+        display: block !important;
+    }
+}

@@ -51,12 +51,12 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
        
     }
     return ( 
-        <div className="flex flex-col w-full h-full relative">
+        <div className="flex flex-col h-full relative">
             <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
             style={{right: onProfile ? "0%": "150%", zIndex: onProfile ? 1:-1}}>
 
             </div>
-            <div className="contactsContainer flex flex-col w-full h-full">
+            <div className="contactsContainer flex flex-col h-full">
                 <div className="headerBarContacts">
                     <div className="profilePhotoMainContacts"
                     onClick={()=>{
@@ -166,7 +166,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     </div>
                 </div>
             </div>
-            <div className="settingsScreen flex flex-col w-full h-full absolute bg-slate-100"
+            <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
             style={{...(_isSemitic 
                 ? { right: settings ? "0%" : "100%" }
                 : { left: settings ? "0%" : "100%" }

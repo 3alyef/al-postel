@@ -19,9 +19,9 @@ export interface propsRoom {
 
 export interface propsMessagesContent {
     _id?: string;
-    fromUser: string,
-    toUser: string,
-    message: string,
+    fromUser: string;
+    toUser: string;
+    message: string;
     createdIn:  string
 }
 export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
@@ -53,12 +53,14 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                 serverIo && (
                     <>
 
-                        <section className="sectionContact" style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
+                        <section className={`sectionContact ${roomNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
                             <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setRoomNameNow={setRoomNameNow}/>
                         </section>
-                        <section className="sectionMsg" style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
+                        
+                        <section className={`sectionMsg ${!(roomNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
+                            
                             <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
-                            userSoul={userSoul} roomNameNow={roomNameNow} setMessagesContent={setMessagesContent}/>
+                            userSoul={userSoul} roomNameNow={roomNameNow} setMessagesContent={setMessagesContent} setRoomNameNow={setRoomNameNow}/>
                         </section>
                     </>
                 )
