@@ -86,22 +86,19 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }
 
-    useEffect(()=>{
-        Array.from(messagesContent).map(([key, messages]) => {
-            if (key === roomNameNow) {
-                const ms2 = messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
-                /**/
-                return ms2.map((el, index) => {
-                    setMessagesContainerByRoom((prev)=>{
-                        let obj = prev;
-                        obj.push(el)
-                        return obj
-                    })
-                })
+    useEffect(() => {
+        const updateMessages = () => {
+            const messagesForRoom = messagesContent.get(roomNameNow);
+            if (messagesForRoom) {
+                const sortedMessages = messagesForRoom.sort((a, b) => 
+                    new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
+                );
+                setMessagesContainerByRoom(sortedMessages);
             }
-            
-        })
-    }, [roomNameNow, messagesContent])
+        };
+    
+        updateMessages();
+    }, [roomNameNow, messagesContent]);
     return(
         <>
             {screenProps?.userSoul && (
