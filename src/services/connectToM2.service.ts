@@ -26,7 +26,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setMessagesContainer: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -83,7 +83,7 @@ export class ConnectM2 {
 
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent, room: string})=>{
             //console.log(el, el.messageData)
-            setMessagesContainer((previous) => {
+            setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
                 
                 if (el.messageData) {
@@ -112,7 +112,7 @@ export class ConnectM2 {
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
             //console.log(el, el.messageData)
-            setMessagesContainer((previous) => {
+            setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
                 
                 if (el.messageData) {
@@ -136,6 +136,25 @@ export class ConnectM2 {
                 }
                 return newMessages;
             });
+            if(el.messageData){
+                const sortMessagesContent = (messagesContent: Map<string, propsMessagesContent[]>) => {
+                    // Converta o Map para um array de [chave, valor] para facilitar a ordenação
+                    const entries = Array.from(messagesContent.entries());
+                
+                    // Ordene as mensagens dentro de cada array baseado na propriedade createdIn
+                    entries.forEach(([key, messages]) => {
+                        messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
+                    });
+                
+                    // Converta o array de volta para um Map
+                    return new Map(entries);
+                }
+
+                setMessagesContent(prev => {
+                    const sortedMessagesContent = sortMessagesContent(prev);
+                    return sortedMessagesContent;
+                })
+            }
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
