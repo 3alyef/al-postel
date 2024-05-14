@@ -1,7 +1,7 @@
 "use client"
 
 import { desactiveScreens } from "@/services/desactiveScreens.service";
-import { useEffect, useState, SetStateAction, Dispatch } from 'react';
+import { useEffect, useState, SetStateAction, Dispatch, useRef } from 'react';
 import Image from "next/image";
 import { IoSettingsOutline } from "react-icons/io5";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
@@ -10,7 +10,6 @@ import {  MdOutlineEmojiEmotions } from "react-icons/md";
 import InputText from "../inputText/inputText";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
-import { GoTriangleDown } from "react-icons/go";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -26,7 +25,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
-    const [msg, setMsg] = useState<string>("")
+    const [msg, setMsg] = useState<string>("");
+    const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([])
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     useEffect(()=>{
         const msgArray = Array.from(screenMsg.values());
         setScreenProps(msgArray[0]);
@@ -35,7 +36,13 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [screenMsg])
 
     useEffect(()=>{
+        const scrollToBottom = () => {
+            if (messagesEndRef.current) {
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
         console.log('messagesContent', messagesContent)
+        scrollToBottom();
     }, [messagesContent])
 
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
@@ -78,6 +85,23 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             setMsg('')
         }
     }
+
+    useEffect(()=>{
+        Array.from(messagesContent).map(([key, messages]) => {
+            if (key === roomNameNow) {
+                const ms2 = messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
+                /**/
+                return ms2.map((el, index) => {
+                    setMessagesContainerByRoom((prev)=>{
+                        let obj = prev;
+                        obj.push(el)
+                        return obj
+                    })
+                })
+            }
+            
+        })
+    }, [roomNameNow, messagesContent])
     return(
         <>
             {screenProps?.userSoul && (
@@ -127,40 +151,28 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                 <IoSettingsOutline className="text-[1.5em] text-white"/>
                             </div>
                         </div>
-                        <div className="mainContacts mainMsgs">
+                        <div className="mainContacts mainMsgs"  ref={messagesEndRef}>
                             <div className="main">
-                                
 
                                 {
-                                    
-                                    Array.from(messagesContent).map(([key, messages]) => {
-                                        if (key === roomNameNow) {
-                                            // Ordenar as mensagens por data de criação (do mais antigo para o mais novo)
-                                            messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
-                                    
-                                            return messages.map((el, index) => {
-                                                const createdDate = new Date(el.createdIn);
-            
-                                                const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                                return (
-                                                    <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
-                                                        {/*<div className={`rtL ${
-                                                            el.fromUser === userSoul ? "rtLColorSender" : "rtLColorReceive"
-                                                        }`} style={el.fromUser === userSoul ? (_isSemitic ? {right: '-12px'} : {left: '-12px'}) : (_isSemitic ? {left: '-12px'} : {right: '-12px'})}>
-                                                            <GoTriangleDown />
-                                                        </div>*/}
-                                                        <p className="msgContainer">{el.message}</p>
-                                                        <p className="msgCreatedIn">{createdTime}</p>
-                                                    </div>
-                                                );
-                                            });
-                                        }
-                                        return null;
-                                    })
+                                    messagesContainerByRoom.map((el, index) => {
+                                        const createdDate = new Date(el.createdIn);
 
+                                        const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                        return (
+                                            <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
+                                                {/*<div className={`rtL ${
+                                                    el.fromUser === userSoul ? "rtLColorSender" : "rtLColorReceive"
+                                                }`} style={el.fromUser === userSoul ? (_isSemitic ? {right: '-12px'} : {left: '-12px'}) : (_isSemitic ? {left: '-12px'} : {right: '-12px'})}>
+                                                    <GoTriangleDown />
+                                                </div>*/}
+                                                <p className="msgContainer">{el.message}</p>
+                                                <p className="msgCreatedIn">{createdTime}</p>
+                                            </div>
+                                        );
+                                        
+                                    })
                                 }
-                                
-                                
                             </div>
                         </div>
                         <div className="footerBarContacts footerBarMsgs">
