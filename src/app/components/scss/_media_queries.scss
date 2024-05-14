@@ -48,4 +48,13 @@
     .sectionDisplayOk{
         display: block !important;
     }
+
+    .headerBarContacts {
+        position: fixed;
+        top: 0;
+    }
+    .footerBarContacts {
+        position: fixed;
+        bottom: 0;
+    }
 }

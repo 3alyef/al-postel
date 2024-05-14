@@ -1,13 +1,13 @@
 .contactsContainer {
     border: 1px solid black;
     justify-content: center;
+    height: 100vh;
     background-color: $bg-color-msg;
     img {
         user-select: none;
     }
     .headerBarContacts {
-        position: fixed;
-        top: 0;
+        
         min-width: 100%;
         background-color: $bg-color-header;
         min-height: 12.5%;
@@ -83,8 +83,7 @@
     }
 
     .footerBarContacts {
-        position: fixed;
-        bottom: 0;
+        
         min-width: 100%;
         background-color: $bg-color-footer;
         min-height: 12.5%;
