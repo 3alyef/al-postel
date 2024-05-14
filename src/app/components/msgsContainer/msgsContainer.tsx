@@ -83,8 +83,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             {screenProps?.userSoul && (
                 <div className="flex flex-col w-full h-full">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
-                        <div className="headerBarContacts">
-                                <div className="flex items-center gap-[.5em] cursor-pointer" onClick={()=>setRoomNameNow('')}>
+                        <div className="headerBarContacts py-[5px]">
+                                <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
+                                    setRoomNameNow('')
+                                }}>
                                     <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
                                         {_isSemitic ? (
                                             <FaArrowRight />
@@ -127,16 +129,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         </div>
                         <div className="mainContacts mainMsgs">
                             <div className="main">
-                                {/*<div className="messageRender">
-                                    <div className="rtL" style={_isSemitic ? {right: '-12px'}: {left: '-12px'}}>
-                                        <GoTriangleDown />
-                                    </div>
-                                    <p className="msgContainer">
-                                        jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjiiiiiiiiiiiiiiiiiiiiiiiihhhhhhhhhhhhhhhhhhhhhhhhgggggggggggggggggggggggggggggggg
-                                    </p>
-                                    <p className="msgCreatedIn">1:58 אחה צ</p>
-                                </div>
-                                */}
+                                
+
                                 {
                                     
                                     Array.from(messagesContent).map(([key, messages]) => {
@@ -178,7 +172,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                     <InputText value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" type="text" costumerClass="text-white"/>
                                 </div>  
                                 <button className="sendMsg flex items-center justify-center" type="submit">
-                                    <IoMdSend className="text-white w-[75%] h-[75%]"/>
+                                    <IoMdSend className="text-white w-[75%] h-[75%]"
+                                    style={{rotate: _isSemitic ? '180deg':'0deg'}}/>
                                 </button>
                             </form>
                                 
