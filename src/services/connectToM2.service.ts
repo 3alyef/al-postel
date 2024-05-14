@@ -83,8 +83,8 @@ export class ConnectM2 {
 
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent, room: string})=>{
             //console.log(el, el.messageData)
-            setMessagesContent((previous) => {
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
+            setMessagesContent(() => {
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>([]);
                 
                 if (el.messageData) {
                     const newMessage: propsMessagesContent = {

@@ -98,9 +98,15 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         const updateMessages = () => {
             const messagesForRoom = messagesContent.get(roomNameNow);
             if (messagesForRoom) {
-                const sortedMessages = messagesForRoom.sort((a, b) => 
+                console.log("Before sorting:", messagesForRoom);
+
+                const sortedMessages = [...messagesForRoom].sort((a, b) => 
                     new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
                 );
+
+                // Debug: Verifique o conteúdo das mensagens após a ordenação
+                console.log("After sorting:", sortedMessages);
+
                 setMessagesContainerByRoom(sortedMessages);
             }
         };
@@ -157,7 +163,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="mainContacts mainMsgs">
-                            <div className="main" ref={messagesEndRef}>
+                            <div className="main" >
 
                                 {
                                     messagesContainerByRoom.map((el, index) => {
@@ -178,6 +184,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         
                                     })
                                 }
+                                <div ref={messagesEndRef}/>
                             </div>
                         </div>
                         <div className="footerBarContacts footerBarMsgs">
