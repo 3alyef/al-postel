@@ -35,6 +35,9 @@
 }
 
 @media (max-width: 810px) {
+    body {
+        background-color: $bg-color-header;
+    }
     .sectionContact, .sectionMsg {
         width: 100% !important;
     }
