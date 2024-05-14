@@ -71,16 +71,18 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 };
                 if (newMessages.has(roomNameNow)) {
                     const rooms = newMessages.get(roomNameNow)
-                    rooms?.push(newMessage);
+                    if(rooms){
+                        rooms.push(newMessage);
+                        console.log("existe a sala")
+                    }
+                    
                     
                 } else {
                     newMessages.set(roomNameNow, [newMessage]);
                 }
     
-                console.log("previousMsgs", newMessages, msgS);
+                //console.log("previousMsgs", newMessages, msgS);
                 return newMessages;
-            
-                
             })
             setMsg('')
         }
@@ -148,8 +150,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                 <IoSettingsOutline className="text-[1.5em] text-white"/>
                             </div>
                         </div>
-                        <div className="mainContacts mainMsgs"  ref={messagesEndRef}>
-                            <div className="main">
+                        <div className="mainContacts mainMsgs">
+                            <div className="main" ref={messagesEndRef}>
 
                                 {
                                     messagesContainerByRoom.map((el, index) => {

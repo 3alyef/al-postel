@@ -44,28 +44,9 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
         }
     }, []); // O array vazio garante que este efeito só será executado uma vez, semelhante ao componentDidMount
 
-    useEffect(()=>{
-        console.log('screenMsg', screenMsg)
-    }, [screenMsg])
+    
 
-    useEffect(()=>{
-        const sortMessagesContent = (messagesContent: Map<string, propsMessagesContent[]>) => {
-            // Converta o Map para um array de [chave, valor] para facilitar a ordenação
-            const entries = Array.from(messagesContent.entries());
-        
-            // Ordene as mensagens dentro de cada array baseado na propriedade createdIn
-            entries.forEach(([key, messages]) => {
-                messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
-            });
-        
-            // Converta o array de volta para um Map
-            return new Map(entries);
-        }
-        setMessagesContent(prev => {
-            const sortedMessagesContent = sortMessagesContent(prev);
-            return sortedMessagesContent;
-        })
-    }, [messagesContent])
+    
     return(
         <>
             { 

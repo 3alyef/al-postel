@@ -113,7 +113,7 @@ export class ConnectM2 {
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
             //console.log(el, el.messageData)
             setMessagesContent((previous) => {
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
                 
                 if (el.messageData) {
                     const newMessage: propsMessagesContent = {
@@ -131,10 +131,19 @@ export class ConnectM2 {
                         newMessages.set(el.room, [newMessage]);
                     }
         
-                    console.log("previousMsgs", newMessages, el);
+                    // Ordena as mensagens da sala atualizadas
+                    const sortedMessages = newMessages.get(el.room)?.sort((a, b) => 
+                        new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
+                    );
+
+                    if (sortedMessages) {
+                        newMessages.set(el.room, sortedMessages);
+                    }
+
+                    //console.log("previousMsgs", newMessages, el);
                     return newMessages;
                 }
-                return newMessages;
+                return previous;
             });
             if(el.messageData){
                 const sortMessagesContent = (messagesContent: Map<string, propsMessagesContent[]>) => {
