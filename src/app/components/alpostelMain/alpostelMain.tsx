@@ -20,6 +20,7 @@ export interface propsRoom {
 export interface propsMessagesContent {
     _id?: string;
     fromUser: string;
+    isDeletedToFrom: boolean;
     toUser: string;
     message: string;
     createdIn:  string

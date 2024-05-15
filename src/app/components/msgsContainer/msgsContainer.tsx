@@ -34,22 +34,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         setScreenProps(msgArray[0]);
         console.log("msgArray", msgArray)
        
-    }, [screenMsg])
-
-    /*useEffect(()=>{
-        const scrollToBottom = () => {
-            if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        };
-    
-        console.log('messagesContent', messagesContent);
-        const timeoutId = setTimeout(() => {
-            scrollToBottom();
-        }, 100);
-    
-        return () => clearTimeout(timeoutId);
-    }, [messagesContainerByRoom])*/
+    }, [screenMsg]);
 
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
@@ -62,7 +47,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         if(msg.length > 0 && screenProps?.userSoul) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
-            const msgS: sendMsg = {fromUser: userSoul, message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
+            const msgS: sendMsg = {fromUser: userSoul, isDeletedToFrom: false, message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
             console.log("msgS",msgS)
             serverIo.sendMsg(false, msgS);
             setMessagesContent((previous)=>{
@@ -71,6 +56,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
              
                 const newMessage: propsMessagesContent = {
                     fromUser:msgS.fromUser,
+                    isDeletedToFrom: msgS.isDeletedToFrom,
                     toUser:msgS.toUser,
                     message:msgS.message,
                     createdIn:msgS.createdIn

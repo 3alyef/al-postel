@@ -7,6 +7,7 @@ import { io, Socket } from "socket.io-client";
 
 export interface sendMsg {
     fromUser: string;
+    isDeletedToFrom: boolean;
     toUser: string;
     toRoom?: string;
     message: string;
@@ -90,6 +91,7 @@ export class ConnectM2 {
                     const newMessage: propsMessagesContent = {
                         _id: el.messageData._id,
                         fromUser: el.messageData.fromUser,
+                        isDeletedToFrom: el.messageData.isDeletedToFrom,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
                         createdIn: el.messageData.createdIn
@@ -113,13 +115,14 @@ export class ConnectM2 {
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
-            //console.log(el, el.messageData)
+           
             setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
                 
                 if (el.messageData) {
                     const newMessage: propsMessagesContent = {
                         fromUser: el.messageData.fromUser,
+                        isDeletedToFrom: el.messageData.isDeletedToFrom,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
                         createdIn: el.messageData.createdIn
@@ -138,25 +141,7 @@ export class ConnectM2 {
                 }
                 
             });
-            /*if(el.messageData){
-                const sortMessagesContent = (messagesContent: Map<string, propsMessagesContent[]>) => {
-                    // Converta o Map para um array de [chave, valor] para facilitar a ordenação
-                    const entries = Array.from(messagesContent.entries());
-                
-                    // Ordene as mensagens dentro de cada array baseado na propriedade createdIn
-                    entries.forEach(([key, messages]) => {
-                        messages.sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime());
-                    });
-                
-                    // Converta o array de volta para um Map
-                    return new Map(entries);
-                }
-
-                setMessagesContent(prev => {
-                    const sortedMessagesContent = sortMessagesContent(prev);
-                    return sortedMessagesContent;
-                })
-            }*/
+            
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
@@ -185,17 +170,15 @@ export class ConnectM2 {
         });
     }
     
-
-
     public connectFriend(soulName: string){
         this.socket.emit("connectFriend", {soulName})
     }
     public sendMsg(isGroup: boolean, msgData: sendMsg) {
         
         if(!isGroup && msgData.toRoom){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, isDeletedToFrom: msgData.isDeletedToFrom, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
         }else if(isGroup && msgData.toGroup){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, isDeletedToFrom: msgData.isDeletedToFrom, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
         } 
     }
     public newGroup(soulName: string){
