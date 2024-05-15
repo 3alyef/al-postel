@@ -94,25 +94,25 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         const updateMessages = () => {
             const messagesForRoom = messagesContent.get(roomNameNow);
             if (messagesForRoom) {
                 console.log("Before sorting:", messagesForRoom);
-
-                const sortedMessages = [...messagesForRoom].sort((a, b) => 
+                setMessagesContainerByRoom(messagesForRoom);
+                /*const sortedMessages = [...messagesForRoom].sort((a, b) => 
                     new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
                 );
 
                 // Debug: Verifique o conteúdo das mensagens após a ordenação
                 console.log("After sorting:", sortedMessages);
 
-                setMessagesContainerByRoom(sortedMessages);
+                setMessagesContainerByRoom(sortedMessages);*/
             }
         };
     
         updateMessages();
-    }, [roomNameNow, messagesContent]);*/
+    }, [roomNameNow, messagesContent]);
     return(
         <>
             {screenProps?.userSoul && (
