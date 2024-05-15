@@ -36,7 +36,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
        
     }, [screenMsg])
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         const scrollToBottom = () => {
             if (messagesEndRef.current) {
                 messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -49,7 +49,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }, 100);
     
         return () => clearTimeout(timeoutId);
-    }, [messagesContainerByRoom])
+    }, [messagesContainerByRoom])*/
 
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
@@ -100,18 +100,17 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             if (messagesForRoom) {
                 console.log("Before sorting:", messagesForRoom);
                 setMessagesContainerByRoom(messagesForRoom);
-                /*const sortedMessages = [...messagesForRoom].sort((a, b) => 
-                    new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime()
-                );
-
-                // Debug: Verifique o conteúdo das mensagens após a ordenação
-                console.log("After sorting:", sortedMessages);
-
-                setMessagesContainerByRoom(sortedMessages);*/
             }
         };
-    
+
         updateMessages();
+        const scrollToBottom = () => {
+            if (messagesEndRef.current) {
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        };
+        scrollToBottom();
+    
     }, [roomNameNow, messagesContent]);
     return(
         <>
