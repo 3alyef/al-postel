@@ -86,7 +86,7 @@ export class ConnectM2 {
             setMessagesContent((prev) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
                 
-                if (el.messageData && !prev) {
+                if (el.messageData) {
                     const newMessage: propsMessagesContent = {
                         _id: el.messageData._id,
                         fromUser: el.messageData.fromUser,
