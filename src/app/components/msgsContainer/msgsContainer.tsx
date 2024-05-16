@@ -29,6 +29,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
     useEffect(()=>{
         const msgArray = Array.from(screenMsg.values());
         setScreenProps(msgArray[0]);
@@ -51,36 +52,19 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             //const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
             console.log("msgS",msgS)
             serverIo.sendMsg(false, msgS);
-            /*setMessagesContent((previous)=>{
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
-                
-             
-                const newMessage: propsMessagesContent = {
-                    fromUser: msgS.fromUser,
-                    deletedTo: msgS.deletedTo,
-                    toUser: msgS.toUser,
-                    message: msgS.message,
-                    createdIn: msgS.createdIn
-                };
-                if (newMessages.has(roomNameNow)) {
-                    const rooms = newMessages.get(roomNameNow)
-                    if(rooms){
-                        rooms.push(newMessage);
-                        console.log("existe a sala")
-                    }
-                    
-                    
-                } else {
-                    newMessages.set(roomNameNow, [newMessage]);
-                }
-    
-                //console.log("previousMsgs", newMessages, msgS);
-                return newMessages;
-            })*/
+            
             setMsg('')
         }
     }
 
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    };
+    useEffect(()=>{
+        scrollToBottom()
+    }, [])
     useEffect(() => {
         const updateMessages = () => {
             const messagesForRoom = messagesContent.get(roomNameNow);
@@ -91,11 +75,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         };
 
         updateMessages();
-        const scrollToBottom = () => {
-            if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        };
+        
         scrollToBottom();
     
     }, [roomNameNow, messagesContent]);
