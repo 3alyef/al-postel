@@ -129,25 +129,25 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="mainContacts mainMsgs">
-                            <div className="main_intermediate">
-                                <div className="main" >
+                           
+                            <div className="main" >
 
-                                    {
-                                        messagesContainerByRoom.map((el, index) => {
-                                            const createdDate = new Date(el.createdIn);
-                                            const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                {
+                                    messagesContainerByRoom.map((el, index) => {
+                                        const createdDate = new Date(el.createdIn);
+                                        const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-                                            return (
-                                                <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
-                                                    <p className="msgContainer">{el.message}</p>
-                                                    <p className="msgCreatedIn">{createdTime}</p>
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                    <div ref={messagesEndRef}/>
-                                </div>
+                                        return (
+                                            <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
+                                                <p className="msgContainer">{el.message}</p>
+                                                <p className="msgCreatedIn">{createdTime}</p>
+                                            </div>
+                                        );
+                                    })
+                                }
+                                <div ref={messagesEndRef}/>
                             </div>
+                            
                         </div>
                         <div className="footerBarContacts footerBarMsgs">
                             <form onSubmit={sendMsg} className="flex w-full items-center justify-between">

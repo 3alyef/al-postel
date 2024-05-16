@@ -1,8 +1,9 @@
 .messagesContainer {
     .mainMsgs {
         position: fixed;
-        .main_intermediate {
-            position: relative;
+        display: grid;
+        top: 12.5%;
+        
             .main {
                 display: flex;
                 flex-direction: column;
@@ -85,7 +86,7 @@
             .main {
                 font-size: .75em;
             }
-        }
+        
        
 
         
