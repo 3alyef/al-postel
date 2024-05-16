@@ -13,13 +13,14 @@ export interface sendMsg {
     message: string;
     chatName?: string;
     toGroup?: string;
-    createdIn?: string
+    createdIn: string
 }
 
 export class ConnectM2 {
     public socket: Socket;
-
-    constructor(m2: string, token: string) {
+    private setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>
+    constructor(m2: string, token: string, setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
+        this.setMessagesContent = setMessagesContent;
         this.socket = io(m2, {
             extraHeaders: {
                 authorization: token // Vamos adicionar o token de autorização aqui
@@ -27,7 +28,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -84,7 +85,7 @@ export class ConnectM2 {
 
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string})=>{
             if(el.messageData.length > 0) {
-                setMessagesContent((prev)=>{
+                this.setMessagesContent((prev)=>{
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
                     if (newMessages.has(el.room)) {
                         const rooms = newMessages.get(el.room)
@@ -103,33 +104,7 @@ export class ConnectM2 {
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
-           
-            setMessagesContent((previous) => {
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
-                
-                if (el.messageData) {
-                    const newMessage: propsMessagesContent = {
-                        fromUser: el.messageData.fromUser,
-                        deletedTo: el.messageData.deletedTo,
-                        toUser: el.messageData.toUser,
-                        message: el.messageData.message,
-                        createdIn: el.messageData.createdIn
-                        // outras propriedades, se houver
-                    };
-                    if (newMessages.has(el.room)) {
-                        const rooms = newMessages.get(el.room)
-                        rooms?.push(newMessage);
-                        
-                    } else {
-                        newMessages.set(el.room, [newMessage]);
-                    }
-                    return newMessages;
-                } else {
-                    return previous;
-                }
-                
-            });
-            
+           this.addMsg(el)
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
@@ -164,12 +139,40 @@ export class ConnectM2 {
     public sendMsg(isGroup: boolean, msgData: sendMsg) {
         
         if(!isGroup && msgData.toRoom){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
+            this.addMsg({messageData: {...msgData}, room: msgData.toRoom})
         }else if(isGroup && msgData.toGroup){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
         } 
     }
     public newGroup(soulName: string){
         this.socket.emit("newGroup", {soulName})
+    }
+
+    private addMsg(el: {messageData: propsMessagesContent, room: string}){
+        this.setMessagesContent((previous) => {
+            const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
+            
+            if (el.messageData) {
+                const newMessage: propsMessagesContent = {
+                    fromUser: el.messageData.fromUser,
+                    deletedTo: el.messageData.deletedTo,
+                    toUser: el.messageData.toUser,
+                    message: el.messageData.message,
+                    createdIn: el.messageData.createdIn
+                };
+                if (newMessages.has(el.room)) {
+                    const rooms = newMessages.get(el.room)
+                    rooms?.push(newMessage);
+                    
+                } else {
+                    newMessages.set(el.room, [newMessage]);
+                }
+                return newMessages;
+            } else {
+                return previous;
+            }
+            
+        });
     }
 }

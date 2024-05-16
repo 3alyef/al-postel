@@ -38,8 +38,8 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
-            const server = new ConnectM2(m2URL, tokenToM2);
-            server.initialize(setUpdateRooms, setUserSoul, setMessagesContent);
+            const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent);
+            server.initialize(setUpdateRooms, setUserSoul);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
