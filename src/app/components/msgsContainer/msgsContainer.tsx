@@ -47,7 +47,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         if(msg.length > 0 && screenProps?.userSoul) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
-            const msgS: sendMsg = {fromUser: userSoul, isDeletedToFrom: false, message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
+            const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
             console.log("msgS",msgS)
             serverIo.sendMsg(false, msgS);
             setMessagesContent((previous)=>{
@@ -55,11 +55,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 
              
                 const newMessage: propsMessagesContent = {
-                    fromUser:msgS.fromUser,
-                    isDeletedToFrom: msgS.isDeletedToFrom,
-                    toUser:msgS.toUser,
-                    message:msgS.message,
-                    createdIn:msgS.createdIn
+                    fromUser: msgS.fromUser,
+                    deletedTo: msgS.deletedTo,
+                    toUser: msgS.toUser,
+                    message: msgS.message,
+                    createdIn: msgS.createdIn
                 };
                 if (newMessages.has(roomNameNow)) {
                     const rooms = newMessages.get(roomNameNow)

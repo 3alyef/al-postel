@@ -7,7 +7,7 @@ import { io, Socket } from "socket.io-client";
 
 export interface sendMsg {
     fromUser: string;
-    isDeletedToFrom: boolean;
+    deletedTo: "none" | "justFrom" | "all";
     toUser: string;
     toRoom?: string;
     message: string;
@@ -91,7 +91,7 @@ export class ConnectM2 {
                     const newMessage: propsMessagesContent = {
                         _id: el.messageData._id,
                         fromUser: el.messageData.fromUser,
-                        isDeletedToFrom: el.messageData.isDeletedToFrom,
+                        deletedTo: el.messageData.deletedTo,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
                         createdIn: el.messageData.createdIn
@@ -122,7 +122,7 @@ export class ConnectM2 {
                 if (el.messageData) {
                     const newMessage: propsMessagesContent = {
                         fromUser: el.messageData.fromUser,
-                        isDeletedToFrom: el.messageData.isDeletedToFrom,
+                        deletedTo: el.messageData.deletedTo,
                         toUser: el.messageData.toUser,
                         message: el.messageData.message,
                         createdIn: el.messageData.createdIn
@@ -176,9 +176,9 @@ export class ConnectM2 {
     public sendMsg(isGroup: boolean, msgData: sendMsg) {
         
         if(!isGroup && msgData.toRoom){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, isDeletedToFrom: msgData.isDeletedToFrom, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
         }else if(isGroup && msgData.toGroup){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, isDeletedToFrom: msgData.isDeletedToFrom, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
         } 
     }
     public newGroup(soulName: string){
