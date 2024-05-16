@@ -152,7 +152,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
                                 {
                                     messagesContainerByRoom
-                                    .sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime())
+                                    .sort((a,b) => Date.parse(b.createdIn) - Date.parse(a.createdIn))
                                     .map((el, index) => {
                                         const createdDate = new Date(el.createdIn);
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
