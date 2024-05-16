@@ -150,21 +150,22 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         <div className="mainContacts mainMsgs">
                             <div className="main" >
 
-                                {
-                                    messagesContainerByRoom
-                                    .sort((a,b) => Date.parse(b.createdIn) - Date.parse(a.createdIn))
+                            {
+                                messagesContainerByRoom
+                                    .sort((a, b) => Date.parse(a.createdIn) - Date.parse(b.createdIn))
                                     .map((el, index) => {
-                                        const createdDate = new Date(el.createdIn);
-                                        const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                            
-                                        return (
-                                            <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
-                                                <p className="msgContainer">{el.message}</p>
-                                                <p className="msgCreatedIn">{createdTime}</p>
-                                            </div>
-                                        );
+                                    const createdDate = new Date(el.createdIn);
+                                    const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                    
+                                    return (
+                                        <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
+                                        <p className="msgContainer">{el.message}</p>
+                                        <p className="msgCreatedIn">{createdTime}</p>
+                                        </div>
+                                    );
                                     })
                                 }
+
                                 <div ref={messagesEndRef}/>
                             </div>
                         </div>
