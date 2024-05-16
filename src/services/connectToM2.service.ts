@@ -100,12 +100,13 @@ export class ConnectM2 {
                     if (newMessages.has(el.room)) {
                         const rooms = newMessages.get(el.room)
                         rooms?.push(newMessage);
+
                         
                     } else {
                         newMessages.set(el.room, [newMessage]);
                     }
         
-                    console.log("previousMsgs", newMessages, el);
+                    console.log("previousMsgs + new", newMessages);
                     return newMessages;
                 }else {
                     return newMessages;
