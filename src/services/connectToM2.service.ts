@@ -82,37 +82,24 @@ export class ConnectM2 {
             }
         });
 
-        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent, room: string})=>{
-            //console.log(el, el.messageData)
-            setMessagesContent((prev) => {
-                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
-                
-                if (el.messageData) {
-                    const newMessage: propsMessagesContent = {
-                        _id: el.messageData._id,
-                        fromUser: el.messageData.fromUser,
-                        deletedTo: el.messageData.deletedTo,
-                        toUser: el.messageData.toUser,
-                        message: el.messageData.message,
-                        createdIn: el.messageData.createdIn
-                        // outras propriedades, se houver
-                    };
+        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string})=>{
+            if(el.messageData.length > 0) {
+                setMessagesContent((prev)=>{
+                    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
                     if (newMessages.has(el.room)) {
                         const rooms = newMessages.get(el.room)
-                        rooms?.push(newMessage);
+                        rooms?.push(...el.messageData);
 
                         
                     } else {
-                        newMessages.set(el.room, [newMessage]);
+                        newMessages.set(el.room, el.messageData);
                     }
         
                     console.log("previousMsgs + new", newMessages);
                     return newMessages;
-                }else {
-                    return newMessages;
-                }
-                
-            });
+                })
+            }
+            
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
@@ -186,3 +173,34 @@ export class ConnectM2 {
         this.socket.emit("newGroup", {soulName})
     }
 }
+
+
+/*setMessagesContent((prev) => {
+    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
+    
+    if (el.messageData) {
+        const newMessage: propsMessagesContent = {
+            _id: el.messageData._id,
+            fromUser: el.messageData.fromUser,
+            deletedTo: el.messageData.deletedTo,
+            toUser: el.messageData.toUser,
+            message: el.messageData.message,
+            createdIn: el.messageData.createdIn
+            // outras propriedades, se houver
+        };
+        if (newMessages.has(el.room)) {
+            const rooms = newMessages.get(el.room)
+            rooms?.push(newMessage);
+
+            
+        } else {
+            newMessages.set(el.room, [newMessage]);
+        }
+
+        console.log("previousMsgs + new", newMessages);
+        return newMessages;
+    }else {
+        return newMessages;
+    }
+    
+});*/
