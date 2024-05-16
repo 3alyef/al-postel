@@ -43,8 +43,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
-    }, []); // O array vazio garante que este efeito só será executado uma vez, semelhante ao componentDidMount
-
+    }, []); 
     
 
     

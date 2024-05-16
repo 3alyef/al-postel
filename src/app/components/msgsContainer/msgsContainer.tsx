@@ -84,7 +84,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         const updateMessages = () => {
             const messagesForRoom = messagesContent.get(roomNameNow);
             if (messagesForRoom) {
-                console.log("Before sorting:", messagesForRoom);
+                //console.log("Before sorting:", messagesForRoom);
                 setMessagesContainerByRoom(messagesForRoom);
             }
         };
@@ -151,17 +151,18 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             <div className="main" >
 
                                 {
-                                    messagesContainerByRoom.map((el, index) => {
+                                    messagesContainerByRoom
+                                    .sort((a, b) => new Date(a.createdIn).getTime() - new Date(b.createdIn).getTime())
+                                    .map((el, index) => {
                                         const createdDate = new Date(el.createdIn);
-
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                            
                                         return (
                                             <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
                                                 <p className="msgContainer">{el.message}</p>
                                                 <p className="msgCreatedIn">{createdTime}</p>
                                             </div>
                                         );
-                                        
                                     })
                                 }
                                 <div ref={messagesEndRef}/>
