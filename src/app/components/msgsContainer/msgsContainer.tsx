@@ -45,12 +45,13 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     function sendMsg(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         if(msg.length > 0 && screenProps?.userSoul) {
-            const dateInf = new Date(); 
-            const createdIn = dateInf.toISOString();
-            const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
+            //const dateInf = new Date(); 
+            //const createdIn = dateInf.toISOString();
+            const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow};
+            //const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, toRoom: roomNameNow, createdIn};
             console.log("msgS",msgS)
             serverIo.sendMsg(false, msgS);
-            setMessagesContent((previous)=>{
+            /*setMessagesContent((previous)=>{
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous || []);
                 
              
@@ -75,7 +76,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     
                 //console.log("previousMsgs", newMessages, msgS);
                 return newMessages;
-            })
+            })*/
             setMsg('')
         }
     }

@@ -13,7 +13,7 @@ export interface sendMsg {
     message: string;
     chatName?: string;
     toGroup?: string;
-    createdIn: string
+    createdIn?: string
 }
 
 export class ConnectM2 {
@@ -164,43 +164,12 @@ export class ConnectM2 {
     public sendMsg(isGroup: boolean, msgData: sendMsg) {
         
         if(!isGroup && msgData.toRoom){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message})
         }else if(isGroup && msgData.toGroup){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
+            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup})
         } 
     }
     public newGroup(soulName: string){
         this.socket.emit("newGroup", {soulName})
     }
 }
-
-
-/*setMessagesContent((prev) => {
-    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
-    
-    if (el.messageData) {
-        const newMessage: propsMessagesContent = {
-            _id: el.messageData._id,
-            fromUser: el.messageData.fromUser,
-            deletedTo: el.messageData.deletedTo,
-            toUser: el.messageData.toUser,
-            message: el.messageData.message,
-            createdIn: el.messageData.createdIn
-            // outras propriedades, se houver
-        };
-        if (newMessages.has(el.room)) {
-            const rooms = newMessages.get(el.room)
-            rooms?.push(newMessage);
-
-            
-        } else {
-            newMessages.set(el.room, [newMessage]);
-        }
-
-        console.log("previousMsgs + new", newMessages);
-        return newMessages;
-    }else {
-        return newMessages;
-    }
-    
-});*/
