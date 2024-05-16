@@ -6,6 +6,7 @@
     padding: 0;
     box-sizing: border-box;
     z-index: 50;
+    transition: all .2s ease-in;
 }
 
 @import "./[locale]/(login-register)/scss/global.scss";
