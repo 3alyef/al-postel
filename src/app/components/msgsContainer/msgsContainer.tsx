@@ -7,11 +7,11 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { IoMdSend } from "react-icons/io";
 import {  MdOutlineEmojiEmotions } from "react-icons/md";
-import InputText from "../inputText/inputText";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import MessageLabel from "../messageLabel/messageLabel";
+import TextareaMsg from "../textareaMsg/textareaMsg";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -154,13 +154,13 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                             
                         </div>
-                        <div className="footerBarContacts footerBarMsgs">
-                            <form onSubmit={sendMsg} className="flex w-full items-center justify-between">
+                        <div className=" footerBarMsgs w-[70%]">
+                            <form onSubmit={sendMsg} className="footerBarContacts flex w-full items-center justify-between">
                                 <div className="emojiBtn">
                                     <MdOutlineEmojiEmotions className="text-white w-[75%] h-[75%]"/>
                                 </div>   
                                 <div className="messageInput">
-                                    <InputText value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" type="text" costumerClass="text-white"/>
+                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white"/>
                                 </div>  
                                 <button className="sendMsg flex items-center justify-center" type="submit">
                                     <IoMdSend className="text-white w-[75%] h-[75%]"

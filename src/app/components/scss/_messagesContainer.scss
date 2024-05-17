@@ -99,10 +99,15 @@
     }
     .footerBarMsgs {
         
-
+        display: grid;
+        justify-items: center;
+        grid-template-columns: 1fr 70% 1fr;
         .emojiBtn, .messageInput, .sendMsg {
             cursor: pointer;
 
+        }
+        .messageInput { 
+            width: 100%;
         }
 
         .emojiBtn, .sendMsg {
@@ -126,6 +131,8 @@
               
         }
 
-        
+        .textareaInput {
+
+        }
     }
 }

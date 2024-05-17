@@ -50,7 +50,7 @@ export default function MessageLabel({message, room, createdTime, userSoul, serv
     }, [message, room, serverIo, setMessagesContent, userSoul])
     return (
         <div className={`messageRender w-full ${message.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
-            <p className="msgContainer">{message.message}</p>
+            <p className="msgContainer rtl">{message.message}</p>
             <p className="msgCreatedIn flex justify-between w-full">{createdTime}
             
             {

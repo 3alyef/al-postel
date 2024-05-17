@@ -11,3 +11,11 @@
 @import "./messagesContainer";
 @import "./_searchUser";
 @import "./media_queries";
+
+
+.rtl {
+    direction: rtl;
+}
+.ltr {
+    direction: ltr;
+}
