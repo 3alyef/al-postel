@@ -4,10 +4,16 @@ import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
 
+export interface msgStatus {
+    room: string;
+    createdIn: string;
+    viewStatus: "onServer" | "delivered" | "seen";
+}
 
 export interface sendMsg {
     fromUser: string;
     deletedTo: "none" | "justFrom" | "all";
+    viewStatus?: "onServer" | "delivered" | "seen";
     toUser: string;
     toRoom?: string;
     message: string;
@@ -106,6 +112,25 @@ export class ConnectM2 {
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
            this.addMsg(el)
         })
+
+        this.socket.on("msgStatus", (data: msgStatus)=>{
+            this.setMessagesContent((previous) => {
+                const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
+                newMessages.forEach((value, key)=>{
+                    if(key === data.room){
+                        const updatedMessages = value.map((msg) => {
+                            if (msg.createdIn === data.createdIn) {
+                                return { ...msg, viewStatus: data.viewStatus };
+                            }
+                            return msg;
+                        });
+        
+                        newMessages.set(key, updatedMessages);
+                    }
+                })
+                return newMessages
+            });
+        })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {
@@ -157,6 +182,7 @@ export class ConnectM2 {
                 const newMessage: propsMessagesContent = {
                     fromUser: el.messageData.fromUser,
                     deletedTo: el.messageData.deletedTo,
+                    viewStatus: el.messageData.viewStatus,
                     toUser: el.messageData.toUser,
                     message: el.messageData.message,
                     createdIn: el.messageData.createdIn
