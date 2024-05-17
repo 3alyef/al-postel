@@ -16,13 +16,13 @@ interface propsMessageLabel {
 export default function MessageLabel({message, room, createdTime, userSoul, serverIo, setMessagesContent}: propsMessageLabel){
     function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen"){
         if(viewStatus === 'onServer'){
-            return <BsCheck />
+            return<span className="text-[1.25em]"> <BsCheck /></span>
         }
         if(viewStatus === 'delivered') {
-            return <BsCheckAll />
+            return <span className="text-[1.25em]"><BsCheckAll/></span>
         }
         if(viewStatus === 'seen'){
-            return <BsCheckAll style={{color: 'blue'}}/>
+            return <span className="text-[1.25em] text-[#0c5dba]"><BsCheckAll/></span>
         }
     }
 
@@ -47,15 +47,16 @@ export default function MessageLabel({message, room, createdTime, userSoul, serv
                 return newMessages
             });
         }
-    }, [])
+    }, [message, room, serverIo, setMessagesContent, userSoul])
     return (
         <div className={`messageRender w-full ${message.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
             <p className="msgContainer">{message.message}</p>
-            <p className="msgCreatedIn">{createdTime}</p>
+            <p className="msgCreatedIn flex justify-between w-full">{createdTime}
             
             {
                 message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)
             }
+            </p>
         </div>
     )
 }
