@@ -94,7 +94,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     return(
         <>
             {screenProps?.userSoul && (
-                <div className="flex flex-col w-full h-full">
+                <div className="flex flex-col">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts py-[5px]">
                                 <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{

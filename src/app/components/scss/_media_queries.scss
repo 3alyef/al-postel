@@ -38,6 +38,9 @@
     body {
         background-color: $bg-color-header;
     }
+    .messagesContainer {
+        width: 100%;
+    }
     .sectionContact, .sectionMsg {
         width: 100% !important;
     }

@@ -2,10 +2,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: fixed;
+    width: 56.5%;
+    height: 100%;
     .mainMsgs {
-        position: fixed;
+        position: relative;
         display: grid;
-        top: 12.5%;
+        //top: 12.5%;
         
             .main {
                 display: flex;
