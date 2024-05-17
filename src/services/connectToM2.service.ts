@@ -6,6 +6,7 @@ import { io, Socket } from "socket.io-client";
 
 export interface msgStatus {
     fromUser: string;
+    toUser: string;
     room: string;
     createdIn: string;
     viewStatus: "onServer" | "delivered" | "seen";
@@ -204,6 +205,6 @@ export class ConnectM2 {
     }
 
     public msgSeenUpdate(data: msgStatus){
-        this.socket.emit("msgSeenUpdate", {data})
+        this.socket.emit("msgSeenUpdate", {...data})
     }
 }

@@ -28,7 +28,7 @@ export default function MessageLabel({message, room, createdTime, userSoul, serv
 
     useEffect(()=>{
         if(message.viewStatus && !(message.viewStatus === "seen") && message.fromUser !== userSoul){
-            serverIo.msgSeenUpdate({fromUser: message.fromUser, createdIn: message.createdIn, room, viewStatus: 'seen'})
+            serverIo.msgSeenUpdate({fromUser: message.fromUser, toUser: message.toUser, createdIn: message.createdIn, room, viewStatus: 'seen'})
             
             setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
