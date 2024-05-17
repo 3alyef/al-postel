@@ -136,6 +136,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             <div className="main" >
 
                                 {
+                                    messagesContainerByRoom &&
                                     messagesContainerByRoom.map((el, index) => {
                                         const createdDate = new Date(el.createdIn);
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
