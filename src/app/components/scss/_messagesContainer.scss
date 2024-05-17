@@ -99,9 +99,12 @@
     }
     .footerBarMsgs {
         
-        display: grid;
-        justify-items: center;
-        grid-template-columns: 1fr 70% 1fr;
+       
+        .formFooterBar {
+            display: grid;
+            justify-items: center;
+            grid-template-columns: 1fr 70% 1fr;
+        }
         .emojiBtn, .messageInput, .sendMsg {
             cursor: pointer;
 
