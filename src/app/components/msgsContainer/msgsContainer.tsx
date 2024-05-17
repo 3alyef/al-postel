@@ -141,7 +141,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                        
                                         return (
-                                            <div key={el.createdIn}>
+                                            <div key={el.createdIn} className="min-w-[25%]">
                                                 <MessageLabel 
                                                 room={roomNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
                                                 setMessagesContent={setMessagesContent}/>

@@ -49,7 +49,7 @@ export default function MessageLabel({message, room, createdTime, userSoul, serv
         }
     }, [])
     return (
-        <div className={`messageRender ${message.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
+        <div className={`messageRender w-full ${message.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
             <p className="msgContainer">{message.message}</p>
             <p className="msgCreatedIn">{createdTime}</p>
             
