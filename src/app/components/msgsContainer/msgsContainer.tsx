@@ -69,6 +69,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             const messagesForRoom = messagesContent.get(roomNameNow);
             if (messagesForRoom) {
                 //console.log("Before sorting:", messagesForRoom);
+                console.log('messagesForRoom', messagesForRoom)
                 setMessagesContainerByRoom(messagesForRoom);
             }
         };
