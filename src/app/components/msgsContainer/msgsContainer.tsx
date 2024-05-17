@@ -11,6 +11,7 @@ import InputText from "../inputText/inputText";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { BsCheck, BsCheckAll } from "react-icons/bs";
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
     messagesContent: Map<string, propsMessagesContent[]>;
@@ -79,6 +80,17 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         scrollToBottom();
     
     }, [roomNameNow, messagesContent]);
+    function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen"){
+        if(viewStatus === 'onServer'){
+            return <BsCheck />
+        }
+        if(viewStatus === 'delivered') {
+            return <BsCheckAll />
+        }
+        if(viewStatus === 'seen'){
+            return <BsCheckAll style={{color: 'blue'}}/>
+        }
+    }
     return(
         <>
             {screenProps?.userSoul && (
@@ -136,11 +148,15 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                     messagesContainerByRoom.map((el, index) => {
                                         const createdDate = new Date(el.createdIn);
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
+                                       
                                         return (
                                             <div key={el._id} className={`messageRender ${el.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}>
                                                 <p className="msgContainer">{el.message}</p>
                                                 <p className="msgCreatedIn">{createdTime}</p>
+                                                
+                                                {
+                                                    el.viewStatus && typeOfCheck(el.viewStatus)
+                                                }
                                             </div>
                                         );
                                     })

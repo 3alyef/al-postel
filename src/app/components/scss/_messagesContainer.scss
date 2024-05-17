@@ -1,4 +1,7 @@
 .messagesContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     .mainMsgs {
         position: fixed;
         display: grid;
