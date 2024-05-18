@@ -1,4 +1,105 @@
 .textareaInput {
-    max-height: 40px;
+    height: 100%;
     resize: none;
 }
+
+.textareaInput::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+  
+.textareaInput::-webkit-scrollbar-track {
+    background: #333; /* Cor do trilho da barra de rolagem */
+    border-radius: 4px;
+}
+  
+.textareaInput::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da barra de rolagem */
+    border-radius: 4px;
+    border: 2px solid #333; /* Cor da borda ao redor da barra de rolagem */
+}
+  
+.textareaInput::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor da barra de rolagem ao passar o mouse */
+}
+
+.formData_ContainerEmail {
+                        
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .container_Input_Div {
+        //border: 1.8px solid rgb(0, 0, 0);
+        border-radius: 6.5px;
+        width: 100%;
+        position: relative;
+        min-height: 40px;
+        .Inputs{
+            background-color: transparent;
+            width: 100%;
+            padding: .35em .5em;
+            font-size: 16.5px;
+            outline: none;
+            font-weight: 400;
+            
+        }
+        
+        .labelsTextArea, .labelsTextAreaAllert{
+            color: rgba(255, 255, 255, 0.473);
+            max-height: 25px;
+            position: absolute;
+            width: auto;
+            bottom: .68em;
+            font-size: 16.5px;
+            font-weight: 500;
+            
+            max-width: calc(100% - 16px);
+            overflow: hidden;
+            padding: 0 7px;
+            transition: transform .15s cubic-bezier(0.4, 0, 0.2, 1), opacity .15s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            z-index: 1;
+            cursor: pointer
+        }
+
+        .Inputs:-internal-autofill-selected { 
+            appearance: initial;
+            background-color: transparent !important;
+            background-color: initial !important;
+            color: initial !important;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+            -webkit-transition-delay: 9999s;
+        }
+
+        
+    }
+
+    .Inputs:focus ~ .labelsTextAreaAllert,
+    .Inputs:not(:placeholder-shown) ~ .labelsTextAreaAllert {
+        transform: scale(0.78) translateY(-27px) translateX(-28px);
+        color: #ff2424;
+        background-image: linear-gradient(to top, #1C241F, #1F2921);
+        border-radius: 15px;
+    }
+
+    .Inputs:focus ~ .labelsTextArea,
+    .Inputs:not(:placeholder-shown) ~ .labelsTextArea {
+        transform: scale(0.78) translateY(-27px) translateX(-6px);
+        color: #71BA00;
+        background-image: linear-gradient(to top, #1C241F, #1F2921);
+        border-radius: 15px;
+    }
+    
+    
+}
+
+
+

@@ -52,7 +52,7 @@ export default function TextareaMsg({ text, _isSemitic, costumerClass, value, se
     return (
         <div className="w-[100%] h-[100%]">
             <div className="formData_ContainerEmail">
-                <div className={`container_Input_Div ${costumerClassDivContainer}`} style={{border: borderStyle}}>
+                <div className={`container_Input_Div h-[45px] ${costumerClassDivContainer}`} style={{border: borderStyle}}>
                     <textarea
                         className={`Inputs ${costumerClass} textareaInput`}
                         placeholder=" " 
@@ -65,7 +65,7 @@ export default function TextareaMsg({ text, _isSemitic, costumerClass, value, se
                             onBlur? onBlur(false): setOnFocusStyle(false)}}
                     />
                     <div
-                        className={`${processErrorStyle ? "labelsAllert" : "labels"} ${!_isSemitic && "left-[7px]"}`}
+                        className={`${processErrorStyle ? "labelsTextAreaAllert" : "labelsTextArea"} ${!_isSemitic && "left-[7px]"}`}
                         onClick={focusInput}
                         style={{ cursor: "text" }}
                     >
