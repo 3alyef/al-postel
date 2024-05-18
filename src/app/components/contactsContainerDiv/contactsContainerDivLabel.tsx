@@ -10,12 +10,13 @@ interface propsDivLabel {
     _custom_name_contact?: string | undefined
     email: string | undefined;
     onClick: (el: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    roomName: string
+    roomName: string;
+    soulName: string
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName}: propsDivLabel){
-
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName}: propsDivLabel){
+    
     return(
-        <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-room={roomName}>
+        <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-soulname={soulName}>
             <div className="contactGroupPhoto">
                 <Image alt="profile photo" src={sourceImage ? sourceImage : '/imgs/assets/person.png'} fill/>
             </div>

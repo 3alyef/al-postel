@@ -20,10 +20,11 @@ interface propsMsgContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
     userSoul: string;
-    roomNameNow: string;
-    setRoomNameNow: Dispatch<SetStateAction<string>>
+    soulNameNow: string;
+    setSoulNameNow: Dispatch<SetStateAction<string>>;
+    roomsListByUserSoul: Map<string, string>
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, roomNameNow, setMessagesContent, setRoomNameNow}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
@@ -50,6 +51,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         if(msg.length > 0 && screenProps?.userSoul) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
+            const roomNameNow = roomsListByUserSoul.get(soulNameNow)
             const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
             console.log("msgS",msgS)
             serverIo.sendMsg(false, msgS);
@@ -68,19 +70,26 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [])
     useEffect(() => {
         const updateMessages = () => {
-            const messagesForRoom = messagesContent.get(roomNameNow);
-            if (messagesForRoom) {
-                //console.log("Before sorting:", messagesForRoom);
-                console.log('messagesForRoom', messagesForRoom)
-                setMessagesContainerByRoom(messagesForRoom);
+            
+            const roomNameNow = roomsListByUserSoul.get(soulNameNow);
+            console.log("roomNameNow", roomNameNow)
+            if(roomNameNow){
+                console.log('magsContainer => roomNameNow', roomNameNow)
+                const messagesForRoom = messagesContent.get(soulNameNow);
+                if (messagesForRoom) {
+                    //console.log("Before sorting:", messagesForRoom);
+                    console.log('messagesForRoom', messagesForRoom)
+                    setMessagesContainerByRoom(messagesForRoom);
+                }
             }
+            
         };
 
         updateMessages();
         
         scrollToBottom();
     
-    }, [roomNameNow, messagesContent]);
+    }, [soulNameNow, messagesContent]);
     
     return(
         <>
@@ -89,7 +98,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts py-[5px]">
                                 <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
-                                    setRoomNameNow('')
+                                    setSoulNameNow('')
                                 }}>
                                     <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
                                         {_isSemitic ? (
@@ -142,11 +151,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                        
                                         return (
-                                            <div key={el.createdIn} className="min-w-[25%]">
-                                                <MessageLabel 
-                                                room={roomNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
-                                                setMessagesContent={setMessagesContent}/>
-                                            </div>
+                                            <MessageLabel 
+                                            soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
+                                            setMessagesContent={setMessagesContent}
+                                            roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
+                                           
                                         );
                                     })
                                 }

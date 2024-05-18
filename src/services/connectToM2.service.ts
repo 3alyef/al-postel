@@ -36,7 +36,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -53,15 +53,21 @@ export class ConnectM2 {
             message: string, 
             content: any, 
             friendData: propsRoom, 
-            userSoul: string | undefined    
+            userSoul: string    
         }) => {
             //console.log("aqui",el)
             if (el.message === "add_room" && typeof el.content === "string") {
+                setRoomsListByUserSoul((previous)=>{
+                    const roomsList: Map<string, string> = new Map(previous);
+                    roomsList.delete(el.friendData.userSoul)
+                    roomsList.set(el.friendData.userSoul, el.content)
+                    console.log('roomsList', previous)
+                    return roomsList;
+                })
                 setUpdateRooms((previous) => {
-                    // Criamos uma cópia do mapa existente, ou criamos um novo mapa vazio se o mapa atual for nulo
-                    const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(previous || []);
+                    const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(previous);
         
-                    // Adicionamos a nova sala de bate-papo, se necessário
+                   
                     const newRoom: propsRoom = {
                         userSoul: el.friendData.userSoul,
                         email: el.friendData.email,
@@ -70,41 +76,58 @@ export class ConnectM2 {
                         imageData: el.friendData.imageData,
                         last_name: el.friendData.last_name
                     };
-                    if (newRooms.has(el.content)) {
-                        const rooms = newRooms.get(el.content)
-                        //?.push(newRoom);
-                        console.log('them ----')
-                        if(rooms?.length === 0) {
-                            rooms?.push(newRoom);
+
+                    /*for (const [key, rooms] of Array.from(newRooms.entries())) {
+                        const roomIndex = rooms.findIndex(room => room.userSoul === el.friendData.userSoul);
+                        if (roomIndex !== -1) {
+                            rooms.splice(roomIndex, 1);
+                            // Remove a chave se o array de salas estiver vazio
+                            if (rooms.length === 0) {
+                                newRooms.delete(key);
+                            }
                         }
+                    }*/
+        
+                    // Adiciona a nova sala
+                    if (!newRooms.has(el.friendData.userSoul)) {
+                        newRooms.set(el.friendData.userSoul, [newRoom]);
                     } else {
-                        newRooms.set(el.content, [newRoom]);
+                        const rooms = newRooms.get(el.friendData.userSoul);
+                        if (rooms) {
+                            const equalUser = rooms.some(user => user.userSoul === el.friendData.userSoul);
+                            if (!equalUser) {
+                                rooms.push(newRoom);
+                            }
+                        }
                     }
         
-                    //console.log("updateRooms", newRooms);
                     return newRooms;
                 });
-            }
+            } 
+            
+            /*else {
+                if(typeof el.userSoul === "string") {
+                    setUserSoul(el.userSoul)
+                }
+            }*/
         
-            if(typeof el.userSoul === "string") {
-                setUserSoul(el.userSoul)
-            }
+            
         });
 
-        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string})=>{
+        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string, msgCase: string})=>{
             if(el.messageData.length > 0) {
+                console.log('msgCase',el.msgCase)
                 this.setMessagesContent((prev)=>{
-                    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev || []);
-                    if (newMessages.has(el.room)) {
-                        const rooms = newMessages.get(el.room)
+                    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev);
+                    /*if (newMessages.has(el.msgCase)) {
+                        const rooms = newMessages.get(el.msgCase)
                         rooms?.push(...el.messageData);
-
-                        
                     } else {
-                        newMessages.set(el.room, el.messageData);
-                    }
-        
-                    console.log("previousMsgs + new", newMessages);
+                        newMessages.set(el.msgCase, el.messageData);
+                    }*/
+                    newMessages.set(el.msgCase, el.messageData);
+                    //console.log("previousMsgs + new", newMessages);
+                   
                     return newMessages;
                 })
             }
@@ -112,14 +135,15 @@ export class ConnectM2 {
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
-           this.addMsg(el)
+           this.addMsg({...el, msgCase: el.messageData.fromUser})
         })
 
         this.socket.on("msgStatus", (data: msgStatus)=>{
+            console.log('msgStatus', data)
             this.setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
                 newMessages.forEach((value, key)=>{
-                    if(key === data.room){
+                    if(key === data.toUser){
                         const updatedMessages = value.map((msg) => {
                             if (msg.createdIn === data.createdIn) {
                                 return { ...msg, viewStatus: data.viewStatus };
@@ -167,7 +191,7 @@ export class ConnectM2 {
         
         if(!isGroup && msgData.toRoom){
             this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
-            this.addMsg({messageData: {...msgData}, room: msgData.toRoom})
+            this.addMsg({messageData: {...msgData}, room: msgData.toRoom, msgCase: msgData.toUser})
         }else if(isGroup && msgData.toGroup){
             this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
         } 
@@ -176,7 +200,7 @@ export class ConnectM2 {
         this.socket.emit("newGroup", {soulName})
     }
 
-    private addMsg(el: {messageData: propsMessagesContent, room: string}){
+    private addMsg(el: {messageData: propsMessagesContent, room: string, msgCase: string}){
         this.setMessagesContent((previous) => {
             const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
             
@@ -189,12 +213,12 @@ export class ConnectM2 {
                     message: el.messageData.message,
                     createdIn: el.messageData.createdIn
                 };
-                if (newMessages.has(el.room)) {
-                    const rooms = newMessages.get(el.room)
+                if (newMessages.has(el.msgCase)) {
+                    const rooms = newMessages.get(el.msgCase);
                     rooms?.push(newMessage);
                     
                 } else {
-                    newMessages.set(el.room, [newMessage]);
+                    newMessages.set(el.msgCase, [newMessage]);
                 }
                 return newMessages;
             } else {

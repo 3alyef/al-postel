@@ -17,10 +17,10 @@ interface propsContactsContainer {
     setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>;
     userSoul: string;
     setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
-    setRoomNameNow: Dispatch<SetStateAction<string>>
+    setSoulNameNow: Dispatch<SetStateAction<string>>
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setRoomNameNow}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -37,15 +37,15 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
 
 
     async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        const roomName = e.currentTarget.dataset.room;
+        const soulName = e.currentTarget.dataset.soulname;
 
-        if(roomName){setRoomNameNow(roomName)};
+        if(soulName){setSoulNameNow(soulName)};
         
-        console.log(roomName);
-        const roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === roomName)?.[1];
-        if(roomProps && roomName){
+        //console.log(soulName);
+        const roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
+        if(roomProps && soulName){
             const roomMap: Map<string, propsRoom> = new Map();
-            roomMap.set(roomName, roomProps[0])
+            roomMap.set(soulName, roomProps[0])
             setScreenMsg(roomMap)  
         }
        
@@ -86,7 +86,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         }}>
                         <IoSettingsOutline className="text-[1.5em] text-white"/>
                     </div>
-                </div>
+                </div> 
                 <div className="mainContacts">
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
@@ -106,6 +106,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 Array.from(updateRooms).map(([key, propsRoomArray]) =>
                                     propsRoomArray.map((propsRoom, index) => (
                                         <ContactsContainerDivLabel
+                                            soulName={propsRoom.userSoul}
                                             key={key + "-" + index}
                                             sourceImage={propsRoom.imageData?.userImage}
                                             unreadMessages={0}

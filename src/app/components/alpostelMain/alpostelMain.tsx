@@ -31,16 +31,16 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [updateRooms, setUpdateRooms] = useState<Map<string, propsRoom[]>>(new Map());
     const [userSoul, setUserSoul] = useState<string>('');
     const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map());
-    const [roomNameNow, setRoomNameNow] = useState<string>("")
+    const [soulNameNow, setSoulNameNow] = useState<string>("")
     const [messagesContent, setMessagesContent] = useState<Map <string, propsMessagesContent[]>>(new Map())
-
+    const [roomsListByUserSoul, setRoomsListByUserSoul] = useState<Map<string, string>>(new Map())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
             const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent);
-            server.initialize(setUpdateRooms, setUserSoul);
+            server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
@@ -54,14 +54,15 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                 serverIo && (
                     <>
 
-                        <section className={`sectionContact ${roomNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setRoomNameNow={setRoomNameNow}/>
+                        <section className={`sectionContact ${soulNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow}/>
                         </section>
                         
-                        <section className={`sectionMsg ${!(roomNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
+                        <section className={`sectionMsg ${!(soulNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
                             
                             <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
-                            userSoul={userSoul} roomNameNow={roomNameNow} setMessagesContent={setMessagesContent} setRoomNameNow={setRoomNameNow}/>
+                            userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow}
+                            roomsListByUserSoul={roomsListByUserSoul}/>
                         </section>
                     </>
                 )
