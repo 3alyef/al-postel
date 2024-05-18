@@ -52,7 +52,7 @@ export default function TextareaMsg({ text, _isSemitic, costumerClass, value, se
     return (
         <div className="w-[100%] h-[100%]">
             <div className="formData_ContainerEmail">
-                <div className={`container_Input_Div h-[45px] ${costumerClassDivContainer}`} style={{border: borderStyle}}>
+                <div className={`container_Input_Div h-[45px] py-[.1em] ${costumerClassDivContainer}`} style={{border: borderStyle}}>
                     <textarea
                         className={`Inputs ${costumerClass} textareaInput`}
                         placeholder=" " 
