@@ -91,7 +91,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms}/>
+                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}/>
                         </div>
                         <div className="groupsScreen"
                         style={{top: onGroups ? "0%":"-100%"}}>

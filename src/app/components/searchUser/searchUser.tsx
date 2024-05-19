@@ -10,10 +10,11 @@ interface propsSearchUser {
     _isSemitic: boolean;
     serverIo: ConnectM2;
     updateRooms: Map<string, propsRoom[]>;
-    setUpdateRooms: Dispatch<Map<string, propsRoom[]>>
+    setUpdateRooms: Dispatch<Map<string, propsRoom[]>>;
+    showMessages: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
-export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: propsSearchUser) {
+export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, showMessages}: propsSearchUser) {
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
     const [searchError, setSearchError] = useState<boolean>(false)
     const [searchFormValue, setSearchFormValue] = useState<string>("");
@@ -73,14 +74,15 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms}: 
     }, [dataSearchFormChange]);
     
     async function makeNetwork(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        console.log(e.currentTarget.dataset.soulValue);
+        console.log(e.currentTarget.dataset.soulname);
         
-        const userSoul = e.currentTarget.dataset.soulValue
+        const userSoul = e.currentTarget.dataset.soulname
         if(!userSoul) return
         try {       
             const content = await serverIo.makeNetwork(userSoul);
+            showMessages(e)
             console.log(content)     
-        } catch (error) {
+        } catch (error) { 
             console.error("Erro ao buscar usuário:", error);
             // Trate o erro conforme necessário
         }

@@ -11,7 +11,7 @@ interface propsContactView {
 }
 export default function ContactSearchView({first_name, sourceImage, custom_name, email, onClick, soulNameValue}:propsContactView){
     return (
-        <div className="contactsContainerDiv" onClick={onClick} data-soul-value={soulNameValue}>
+        <div className="contactsContainerDiv" onClick={onClick} data-soulname={soulNameValue}>
             <div className="contactGroupPhoto">
                 <Image alt="profile photo" src={sourceImage ? sourceImage: "/imgs/assets/person.png"} fill/>
             </div>
