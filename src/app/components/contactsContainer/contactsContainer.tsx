@@ -36,24 +36,21 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     }, [])
 
 
-    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string) {
+    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom ) {
         console.log('soulNameC', soulNameC);
 
         let soulName: string | undefined;
-
-        if(!soulNameC ){
-            soulName = e.currentTarget.dataset.soulname;
-            if(soulName){
-                setSoulNameNow(soulName);
-            }
-            
+        let roomProps: propsRoom[] | undefined = [];
+        if(!soulNameC || !roomPropsC ){
+            soulName = e.currentTarget.dataset.soulname; 
+            roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
         } else {
             soulName = soulNameC;
-            setSoulNameNow(soulNameC);
-            
+            roomProps.push(roomPropsC);
         };
-
-        const roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
+        setSoulNameNow(soulName ? soulName : '');
+        
+        console.log('roomProps', roomProps)
         if(roomProps && soulName){
             const roomMap: Map<string, propsRoom> = new Map();
             roomMap.set(soulName, roomProps[0])
@@ -102,7 +99,17 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
                         style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}/>
+                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}
+                            desactiveSearchUser={()=>
+                                desactiveScreens(
+                                {
+                                    root: onAlPostelLogo, 
+                                    competitors: [onProfile, onGroups, onMessages, settings],  
+                                    setCompetitors: [setOnProfile, setOnGroups, setOnMessages, setSettings], 
+                                    setRoot:  setOnAlPostelLogo,
+                                    setOnMessages: setOnMessages
+                                }
+                            ) }/>
                         </div>
                         <div className="groupsScreen"
                         style={{top: onGroups ? "0%":"-100%"}}>

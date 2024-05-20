@@ -173,12 +173,13 @@ export class ConnectM2 {
         });
         
     }
-    public makeNetwork(soulName: string): Promise<string>{
+    public makeNetwork(soulName: string): Promise<{friendData: propsRoom} | string>{
         return new Promise((resolve, reject) => {
             this.socket.emit("connectFriend", { friendName: soulName });
             
-            this.socket.on("connectFriendSucess", (msg: string)=>{
-                resolve(msg)
+            this.socket.on("connectFriendSucess", (el: {friendData: propsRoom})=>{
+                console.log('connectFS', el)
+                resolve(el)
             })
             this.socket.on("connectFriendError", (error: any) => {
                 reject(error);
