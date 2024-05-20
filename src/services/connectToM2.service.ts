@@ -177,16 +177,19 @@ export class ConnectM2 {
         return new Promise((resolve, reject) => {
             this.socket.emit("connectFriend", { friendName: soulName });
             
+            this.socket.on("connectFriendSucess", (msg: string)=>{
+                resolve(msg)
+            })
             this.socket.on("connectFriendError", (error: any) => {
                 reject(error);
                 this.socket.off("connectFriendError");
             });
+            
+                
+           
         });
     }
-    
-    public connectFriend(soulName: string){
-        this.socket.emit("connectFriend", {soulName})
-    }
+
     public sendMsg(isGroup: boolean, msgData: sendMsg) {
         
         if(!isGroup && msgData.toRoom){

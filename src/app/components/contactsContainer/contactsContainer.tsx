@@ -36,12 +36,23 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     }, [])
 
 
-    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        const soulName = e.currentTarget.dataset.soulname;
+    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string) {
+        console.log('soulNameC', soulNameC);
 
-        if(soulName){setSoulNameNow(soulName)};
-        
-        //console.log(soulName);
+        let soulName: string | undefined;
+
+        if(!soulNameC ){
+            soulName = e.currentTarget.dataset.soulname;
+            if(soulName){
+                setSoulNameNow(soulName);
+            }
+            
+        } else {
+            soulName = soulNameC;
+            setSoulNameNow(soulNameC);
+            
+        };
+
         const roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
         if(roomProps && soulName){
             const roomMap: Map<string, propsRoom> = new Map();
