@@ -23,7 +23,9 @@
         position: absolute;
         display: grid;
         top: 13%;
-        
+            .intermediateDivMsgs {
+                width: 56%;
+            }
             .main {
                 display: flex;
                 flex-direction: column;
