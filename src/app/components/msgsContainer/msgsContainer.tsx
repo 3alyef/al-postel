@@ -34,6 +34,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [isTyping, setIsTyping] = useState<boolean>(false)
     const [friendIsTyping, setFriendIsTyping] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(true)
 
     useEffect(()=>{
         const msgArray = Array.from(screenMsg.values());
@@ -152,6 +153,15 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         )
                                     }}>
                                         <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                    </div>
+                                    <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
+                                        <span className="nameUserSpan">
+                                            {screenProps.costumName.custom_name || screenProps.first_name}
+                                        </span>
+                                        <span className="digOrOn">
+                                            {isOnlineFriend && friendIsTyping ? 'Digitando...' : 'Online'
+                                            }
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="settingsContacts"

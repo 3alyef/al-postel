@@ -5,6 +5,20 @@
     position: fixed;
     width: 56.5%;
     height: 100%;
+
+    .headerBarContacts {
+        .onlineAndTyping {
+            display: flex;
+            flex-direction: column;
+            color: white;
+            .nameUserSpan {
+                font-weight: 400;
+            }
+            .digOrOn {
+                font-weight: 300;
+            }
+        }
+    }
     .mainMsgs {
         position: relative;
         display: grid;
