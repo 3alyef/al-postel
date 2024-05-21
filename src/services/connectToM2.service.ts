@@ -36,7 +36,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -47,6 +47,13 @@ export class ConnectM2 {
         // Adicionando um ouvinte para o evento "disconnect"
         this.socket.on("disconnect", () => {
             console.log("Desconectado do servidor Socket.IO");
+            setFriendsOnline((prev)=>{
+                const newFriendsOnline = new Map(prev);
+                newFriendsOnline.forEach((value, key, map) => {
+                    map.set(key, false); 
+                });
+                return newFriendsOnline;
+            })
         });
         
         this.socket.on("updateAll", (el: {
@@ -101,6 +108,14 @@ export class ConnectM2 {
                     typingStates.set(el.friendData.userSoul, false)
                 }
                 return typingStates
+            })
+
+            setFriendsOnline((prev)=>{
+                const friendsOnline = new Map<string, boolean>(prev);
+               
+                friendsOnline.set(el.friendData.userSoul, false);
+                
+                return friendsOnline
             })
             
         });
@@ -160,6 +175,18 @@ export class ConnectM2 {
                 return typingStates;
             })
         })
+        this.socket.on("updateFriendsOnline", ({userSoul, online}: {userSoul: string, online: boolean})=>{
+            console.log({ userSoul, online });
+           
+            setFriendsOnline((prev)=>{
+                const friendsOnline = new Map<string, boolean>(prev);
+               
+                friendsOnline.set(userSoul, online);
+                
+                return friendsOnline
+            })
+        })
+       
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {

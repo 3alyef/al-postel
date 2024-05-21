@@ -24,8 +24,9 @@ interface propsMsgContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     roomsListByUserSoul: Map<string, string>;
     typingStateRoom: Map<string, boolean>;
+    friendsOnline: Map<string, boolean>
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
@@ -34,7 +35,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [isTyping, setIsTyping] = useState<boolean>(false)
     const [friendIsTyping, setFriendIsTyping] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(true)
+    const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
 
     useEffect(()=>{
         const msgArray = Array.from(screenMsg.values());
@@ -69,7 +70,13 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     };
     useEffect(()=>{
-        scrollToBottom()
+        scrollToBottom();
+        const friendStatus = friendsOnline.get(soulNameNow)
+        console.log('friendsOnline', friendsOnline)
+        if(typeof friendStatus === 'boolean') {
+            
+            setIsOnlineFriend(friendStatus);
+        }
     }, [])
     useEffect(() => {
         const updateMessages = () => {
@@ -117,10 +124,18 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         const friendState = typingStateRoom.get(soulNameNow);
         if(typeof friendState === 'boolean'){
             setFriendIsTyping(friendState)
-            console.log('=========friendState=========', friendState)
+            //console.log('=========friendState=========', friendState)
         }
         
     }, [typingStateRoom])
+
+    useEffect(()=>{
+        console.log('mudou o friendsOnline', friendsOnline, 'soulNameNow',soulNameNow)
+        const friendStatus = friendsOnline.get(soulNameNow);
+        if(typeof friendStatus === 'boolean') {
+            setIsOnlineFriend(friendStatus)
+        }
+    }, [friendsOnline, soulNameNow])
     return(
         <>
             {screenProps?.userSoul && (
@@ -159,7 +174,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             {screenProps.costumName.custom_name || screenProps.first_name}
                                         </span>
                                         <span className="digOrOn">
-                                            {isOnlineFriend && friendIsTyping ? 'Digitando...' : 'Online'
+                                            {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
                                             }
                                         </span>
                                     </div>

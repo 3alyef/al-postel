@@ -34,14 +34,15 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [soulNameNow, setSoulNameNow] = useState<string>("")
     const [messagesContent, setMessagesContent] = useState<Map <string, propsMessagesContent[]>>(new Map())
     const [roomsListByUserSoul, setRoomsListByUserSoul] = useState<Map<string, string>>(new Map())
-    const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map)
+    const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map);
+    const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
             const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent);
-            server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom);
+            server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom, setFriendsOnline);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
@@ -63,7 +64,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                             
                             <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
                             userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow}
-                            roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom}/>
+                            roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}/>
                         </section>
                     </>
                 )
