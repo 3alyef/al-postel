@@ -195,7 +195,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="mainContacts mainMsgs">
-                                <div className="fixed py-1"> 
+                                <div className="fixed py-1 h-[72%] w-full"> 
                                     <div className="main" >
                                         {
                                     
