@@ -72,7 +72,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     useEffect(()=>{
         scrollToBottom();
         const friendStatus = friendsOnline.get(soulNameNow)
-        console.log('friendsOnline', friendsOnline)
+        //console.log('friendsOnline', friendsOnline)
         if(typeof friendStatus === 'boolean') {
             
             setIsOnlineFriend(friendStatus);
@@ -82,7 +82,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         const updateMessages = () => {
             
             const roomNameNow = roomsListByUserSoul.get(soulNameNow);
-            console.log("roomNameNow", roomNameNow)
+            // console.log("roomNameNow", roomNameNow)
             if(roomNameNow){
                 //console.log('magsContainer => roomNameNow', roomNameNow)
                 const messagesForRoom = messagesContent.get(soulNameNow);
@@ -116,7 +116,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
 
     useEffect(()=>{
-        console.log('isTyping', isTyping);
+        //console.log('isTyping', isTyping);
         serverIo.setTypingState({state: isTyping, userSoulFrom: userSoul, userSoulTo: soulNameNow});
     }, [isTyping])
     
@@ -130,7 +130,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [typingStateRoom])
 
     useEffect(()=>{
-        console.log('mudou o friendsOnline', friendsOnline, 'soulNameNow',soulNameNow)
+        //console.log('mudou o friendsOnline', friendsOnline, 'soulNameNow',soulNameNow)
         const friendStatus = friendsOnline.get(soulNameNow);
         if(typeof friendStatus === 'boolean') {
             setIsOnlineFriend(friendStatus)
