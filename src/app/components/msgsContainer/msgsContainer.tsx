@@ -195,24 +195,26 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="mainContacts mainMsgs">
-                                <div className="main" >
-                                    {
-                                        
-                                        messagesContainerByRoom.map((el, index) => {
-                                            const createdDate = new Date(el.createdIn);
-                                            const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                        
-                                            return (
-                                                <MessageLabel 
-                                                soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
-                                                setMessagesContent={setMessagesContent}
-                                                roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
-                                            
-                                            );
-                                        })
-                                    }
+                                <div className="fixed py-1"> 
+                                    <div className="main" >
+                                        {
                                     
-                                    <div ref={messagesEndRef}/>
+                                            messagesContainerByRoom.map((el, index) => {
+                                                const createdDate = new Date(el.createdIn);
+                                                const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                    
+                                                return (
+                                                    <MessageLabel
+                                                    soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
+                                                    setMessagesContent={setMessagesContent}
+                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
+                                    
+                                                );
+                                            })
+                                        }
+                                    
+                                        <div ref={messagesEndRef}/>
+                                    </div>
                                 </div>
                             
                            
