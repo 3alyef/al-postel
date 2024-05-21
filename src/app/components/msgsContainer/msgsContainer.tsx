@@ -22,15 +22,17 @@ interface propsMsgContainer {
     userSoul: string;
     soulNameNow: string;
     setSoulNameNow: Dispatch<SetStateAction<string>>;
-    roomsListByUserSoul: Map<string, string>
+    roomsListByUserSoul: Map<string, string>;
+    typingStateRoom: Map<string, boolean>;
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>()
     const [menu, setMenu] = useState<boolean>(false);
     const [msg, setMsg] = useState<string>("");
     const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
-
+    const [isTyping, setIsTyping] = useState<boolean>(false)
+    const [friendIsTyping, setFriendIsTyping] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(()=>{
@@ -43,7 +45,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
         setOnFocusStyle(true);
-        //console.log('oi')
+        
     }
 
     function sendMsg(event: React.FormEvent<HTMLFormElement>){
@@ -51,12 +53,12 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         if(msg.length > 0 && screenProps?.userSoul) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
-            const roomNameNow = roomsListByUserSoul.get(soulNameNow)
+            const roomNameNow = roomsListByUserSoul.get(soulNameNow);
             const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
-            console.log("msgS",msgS)
+            console.log("msgS",msgS);
             serverIo.sendMsg(false, msgS);
-            
-            setMsg('')
+            setMsg('');
+            setIsTyping(false);
         }
     }
 
@@ -92,7 +94,32 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         scrollToBottom();
     
     }, [soulNameNow, messagesContent]);
+
+    function onBlur(){
+        setOnFocusStyle(false);
+        setIsTyping(false);
+    }
+
+    useEffect(()=>{
+        if(!isTyping && msg.length > 0){
+            setIsTyping(true)
+        }
+    }, [msg])
+
+
+    useEffect(()=>{
+        console.log('isTyping', isTyping);
+        serverIo.setTypingState({state: isTyping, userSoulFrom: userSoul, userSoulTo: soulNameNow});
+    }, [isTyping])
     
+    useEffect(()=>{
+        const friendState = typingStateRoom.get(soulNameNow);
+        if(typeof friendState === 'boolean'){
+            setFriendIsTyping(friendState)
+            console.log('=========friendState=========', friendState)
+        }
+        
+    }, [typingStateRoom])
     return(
         <>
             {screenProps?.userSoul && (
@@ -143,7 +170,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             </div>
                         </div>
                         <div className="mainContacts mainMsgs">
-                            
                                 <div className="main" >
                                     {
                                         
@@ -160,6 +186,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             );
                                         })
                                     }
+                                    
                                     <div ref={messagesEndRef}/>
                                 </div>
                             
@@ -172,7 +199,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                     <MdOutlineEmojiEmotions className="text-white w-[75%] h-[75%]"/>
                                 </div>   
                                 <div className="messageInput">
-                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white"/>
+                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
                                 </div>  
                                 <button className="sendMsg flex items-center justify-center" type="submit">
                                     <IoMdSend className="text-white w-[75%] h-[75%]"

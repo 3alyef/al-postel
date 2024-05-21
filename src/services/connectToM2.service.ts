@@ -36,7 +36,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -76,17 +76,6 @@ export class ConnectM2 {
                         imageData: el.friendData.imageData,
                         last_name: el.friendData.last_name
                     };
-
-                    /*for (const [key, rooms] of Array.from(newRooms.entries())) {
-                        const roomIndex = rooms.findIndex(room => room.userSoul === el.friendData.userSoul);
-                        if (roomIndex !== -1) {
-                            rooms.splice(roomIndex, 1);
-                            // Remove a chave se o array de salas estiver vazio
-                            if (rooms.length === 0) {
-                                newRooms.delete(key);
-                            }
-                        }
-                    }*/
         
                     // Adiciona a nova sala
                     if (!newRooms.has(el.friendData.userSoul)) {
@@ -105,12 +94,14 @@ export class ConnectM2 {
                 });
             } 
             
-            /*else {
-                if(typeof el.userSoul === "string") {
-                    setUserSoul(el.userSoul)
+            setTypingStateRoom((prev)=>{
+                const typingStates = new Map<string, boolean>(prev)
+                const userNow = typingStates.get(el.friendData.userSoul);
+                if(!userNow){
+                    typingStates.set(el.friendData.userSoul, false)
                 }
-            }*/
-        
+                return typingStates
+            })
             
         });
 
@@ -156,6 +147,18 @@ export class ConnectM2 {
                 })
                 return newMessages
             });
+        })
+
+        this.socket.on("setTypingState", ({state, userSoulFrom}:{state: boolean, userSoulFrom: string})=>{
+            //console.log('setTypingState', {state, userSoulFrom})
+            
+            setTypingStateRoom((prev)=>{
+                let typingStates = new Map(prev);
+                //console.log('updatedTypingStates', typingStates);
+                typingStates.set(userSoulFrom, state);
+                //console.log('updatedTypingStates', typingStates);
+                return typingStates;
+            })
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
@@ -234,5 +237,9 @@ export class ConnectM2 {
 
     public msgSeenUpdate(data: msgStatus){
         this.socket.emit("msgSeenUpdate", {...data})
+    }
+
+    public setTypingState({state, userSoulFrom, userSoulTo}:{state: boolean, userSoulFrom: string, userSoulTo: string}) {
+        this.socket.emit("setTypingState", {state, userSoulFrom, userSoulTo})
     }
 }

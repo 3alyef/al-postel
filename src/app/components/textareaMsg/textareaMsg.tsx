@@ -14,7 +14,7 @@ interface propsInputText {
     onFocusFunction: () => void;
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
-    onBlur?:(value: boolean)=>void
+    onBlur?:()=>void
 }
 
 export default function TextareaMsg({ text, _isSemitic, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer }: propsInputText) {
@@ -62,7 +62,7 @@ export default function TextareaMsg({ text, _isSemitic, costumerClass, value, se
                         required={_isRequired}
                         onFocus={onFocusFunction}
                         onBlur={() => {
-                            onBlur? onBlur(false): setOnFocusStyle(false)}}
+                            onBlur? onBlur(): setOnFocusStyle(false)}}
                     />
                     <div
                         className={`${processErrorStyle ? "labelsTextAreaAllert" : "labelsTextArea"} ${!_isSemitic && "left-[7px]"}`}
