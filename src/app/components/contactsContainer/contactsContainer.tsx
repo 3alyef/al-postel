@@ -44,7 +44,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         if(!soulNameC || !roomPropsC ){
             soulName = e.currentTarget.dataset.soulname; 
             roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
-        } else {
+        } else { 
             soulName = soulNameC;
             roomProps.push(roomPropsC);
         };
@@ -138,7 +138,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             
                         </div>
 
-                        <div className="absolute bg-black top-[-100%] w-[100%] h-[100%]">Para correcao de Cor</div>
+                        <div className="absolute bg-black top-[-100%] w-[100%] h-[100%]">{/*Para correcao de Cor*/}</div>
 
                     </div>
                 </div>
@@ -186,10 +186,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 </div>
             </div>
             <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
-            style={{...(_isSemitic 
-                ? { right: settings ? "0%" : "100%" }
-                : { left: settings ? "0%" : "100%" }
-            ), zIndex: settings ? 50:-1}}>
+            style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
     
             </div>
         </div>
