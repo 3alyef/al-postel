@@ -184,11 +184,12 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         <Image src="/imgs/logo.png" alt="search icon" fill className="scale-[.95]"/>
                     </div>
                 </div>
+                <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
+                style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
+        
+                </div>
             </div>
-            <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
-            style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
-    
-            </div>
+            
         </div>
     )
 }

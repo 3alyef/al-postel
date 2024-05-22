@@ -3,6 +3,7 @@
     justify-content: start;
     height: 100vh;
     background-color: $bg-color-msg;
+    position: relative;
     img {
         user-select: none;
     }
@@ -122,12 +123,13 @@
         }
 
     }
+    .settingsScreen {
+        transition: left .5s ease-in, right .5s ease-in;
+        width: 100%;
+    }
 }
 
-.settingsScreen {
-    transition: left .5s ease-in, right .5s ease-in;
-    width: 100%;
-}
+
 
 .userScreen {
     transition: right .5s ease-in;
