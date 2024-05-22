@@ -65,7 +65,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
 
             </div>
             <div className="contactsContainer flex flex-col h-full">
-                <div className="headerBarContacts" style={{justifyContent: settings ? "flex-end": "flex-start"}}>
+                <div className="headerBarContacts" style={{justifyContent: settings ? "flex-end": "space-between"}}>
                     <div className="profilePhotoMainContacts"
                     onClick={()=>{
                         desactiveScreens(
