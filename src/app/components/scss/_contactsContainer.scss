@@ -18,14 +18,18 @@
         padding: 5px 15px;
         .profilePhotoMainContacts {
             position: relative;
-            width: 2.25em;
+            width: 45px;
             aspect-ratio: 1/1;
-            padding: 0px .2em;
+            padding: 3px;
             cursor: pointer;
+            transition: position 0.25s ease-in, transform 0.25s ease-in, right 0.25s ease-in, top 0.25s ease-in;
             img {
                 border-radius: 30px;
             }
+            
         }
+
+        
 
         .settingsContacts {
             cursor: pointer;
@@ -84,14 +88,15 @@
     }
 
     .footerBarContacts {
-        
-        min-width: 100%;
+        position: fixed;
+        bottom: 0;
+        min-width: 43.5%;
         background-color: $bg-color-footer;
         min-height: 12.5%;
         display: flex;
         justify-content: space-around;
         align-items: center;
-
+        z-index: 49;
         .msgsBtn, .searchBtn, .groupsBtn {
             cursor: pointer;
 

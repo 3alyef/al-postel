@@ -65,7 +65,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
 
             </div>
             <div className="contactsContainer flex flex-col h-full">
-                <div className="headerBarContacts">
+                <div className="headerBarContacts" style={{justifyContent: settings ? "flex-end": "flex-start"}}>
                     <div className="profilePhotoMainContacts"
                     onClick={()=>{
                         desactiveScreens(
@@ -77,7 +77,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 setOnMessages: setOnMessages
                             }
                         )                                       
-                    }}>
+                    }} style={settings ? {position: "absolute", top: "25%", right: "calc(50% - 25.5px)", scale: "1.25"} : {}}>
                         <Image alt="me" src={meImg} fill/>
                     </div>
                     <div className="settingsContacts"
@@ -185,7 +185,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     </div>
                 </div>
                 <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
-                style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
+                style={{...{ right: settings ? "0%" : "110%" }, zIndex: settings ? 49:-1}}>
         
                 </div>
             </div>
