@@ -36,7 +36,7 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
                     openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
                 })
             }}>         
-                <SlOptionsVertical />
+                <SlOptionsVertical className="text-white"/>
                     
             </div>
             <div className="languagesSubContainer">
