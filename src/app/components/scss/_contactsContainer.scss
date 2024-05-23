@@ -87,8 +87,8 @@
     }
 
     .footerBarContacts {
-        
-        min-width: 100%;
+        position: fixed;
+        width: 43.5%;
         background-color: $bg-color-footer;
         min-height: 12.5%;
         display: flex;
