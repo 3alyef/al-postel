@@ -9,6 +9,7 @@ import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsConta
 import { SearchUser } from "../searchUser/searchUser";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { propsRoom } from "../alpostelMain/alpostelMain";
+import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
@@ -80,19 +81,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     }}>
                         <Image alt="me" src={meImg} fill/>
                     </div>
-                    <div className="settingsContacts"
-                    style={{transform: settings ? "rotate(180deg)": "rotate(0deg)"}} onClick={()=>{
-                        desactiveScreens(
-                            {
-                                root: settings, 
-                                competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
-                                setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
-                                setRoot: setSettings,
-                                setOnMessages: setOnMessages
-                            }
-                        )  
-                        }}>
-                        <IoSettingsOutline className="text-[1.5em] text-white"/>
+                    <div className="settingsContacts">
+                        <OptionsSwitch _isSemitic={_isSemitic}/>
                     </div>
                 </div> 
                 <div className="mainContacts">
@@ -192,3 +182,14 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         </div>
     )
 }
+/** onClick={()=>{
+                        desactiveScreens(
+                            {
+                                root: settings, 
+                                competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
+                                setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
+                                setRoot: setSettings,
+                                setOnMessages: setOnMessages
+                            }
+                        )  
+                        }} */

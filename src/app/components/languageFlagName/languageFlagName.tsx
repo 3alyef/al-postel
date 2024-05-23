@@ -1,6 +1,6 @@
 interface LanguagesFlagName {
     languageName: string;
-    flag: string;
+    flag?: string;
     costumerClass?: string;
 }
 

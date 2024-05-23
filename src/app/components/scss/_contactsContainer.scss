@@ -27,8 +27,11 @@
         }
 
         .settingsContacts {
-            cursor: pointer;
-            transition: all 1s ease-in-out;     
+            //cursor: pointer;
+            transition: all 1s ease-in-out;    
+            display: flex;
+            justify-content: center; 
+            width: calc((25% / 100) * 25);
         }
 
 
@@ -126,7 +129,7 @@
 
 .settingsScreen {
     transition: left .5s ease-in, right .5s ease-in;
-
+   
 }
 
 .userScreen {

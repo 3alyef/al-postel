@@ -100,23 +100,3 @@ const LanguageSwitch: React.FC<PropsLanguageSwitch> = ({locale}) => {
 };
 
 export default LanguageSwitch;
-
-/*  
-    <svg  viewBox="7 10 10 5" focusable="false"><polygon  stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon><polygon stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon></svg>
-
-            <select className="select_Language" name="languages" id="languages" value={locale} onChange={(e) =>{
-                    const newPath = redirectedPathName(e.target.value);
-                    router.push(newPath);
-                }
-                }
-                >
-                {
-                    Object.entries(languages).map(([key, value]) => (
-                        <option key={key} value={key} >
-                            {`${value[0]} ${value[1]}`}
-                        </option>
-                    ))
-                    // Object.entries() retorna uma matriz de pares chave-valor, onde cada par é uma matriz de duas posições, onde a primeira posição é a chave e a segunda é o valor tipo isso => {key, value => ['', '']}
-                }
-            </select>
-            */

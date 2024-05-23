@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 interface propsToggleLanguages {
     openLangToggle: boolean;
     setOpenLangToggle: React.Dispatch<React.SetStateAction<boolean>>;

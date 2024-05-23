@@ -132,15 +132,3 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
 
     )
 }
-
-/*async function dataToRegister2(event: React.FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        if(firstNameValue){
-            localStorage.setItem("fNameReg", firstNameValue);
-            if(lastNameValue) {
-                localStorage.setItem("lNameReg", lastNameValue);
-            }
-            //redirectToNextPage("register/email-password")
-        }       
-        
-    }*/
