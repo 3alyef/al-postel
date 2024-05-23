@@ -9,7 +9,8 @@ interface propsOptionsSwitch {
 const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
     const [openLangToggle, setOpenLangToggle] = useState<boolean>(false);
     const [maxHeightMenu, setMaxHeightMenu] = useState<string>("0em");
-    const [widthVar, setWidthVar] = useState<string>("55%");;
+    const [widthVar, setWidthVar] = useState<string>("55%");
+    const [optionsOn, setOptionsOn] = useState<boolean>(false);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Element;
@@ -30,20 +31,21 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
     return (
         <div className={`languageSwitchContainer optionsSwitchContainer`}>
             <div className="languageSwitch optionsMenu" onClick={()=>{
-            const onlyClose = false
+            const onlyClose = false;
+            setOptionsOn(!optionsOn)
             toggleMenuLanguages(
                 {
                     openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
                 })
-            }}>         
+            }} style={{rotate: optionsOn ? "0deg" : "90deg"}}>         
                 <SlOptions className="text-white"/>
                     
             </div>
             <div className="languagesSubContainer">
                 
                 <div className="parentLanguagesMenu" style={{width: widthVar}}>
-                    <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu, bottom: 'auto', top: 0, 
-                    ...(_isSemitic ? { left: "7em" } : { right: "7em" })}}>
+                    <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu, bottom: 'auto', top: '3vh', 
+                    ...(_isSemitic ? { left: "67%" } : { right: "67%" })}}>
                         <ul  style={{ maxHeight: maxHeightMenu, opacity: (maxHeightMenu != "0em" ? "1": "0")}}>
                             
                             <li className="liSelect" onClick={()=> console.log('shalom')}>

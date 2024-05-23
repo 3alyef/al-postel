@@ -28,7 +28,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [onAlPostelLogo, setOnAlPostelLogo] = useState<boolean>(false);
     const [onGroups, setOnGroups] = useState<boolean>(false);
     const [onMessages, setOnMessages] = useState<boolean>(true);
-
+    
     useEffect(()=>{
         const meImage = localStorage.getItem("imagemUserToPreLogin")
         if(meImage) {
@@ -59,6 +59,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
        
     }
+
+    
     return ( 
         <div className="flex flex-col h-full relative">
             <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
