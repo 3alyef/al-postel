@@ -5,8 +5,9 @@ import { toggleMenuLanguages } from "@/services/toggleMenuLanguages";
 import { SlOptions } from "react-icons/sl";
 interface propsOptionsSwitch {
     _isSemitic: boolean;
+    onClickSettings: ()=>void
 }
-const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
+const OptionsSwitch = ({_isSemitic, onClickSettings}: propsOptionsSwitch) => {
     const [openLangToggle, setOpenLangToggle] = useState<boolean>(false);
     const [maxHeightMenu, setMaxHeightMenu] = useState<string>("0em");
     const [widthVar, setWidthVar] = useState<string>("55%");
@@ -29,16 +30,16 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
         };
     }, [openLangToggle]);
     
+    function optionsToggleOn(){
+        const onlyClose = false;
+        setOptionsOn(!optionsOn);
+        toggleMenuLanguages({
+                openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
+            })
+    }
     return (
         <div className={`languageSwitchContainer optionsSwitchContainer`}>
-            <div className="languageSwitch optionsMenu" onClick={()=>{
-            const onlyClose = false;
-            setOptionsOn(!optionsOn)
-            toggleMenuLanguages(
-                {
-                    openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
-                })
-            }} style={{rotate: optionsOn ? "0deg" : "90deg"}}>         
+            <div className="languageSwitch optionsMenu" onClick={()=>optionsToggleOn()} style={{rotate: optionsOn ? "0deg" : "90deg"}}>         
                 <SlOptions className="text-white"/>
                     
             </div>
@@ -49,7 +50,10 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
                     ...(_isSemitic ? { left: "67%" } : { right: "67%" })}}>
                         <ul  style={{ maxHeight: maxHeightMenu, opacity: (maxHeightMenu != "0em" ? "1": "0")}}>
                             
-                            <li className="liSelect" onClick={()=> console.log('shalom')}>
+                            <li className="liSelect" onClick={()=>{
+                                onClickSettings();
+                                optionsToggleOn();
+                            }}>
                                 <LanguageFlagName 
                                 languageName={'Settings'}costumerClass="languageFlagCostumer"/>
                             </li>

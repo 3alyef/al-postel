@@ -24,6 +24,18 @@ export interface sendMsg {
     createdIn: string
 }
 
+export type DecodedData  = {
+    userId: string;
+    userSoul: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    costumName: costumName;
+    iat?: number;
+    exp?: number;
+
+}
+
 export class ConnectM2 {
     public socket: Socket;
     private setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>
@@ -36,13 +48,18 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData[]>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
 
-        this.socket.on("updateSoul", (el: {soulName: string})=>{
-            setUserSoul(el.soulName)
+        this.socket.on("updateSoul", (el: {soulName: string, userProps: DecodedData})=>{
+            setUserSoul(el.soulName);
+            setUserProps((prev)=>{
+                const newV = [];
+                newV.push(el.userProps)
+                return newV
+            });
         })
         // Adicionando um ouvinte para o evento "disconnect"
         this.socket.on("disconnect", () => {

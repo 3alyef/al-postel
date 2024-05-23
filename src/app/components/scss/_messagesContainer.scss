@@ -6,7 +6,16 @@
     width: 56.5%;
     height: 100%;
 
-    .headerBarContacts {
+    .headerBarMsgs {
+        justify-content: space-between !important;
+        .profilePhotoMainContacts {
+            width: 2.25em;
+            aspect-ratio: 1/1;
+            position: relative;
+            img {
+                border-radius: 65%;
+            }
+        }
         .onlineAndTyping {
             display: flex;
             flex-direction: column;

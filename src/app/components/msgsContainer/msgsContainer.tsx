@@ -12,6 +12,7 @@ import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import MessageLabel from "../messageLabel/messageLabel";
 import TextareaMsg from "../textareaMsg/textareaMsg";
+import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -141,7 +142,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             {screenProps?.userSoul && (
                 <div className="flex flex-col">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
-                        <div className="headerBarContacts py-[5px]">
+                        <div className="headerBarContacts headerBarMsgs py-[5px]">
                                 <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
                                     setSoulNameNow('')
                                 }}>
@@ -179,9 +180,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         </span>
                                     </div>
                                 </div>
-                                <div className="settingsContacts"
-                                style={{transform: menu ? "rotate(180deg)": "rotate(0deg)"}} onClick={()=>{
-                                    desactiveScreens(
+                                <div className="settingsContacts">
+                                    <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
                                         {
                                             root: menu, 
                                             competitors: [onProfile],  
@@ -189,10 +189,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             setRoot: setMenu,
                                             setOnMessages: setMenu
                                         }
-                                )  
-                                }}>
-                                <IoSettingsOutline className="text-[1.5em] text-white"/>
-                            </div>
+                                    ) }/>
+                                </div>
                         </div>
                         <div className="mainContacts mainMsgs">
                                 <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 

@@ -1,13 +1,12 @@
 "use client";
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
-import { Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from "react";
-
-import { IoSettingsOutline } from "react-icons/io5";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdGroups, MdOutlineMessage } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
-import { ConnectM2 } from "@/services/connectToM2.service";
+import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
 import { propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 
@@ -18,10 +17,11 @@ interface propsContactsContainer {
     setUpdateRooms: Dispatch<SetStateAction<Map<string, propsRoom[]>>>;
     userSoul: string;
     setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
-    setSoulNameNow: Dispatch<SetStateAction<string>>
+    setSoulNameNow: Dispatch<SetStateAction<string>>;
+    userProps: DecodedData[]
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -34,6 +34,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         if(meImage) {
             setImg(meImage)
         }
+
     }, [])
 
 
@@ -60,6 +61,9 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
        
     }
 
+    useEffect(()=>{
+        console.log('userProps', userProps)
+    }, [userProps])
     
     return ( 
         <div className="flex flex-col h-full relative">
@@ -69,22 +73,17 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
             </div>
             <div className="contactsContainer flex flex-col h-full">
                 <div className="headerBarContacts">
-                    <div className="profilePhotoMainContacts"
-                    onClick={()=>{
-                        desactiveScreens(
+                    
+                    <div className="settingsContacts">
+                        <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
                             {
-                                root: onProfile, 
-                                competitors: [settings, onAlPostelLogo, onGroups, onMessages],  
-                                setCompetitors: [setSettings, setOnAlPostelLogo, setOnGroups, setOnMessages], 
-                                setRoot: setOnProfile,
+                                root: settings, 
+                                competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
+                                setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
+                                setRoot: setSettings,
                                 setOnMessages: setOnMessages
                             }
-                        )                                       
-                    }}>
-                        <Image alt="me" src={meImg} fill/>
-                    </div>
-                    <div className="settingsContacts">
-                        <OptionsSwitch _isSemitic={_isSemitic}/>
+                        ) }/>
                     </div>
                 </div> 
                 <div className="mainContacts">
@@ -179,19 +178,54 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
             </div>
             <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
             style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
-    
-            </div>
-        </div>
-    )
-}
-/** onClick={()=>{
-                        desactiveScreens(
+                <header>
+                    <div className="headerContainerCT">
+                        <h2>{"Settings"}</h2>
+                        <div className=" text-black " style={{display: 'none'}} onClick={()=>desactiveScreens(
                             {
                                 root: settings, 
                                 competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
                                 setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
                                 setRoot: setSettings,
                                 setOnMessages: setOnMessages
+                            })}>
+                            {_isSemitic ? (
+                                <FaArrowRight />
+                            ):
+                            (
+                                <FaArrowLeft />
+                            )}
+                        
+                        </div>
+                    </div>
+                </header>
+                <main>
+                    <div className="userOptionsSettings">
+                        <div>
+                            <h3>{userProps[0]?.first_name || ''}</h3>
+                        </div>     
+                        <div className="profilePhotoMainContacts">
+                            <Image alt="me" src={meImg} fill/>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    )
+}
+/** 
+ * <div className="profilePhotoMainContacts"
+                    onClick={()=>{
+                        desactiveScreens(
+                            {
+                                root: onProfile, 
+                                competitors: [settings, onAlPostelLogo, onGroups, onMessages],  
+                                setCompetitors: [setSettings, setOnAlPostelLogo, setOnGroups, setOnMessages], 
+                                setRoot: setOnProfile,
+                                setOnMessages: setOnMessages
                             }
-                        )  
-                        }} */
+                        )                                       
+                    }}>
+                        <Image alt="me" src={meImg} fill/>
+                    </div>
+*/

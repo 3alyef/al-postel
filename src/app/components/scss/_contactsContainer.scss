@@ -12,19 +12,10 @@
         background-color: $bg-color-header;
         min-height: 12.5%;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding: 5px 15px;
-        .profilePhotoMainContacts {
-            position: relative;
-            width: 2.25em;
-            aspect-ratio: 1/1;
-            padding: 0px .2em;
-            cursor: pointer;
-            img {
-                border-radius: 30px;
-            }
-        }
+        
 
         .settingsContacts {
             //cursor: pointer;
@@ -131,7 +122,35 @@
 
 .settingsScreen {
     transition: left .5s ease-in, right .5s ease-in;
-   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    header {
+        min-height: 2em;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .headerContainerCT {
+            display: flex;
+            align-items: flex-start;
+        }
+    }
+    main {
+        min-height: 80%;
+        width: 100%;
+        .profilePhotoMainContacts {
+            position: relative;
+            width: 2.25em;
+            aspect-ratio: 1/1;
+            padding: 0px .2em;
+            cursor: pointer;
+            img {
+                border-radius: 30px;
+            }
+        }
+    }
 }
 
 .userScreen {
