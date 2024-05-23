@@ -17,6 +17,7 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
             
             if (openLangToggle && !target.closest('.languagesSubContainer')) {
                 const onlyClose = true;
+                setOptionsOn(!optionsOn);
                 toggleMenuLanguages({ openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose});
             }
         };
