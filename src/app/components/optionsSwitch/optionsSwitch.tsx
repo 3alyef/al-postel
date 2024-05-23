@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from "react";
 import LanguageFlagName from "../languageFlagName/languageFlagName";
 import { toggleMenuLanguages } from "@/services/toggleMenuLanguages";
+import { SlOptionsVertical } from "react-icons/sl";
 interface propsOptionsSwitch {
     _isSemitic: boolean;
 }
@@ -35,7 +36,7 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
                     openLangToggle, setOpenLangToggle, maxHeightMenu, setMaxHeightMenu, setWidthVar, onlyClose 
                 })
             }}>         
-                <LanguageFlagName languageName={':'}/>
+                <SlOptionsVertical />
                     
             </div>
             <div className="languagesSubContainer">
