@@ -56,8 +56,11 @@ export class ConnectM2 {
         this.socket.on("updateSoul", (el: {soulName: string, userProps: DecodedData})=>{
             setUserSoul(el.soulName);
             setUserProps((prev)=>{
-                const newV = [];
-                newV.push(el.userProps)
+                const newV = prev;
+                if(newV.length === 0){
+                    newV.push(el.userProps)
+                }
+                
                 return newV
             });
         })

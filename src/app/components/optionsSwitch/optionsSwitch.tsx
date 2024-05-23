@@ -43,7 +43,7 @@ const OptionsSwitch = ({_isSemitic, onClickSettings}: propsOptionsSwitch) => {
                 <SlOptions className="text-white"/>
                     
             </div>
-            <div className="languagesSubContainer">
+            <div className="languagesSubContainer" style={{width: "10em"}}>
                 
                 <div className="parentLanguagesMenu" style={{width: widthVar}}>
                     <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu, bottom: 'auto', top: '3vh', 

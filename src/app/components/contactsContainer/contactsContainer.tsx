@@ -176,12 +176,12 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     </div>
                 </div>
             </div>
-            <div className="settingsScreen flex flex-col h-full absolute bg-slate-100"
+            <div className="settingsScreen flex flex-col h-full absolute"
             style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
                 <header>
                     <div className="headerContainerCT">
-                        <h2>{"Settings"}</h2>
-                        <div className=" text-black " style={{display: 'none'}} onClick={()=>desactiveScreens(
+                        
+                        <div className="returnButtonGDRT"onClick={()=>desactiveScreens(
                             {
                                 root: settings, 
                                 competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
@@ -197,15 +197,20 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             )}
                         
                         </div>
+                        <h2 className="titleLabelGDRT">{"Settings"}</h2>
                     </div>
                 </header>
                 <main>
                     <div className="userOptionsSettings">
-                        <div>
-                            <h3>{userProps[0]?.first_name || ''}</h3>
-                        </div>     
-                        <div className="profilePhotoMainContacts">
-                            <Image alt="me" src={meImg} fill/>
+                            
+                        <div className="intermediateOptionsSettings">
+                            <div className="profilePhotoMainContacts">
+                                <Image alt="me" src={meImg} fill/>
+                            </div>
+                            <div className="nameAndMsgSTATUS">
+                                <h3>{userProps[0]?.first_name || ''}</h3>
+                                <p>Teste de mensagem de STATUS</p>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -213,19 +218,3 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         </div>
     )
 }
-/** 
- * <div className="profilePhotoMainContacts"
-                    onClick={()=>{
-                        desactiveScreens(
-                            {
-                                root: onProfile, 
-                                competitors: [settings, onAlPostelLogo, onGroups, onMessages],  
-                                setCompetitors: [setSettings, setOnAlPostelLogo, setOnGroups, setOnMessages], 
-                                setRoot: setOnProfile,
-                                setOnMessages: setOnMessages
-                            }
-                        )                                       
-                    }}>
-                        <Image alt="me" src={meImg} fill/>
-                    </div>
-*/

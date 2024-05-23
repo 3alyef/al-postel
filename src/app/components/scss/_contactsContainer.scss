@@ -124,32 +124,82 @@
     transition: left .5s ease-in, right .5s ease-in;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: .5em;
+    background-color: $bg-color-footer;
+    justify-content: start;
+    padding: .5em 0em;
     width: 100%;
+    color: white;
     header {
         min-height: 2em;
         width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        //align-items: flex-start;
+        justify-content: start;
         .headerContainerCT {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            min-width: 8em;
+            justify-content: space-evenly;
+            font-size: 1.1em;
+            .returnButtonGDRT {
+                cursor: pointer;
+            }
+            .titleLabelGDRT {
+                font-weight: 400;
+            }
         }
     }
     main {
         min-height: 80%;
         width: 100%;
-        .profilePhotoMainContacts {
-            position: relative;
-            width: 2.25em;
-            aspect-ratio: 1/1;
-            padding: 0px .2em;
-            cursor: pointer;
-            img {
-                border-radius: 30px;
+        .userOptionsSettings {
+            display: flex;
+            align-items: center;
+            min-height: 4em;
+            width: 100%;
+            
+            border-top: .1em solid rgba(88, 88, 88, 0.514);  
+            border-bottom: .1em solid rgba(88, 88, 88, 0.514);
+            
+            .intermediateOptionsSettings {
+                gap: 1em;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                padding: 0.25em 1.5em;
+                .profilePhotoMainContacts {
+                    position: relative;
+                    width: 3em;
+                    aspect-ratio: 1/1;
+                    padding: 0px .2em;
+                    
+                    img {
+                        border-radius: 30px;
+                    }
+                }
+    
+                .nameAndMsgSTATUS {
+                    h3 {
+                        font-size: 1.1em;
+                        font-weight: 400;
+                    }
+                    p { 
+                        font-size: .85em;
+                        font-weight: 300;
+                    }
+                }
             }
+            .intermediateOptionsSettings:hover {
+                background-color: rgba(134, 134, 134, 0.24);
+            }
+            .intermediateOptionsSettings:active {
+                background-color: rgba(134, 134, 134, 0.363);
+            }
+            
         }
+        
     }
 }
 
