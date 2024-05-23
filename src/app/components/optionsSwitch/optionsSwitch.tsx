@@ -42,7 +42,8 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
             <div className="languagesSubContainer">
                 
                 <div className="parentLanguagesMenu" style={{width: widthVar}}>
-                    <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu, bottom: 'auto', top: 0, right: "calc(100% - ((25% / 100) * 25))"}}>
+                    <div className="languagesMenu menuApparence" style={{maxHeight: maxHeightMenu, bottom: 'auto', top: 0, 
+                    ...(_isSemitic ? { left: "7em" } : { right: "7em" })}}>
                         <ul  style={{ maxHeight: maxHeightMenu, opacity: (maxHeightMenu != "0em" ? "1": "0")}}>
                             
                             <li className="liSelect" onClick={()=> console.log('shalom')}>
@@ -60,4 +61,4 @@ const OptionsSwitch = ({_isSemitic}: propsOptionsSwitch) => {
 };
 
 export default OptionsSwitch;
-/**...{_isSemitic ? (left: "75%") : (right: "75%")} */
+/**...{_isSemitic ? (left: "7em") : (right: "7em")} */
