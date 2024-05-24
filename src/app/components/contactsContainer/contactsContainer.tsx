@@ -333,16 +333,16 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 <div className="imageProfileChangeItm" style={imageFull ? {width: "100%", padding: 0} : undefined} >
                                     <div className="profilePhotoMainContacts" style={userSettingsProfile ? (imageFull ? imageFullStyle :onProfilePhotoStyle ) : undefined}>
                                         <Image alt="me" src={meImg} fill style={imageFull ? {cursor: "default"} : {borderRadius: '100%'} }
-                                        onClick={() => {
-                                            if(userSettingsProfile){
-                                                setImageFull(true);
-                                            }
-                                            
-                                        }}/>
+                                        />
                                     </div>
-                                    {userSettingsProfile ? (
+                                    {!userSettingsProfile ? (
                                     !imageFull && (
-                                            <div className="changeProfileImageContainer">
+                                            <div className="changeProfileImageContainer" onClick={() => {
+                                                if(userSettingsProfile){
+                                                    setImageFull(true);
+                                                }
+                                                
+                                            }}>
                                                 <div className="changeProfileImage" style={imageFull ? imageFullStyle : undefined}>
                                                     <Image
                                                         alt="alpostel"
