@@ -9,12 +9,12 @@
     color: white;
     .contactGroupPhoto{
         position: relative;
-        width: 2.25em;
+        width: 3.25em;
         aspect-ratio: 1/1;
         padding: 0px .2em;
         cursor: pointer;
         img {
-            border-radius: 30px;
+            border-radius: 100%;
         }
     }
 
@@ -44,9 +44,6 @@
                 color: $bg-isjTest;
                 font-weight: 600;
             }
-            .nameContactGroup {
-
-            }
 
             .lastTime {
                 user-select: none;
@@ -59,16 +56,21 @@
                 user-select: none;
             }
             .unreadMessages {
-                background-color: $bg-isjTest;
+                background-color: $bg-isjTest2;
                 border-radius: 100%;
                 padding: 2px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                min-width: 35px;
+                min-width: 28px;
+                min-height: 28px;
                 user-select: none;
-                aspect-ratio: 1/1;
+                //aspect-ratio: 1/1;
+                span {
+                    font-size: 1em;
+                    font-weight: 600;
+                }
             }
         }
         
