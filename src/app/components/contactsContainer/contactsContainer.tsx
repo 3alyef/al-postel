@@ -1,9 +1,9 @@
 "use client";
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { MdGroups, MdOutlineMessage } from "react-icons/md";
+import { MdGroups, MdOutlineMessage, MdOutlinePhotoCamera } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
 import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
@@ -28,7 +28,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [onAlPostelLogo, setOnAlPostelLogo] = useState<boolean>(false);
     const [onGroups, setOnGroups] = useState<boolean>(false);
     const [onMessages, setOnMessages] = useState<boolean>(true);
-    
+    const [userSettingsProfile, setUserSettingsProfile] = useState<boolean>(false);
+    const [imageFull, setImageFull] = useState<boolean>(false);
     useEffect(()=>{
         const meImage = localStorage.getItem("imagemUserToPreLogin")
         if(meImage) {
@@ -64,6 +65,22 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     useEffect(()=>{
         console.log('userProps', userProps)
     }, [userProps])
+
+    const onProfilePhotoStyle: CSSProperties = {
+        width: "7.5em"
+    }
+
+    const imageFullStyle: CSSProperties = {
+        width: "100%",
+        padding: 0,
+        aspectRatio: "1/.85"
+    }
+    const imageFullMain: CSSProperties = {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
     
     return ( 
         <div className="flex flex-col h-full relative">
@@ -181,14 +198,25 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 <header>
                     <div className="headerContainerCT">
                         
-                        <div className="returnButtonGDRT"onClick={()=>desactiveScreens(
-                            {
-                                root: settings, 
-                                competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
-                                setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
-                                setRoot: setSettings,
-                                setOnMessages: setOnMessages
-                            })}>
+                        <div className="returnButtonGDRT"onClick={()=>{
+                            if(userSettingsProfile){
+                                if(imageFull){
+                                    setImageFull(false)
+                                }else {
+                                    setUserSettingsProfile(false)
+                                }
+                                
+                            } else {
+                                desactiveScreens(
+                                    {
+                                        root: settings, 
+                                        competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
+                                        setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
+                                        setRoot: setSettings,
+                                        setOnMessages: setOnMessages
+                                    })
+                            }
+                            }}>
                             {_isSemitic ? (
                                 <FaArrowRight />
                             ):
@@ -197,22 +225,50 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             )}
                         
                         </div>
-                        <h2 className="titleLabelGDRT">{"Settings"}</h2>
+                        <h2 className="titleLabelGDRT">{userSettingsProfile ? (imageFull ? "Imagem de Perfil": "Profile" ):"Settings"}</h2>
                     </div>
                 </header>
-                <main>
-                    <div className="userOptionsSettings">
-                            
-                        <div className="intermediateOptionsSettings">
-                            <div className="profilePhotoMainContacts">
-                                <Image alt="me" src={meImg} fill/>
-                            </div>
-                            <div className="nameAndMsgSTATUS">
-                                <h3>{userProps[0]?.first_name || ''}</h3>
-                                <p>Teste de mensagem de STATUS</p>
+                <main style={imageFull ? imageFullMain: undefined}>
+                        <div className="userOptionsSettings">   
+                            <div className={`intermediateOptionsSettings ${!userSettingsProfile &&'intermediateOptionsSettingsHAC'}`} onClick={()=> {
+                                if(!userSettingsProfile){
+                                    setUserSettingsProfile(true)
+                                }
+                                
+                            }} style={imageFull ? {padding: 0} : undefined}>
+                                <div className="imageProfileChangeItm" style={imageFull ? {width: "100%", padding: 0} : undefined} >
+                                    <div className="profilePhotoMainContacts" style={userSettingsProfile ? (imageFull ? imageFullStyle :onProfilePhotoStyle ) : undefined}>
+                                        <Image alt="me" src={meImg} fill style={!imageFull ? {borderRadius: '100%'} : undefined}
+                                        onClick={() => setImageFull(true)}/>
+                                    </div>
+                                    {userSettingsProfile ? (
+                                    !imageFull && (
+                                            <div className="changeProfileImageContainer">
+                                                <div className="changeProfileImage" style={imageFull ? imageFullStyle : undefined}>
+                                                    <Image
+                                                        alt="alpostel"
+                                                        src={'/imgs/logo.png?v=4'}
+                                                        fill
+                                                        className="alpostelChangeProfileLogo"
+                                                        
+                                                    />
+                                                    <div className="matzlamahChangeProfilePhoto">
+                                                        <MdOutlinePhotoCamera />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="nameAndMsgSTATUS">
+                                            <h3>{userProps[0]?.first_name || ''}</h3>
+                                            <p>Teste de mensagem de STATUS</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                  
+                    
                 </main>
             </div>
         </div>

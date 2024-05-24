@@ -141,6 +141,8 @@
             align-items: center;
             min-width: 8em;
             justify-content: space-evenly;
+            gap: .5em;
+            padding: 0em .5em;
             font-size: 1.1em;
             .returnButtonGDRT {
                 cursor: pointer;
@@ -163,38 +165,86 @@
             border-bottom: .1em solid rgb(88 88 88 / 14%);
             
             .intermediateOptionsSettings {
-                gap: 1em;
                 width: 100%;
+                //cursor: pointer;
+                padding: .5em;
                 display: flex;
                 align-items: center;
-                cursor: pointer;
-                padding: 0.25em 1.5em;
-                .profilePhotoMainContacts {
+                justify-content: center;
+                .imageProfileChangeItm{
+                    align-items: center;
+                    min-width: 3em;
+                    gap: 1em;
+                    padding: 0.5em 0em;
                     position: relative;
-                    width: 3em;
-                    aspect-ratio: 1/1;
-                    padding: 0px .2em;
-                    
-                    img {
-                        border-radius: 30px;
+                    display: flex;
+                    align-items: center;
+                    .profilePhotoMainContacts {
+                        position: relative;
+                        width: 3em;
+                        aspect-ratio: 1/1;
+                        padding: 0px .2em;
+                        
+                        img {
+                            
+                            cursor: pointer;
+                        }
+                    }
+                    .nameAndMsgSTATUS {
+                        h3 {
+                            font-size: 1.1em;
+                            font-weight: 400;
+                        }
+                        p { 
+                            font-size: .85em;
+                            font-weight: 300;
+                        }
+                    }
+
+                    .changeProfileImageContainer {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        .changeProfileImage {
+                            width: 2.25em;
+                            aspect-ratio: 1/1;
+                            position: relative;
+                            .alpostelChangeProfileLogo {
+                                position: absolute;
+                                border-radius: 100%;
+                                z-index: -1;
+                                animation: settingsAnimation 60s infinite linear;
+                                //cursor: pointer;
+                            }
+
+                            
+                            .matzlamahChangeProfilePhoto {
+                                width: 100%;
+                                aspect-ratio: 1/1;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background-color: $bg-isjTest;
+                                color: black;
+                                border-radius: 100%;
+                                cursor: pointer;
+                            }
+                        }
                     }
                 }
+                
     
-                .nameAndMsgSTATUS {
-                    h3 {
-                        font-size: 1.1em;
-                        font-weight: 400;
-                    }
-                    p { 
-                        font-size: .85em;
-                        font-weight: 300;
-                    }
-                }
+                
+                
+                
             }
-            .intermediateOptionsSettings:hover {
+            .intermediateOptionsSettingsHAC {
+                cursor: pointer;
+            }
+            .intermediateOptionsSettingsHAC:hover {
                 background-color: rgba(134, 134, 134, 0.24);
             }
-            .intermediateOptionsSettings:active {
+            .intermediateOptionsSettingsHAC:active {
                 background-color: rgba(134, 134, 134, 0.363);
             }
             
