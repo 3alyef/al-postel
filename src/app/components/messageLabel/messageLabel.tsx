@@ -38,7 +38,7 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
                 setMessagesContent((previous) => {
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
                     newMessages.forEach((value, key)=>{
-                        if(key === room){
+                        if(key === message.fromUser){
                             const updatedMessages: propsMessagesContent[] = value.map((msg) => {
                                 if (msg.createdIn === message.createdIn) {
                                     return { ...msg, viewStatus: 'seen' };

@@ -60,11 +60,15 @@
             }
             .unreadMessages {
                 background-color: $bg-isjTest;
-                border-radius: 30px;
+                border-radius: 100%;
                 padding: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-align: center;
                 min-width: 35px;
                 user-select: none;
+                aspect-ratio: 1/1;
             }
         }
         

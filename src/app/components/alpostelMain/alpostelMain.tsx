@@ -36,7 +36,8 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [roomsListByUserSoul, setRoomsListByUserSoul] = useState<Map<string, string>>(new Map())
     const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map);
     const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map());
-    const [userProps, setUserProps] = useState<DecodedData[]>([])
+    const [userProps, setUserProps] = useState<DecodedData[]>([]);
+
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
@@ -48,7 +49,6 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             console.log('updateRooms', updateRooms)
         }
     }, []); 
-    
 
     
     return(
@@ -58,7 +58,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                     <>
 
                         <section className={`sectionContact ${soulNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps}/>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent}/>
                         </section>
                         
                         <section className={`sectionMsg ${!(soulNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>

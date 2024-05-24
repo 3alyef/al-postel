@@ -7,7 +7,7 @@ import { MdGroups, MdOutlineMessage, MdOutlinePhotoCamera } from "react-icons/md
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
 import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
-import { propsRoom } from "../alpostelMain/alpostelMain";
+import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import { LuPen } from "react-icons/lu";
 
@@ -19,10 +19,11 @@ interface propsContactsContainer {
     userSoul: string;
     setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
     setSoulNameNow: Dispatch<SetStateAction<string>>;
-    userProps: DecodedData[]
+    userProps: DecodedData[];
+    messagesContent: Map<string, propsMessagesContent[]>;
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -31,6 +32,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [onMessages, setOnMessages] = useState<boolean>(true);
     const [userSettingsProfile, setUserSettingsProfile] = useState<boolean>(false);
     const [imageFull, setImageFull] = useState<boolean>(false);
+
     useEffect(()=>{
         const meImage = localStorage.getItem("imagemUserToPreLogin")
         if(meImage) {
@@ -82,6 +84,77 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         alignItems: 'center',
         justifyContent: 'center'
     }
+
+    interface roomsDataProps {
+        soulName: string; 
+        key: string; 
+        sourceImage: string | undefined; 
+        unreadMessages: number; 
+        customName: string | undefined; 
+        isGroup: boolean; 
+        email: string | undefined; 
+        roomName: string; 
+        lastMsgData: string | undefined; 
+        lastMSGContent: string | undefined; 
+        whoLastSender: string | undefined;
+    }
+    const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
+
+    useEffect(() => {
+
+        const updateRoomsData = () => {
+            const newRoomsData = Array.from(updateRooms).map(([key, propsRoomArray]) =>
+                propsRoomArray.map((propsRoom, index) => {
+                    const messages = messagesContent.get(propsRoom.userSoul);
+
+                    let lastUpdate;
+                    let unreadMsgs = 0;
+                    let lastMSGContent;
+                    let whoLastSender;
+
+                    if (messages) {
+                        const lastMsg = messages[messages.length - 1];
+                        if (lastMsg && lastMsg.createdIn) {
+                            const date = new Date(lastMsg.createdIn);
+                            const day = date.getDate().toString().padStart(2, '0');
+                            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                            const year = date.getFullYear();
+                            lastUpdate = `${day}/${month}/${year}`;
+                        }
+                        lastMSGContent = lastMsg.message;
+                        if (lastMsg.fromUser === userSoul) {
+                            whoLastSender = "you";
+                        }
+                        messages.forEach((el) => {
+                            if (el.viewStatus
+                                && el.fromUser !== userSoul && el.viewStatus !== "seen") {
+                                unreadMsgs++;
+                            }
+                        });
+                    }
+
+                    return {
+                        soulName: propsRoom.userSoul,
+                        key: key + "-" + index,
+                        sourceImage: propsRoom.imageData?.userImage,
+                        unreadMessages: unreadMsgs,
+                        customName: propsRoom.costumName?.custom_name,
+                        isGroup: false,
+                        email: propsRoom.email,
+                        roomName: key,
+                        lastMsgData: lastUpdate,
+                        lastMSGContent: lastMSGContent,
+                        whoLastSender: whoLastSender,
+                    };
+                })
+            );
+
+            setRoomsData(newRoomsData);
+        };
+
+        
+        updateRoomsData();
+    }, [updateRooms, messagesContent, userSoul]);
     
     return ( 
         <div className="flex flex-col h-full relative">
@@ -127,23 +200,22 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         <div className="flex flex-col messagesScreen pt-[7px] gap-[2px]"
                         style={{top: onMessages ? "0%":"-100%"}}>
  
-                            {
-                                // Iterar sobre os elementos em updateRooms e renderizar ContactsContainerDivLabel para cada um
-                               
-                                Array.from(updateRooms).map(([key, propsRoomArray]) =>
-                                    propsRoomArray.map((propsRoom, index) => (
-                                        <ContactsContainerDivLabel
-                                            soulName={propsRoom.userSoul}
-                                            key={key + "-" + index}
-                                            sourceImage={propsRoom.imageData?.userImage}
-                                            unreadMessages={0}
-                                            _custom_name_contact={propsRoom.costumName?.custom_name} _isGroup={false} email={propsRoom.email} onClick={showMessages}
-                                            roomName={key}
-                                        />
-                                    ))
-                                )
-                            }
-                            
+                            {roomsData.flat().map(room => (
+                                <ContactsContainerDivLabel
+                                    soulName={room.soulName}
+                                    key={room.key}
+                                    sourceImage={room.sourceImage}
+                                    unreadMessages={room.unreadMessages}
+                                    _custom_name_contact={room.customName}
+                                    _isGroup={room.isGroup}
+                                    email={room.email}
+                                    onClick={showMessages}
+                                    roomName={room.roomName}
+                                    lastMsgData={room.lastMsgData}
+                                    lastMSGContent={room.lastMSGContent}
+                                    whoLastSender={room.whoLastSender}
+                                />
+                            ))}
                             
                         </div>
 

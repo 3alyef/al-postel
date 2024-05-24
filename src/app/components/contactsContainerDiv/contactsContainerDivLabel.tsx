@@ -11,9 +11,13 @@ interface propsDivLabel {
     email: string | undefined;
     onClick: (el: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     roomName: string;
-    soulName: string
+    soulName: string;
+    lastMsgData?: string;
+    whoLastSender?:string;
+    lastMSGContent?:string
+
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent}: propsDivLabel){
     
     return(
         <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-soulname={soulName}>
@@ -27,8 +31,7 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                     </h3>
                     
                     <p className={`lastTime ${unreadMessages > 0 ? "padronDataColor": "text-white font-[400]"}`}>
-                        
-                        16.4.2024
+                        {lastMsgData || ''}
                     </p>
                 </div>
 
@@ -41,11 +44,13 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                                 </span>
                             )
                         }
-                        comprovante202
+                        {whoLastSender || ''}
+                        {whoLastSender && ": "}
+                        {lastMSGContent || ''}
                     </p>
-                    {unreadMessages>0 && (
+                    {unreadMessages > 0 && (
                         <p className="unreadMessages">
-                            {unreadMessages}
+                            <span>{unreadMessages}</span>
                         </p>
                     )}
 
