@@ -9,6 +9,7 @@ import { SearchUser } from "../searchUser/searchUser";
 import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
 import { propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
+import { LuPen } from "react-icons/lu";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
@@ -193,39 +194,47 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     </div>
                 </div>
             </div>
-            <div className="settingsScreen flex flex-col h-full absolute"
+            <div className={`settingsScreen flex flex-col h-full absolute ${imageFull && 'settingsScreenBGBLK'}`}
             style={{...{ right: settings ? "0%" : "100%" }, zIndex: settings ? 50:-1}}>
                 <header>
                     <div className="headerContainerCT">
                         
-                        <div className="returnButtonGDRT"onClick={()=>{
-                            if(userSettingsProfile){
-                                if(imageFull){
-                                    setImageFull(false)
-                                }else {
-                                    setUserSettingsProfile(false)
+                        <div className="itermediateHeaderContainerCT_IN">
+                            <div className="returnButtonGDRT" onClick={()=>{
+                                if(userSettingsProfile){
+                                    if(imageFull){
+                                        setImageFull(false)
+                                    }else {
+                                        setUserSettingsProfile(false)
+                                    }
+                            
+                                } else {
+                                    desactiveScreens(
+                                        {
+                                            root: settings,
+                                            competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],
+                                            setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages],
+                                            setRoot: setSettings,
+                                            setOnMessages: setOnMessages
+                                        })
                                 }
-                                
-                            } else {
-                                desactiveScreens(
-                                    {
-                                        root: settings, 
-                                        competitors: [onProfile, onAlPostelLogo, onGroups, onMessages],  
-                                        setCompetitors: [setOnProfile, setOnAlPostelLogo, setOnGroups, setOnMessages], 
-                                        setRoot: setSettings,
-                                        setOnMessages: setOnMessages
-                                    })
-                            }
-                            }}>
-                            {_isSemitic ? (
-                                <FaArrowRight />
-                            ):
-                            (
-                                <FaArrowLeft />
-                            )}
-                        
+                                }}>
+                                {_isSemitic ? (
+                                    <FaArrowRight />
+                                ):
+                                (
+                                    <FaArrowLeft />
+                                )}
+                            
+                            </div>
+                            <h2 className="titleLabelGDRT">{userSettingsProfile ? (imageFull ? "Imagem de Perfil": "Profile" ):"Settings"}</h2>
                         </div>
-                        <h2 className="titleLabelGDRT">{userSettingsProfile ? (imageFull ? "Imagem de Perfil": "Profile" ):"Settings"}</h2>
+
+                        {imageFull && (
+                            <div className="editPhotoLuPen">
+                                <LuPen />
+                            </div>
+                        )}
                     </div>
                 </header>
                 <main style={imageFull ? imageFullMain: undefined}>
@@ -238,8 +247,13 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             }} style={imageFull ? {padding: 0} : undefined}>
                                 <div className="imageProfileChangeItm" style={imageFull ? {width: "100%", padding: 0} : undefined} >
                                     <div className="profilePhotoMainContacts" style={userSettingsProfile ? (imageFull ? imageFullStyle :onProfilePhotoStyle ) : undefined}>
-                                        <Image alt="me" src={meImg} fill style={!imageFull ? {borderRadius: '100%'} : undefined}
-                                        onClick={() => setImageFull(true)}/>
+                                        <Image alt="me" src={meImg} fill style={imageFull ? {cursor: "default"} : {borderRadius: '100%'} }
+                                        onClick={() => {
+                                            if(userSettingsProfile){
+                                                setImageFull(true);
+                                            }
+                                            
+                                        }}/>
                                     </div>
                                     {userSettingsProfile ? (
                                     !imageFull && (

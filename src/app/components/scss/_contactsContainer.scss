@@ -119,7 +119,9 @@
 
     }
 }
-
+.settingsScreenBGBLK{
+    background-color: black !important;
+}
 .settingsScreen {
     transition: left .5s ease-in, right .5s ease-in;
     display: flex;
@@ -135,20 +137,53 @@
         width: 100%;
         display: flex;
         //align-items: flex-start;
-        justify-content: start;
+        justify-content: stretch;
         .headerContainerCT {
             display: flex;
             align-items: center;
-            min-width: 8em;
-            justify-content: space-evenly;
-            gap: .5em;
-            padding: 0em .5em;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 1.5em;
             font-size: 1.1em;
-            .returnButtonGDRT {
-                cursor: pointer;
+            .itermediateHeaderContainerCT_IN {
+                display: flex;
+                align-items: center;
+                /* padding: 0 .5em; */
+                min-width: 9em;
+                justify-content: flex-start;
+                gap: .75em;
+                .returnButtonGDRT {
+                    cursor: pointer;
+                }
+                .returnButtonGDRT:active {
+                    background-color: #3b3b3bbd;
+                }
+                .returnButtonGDRT:hover {
+                    background-color: #3b3b3bd6;
+                }
+                .titleLabelGDRT {
+
+                    font-weight: 400;
+                    color: rgba(255, 255, 255, 0.849);
+                }
             }
-            .titleLabelGDRT {
-                font-weight: 400;
+           
+            .editPhotoLuPen {
+                cursor: pointer;
+                font-size: 1em;
+                color: white;
+                width: 1.75em;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                aspect-ratio: 1 / 1;
+                border-radius: 100%;
+            }
+            .editPhotoLuPen:active {
+                background-color: #3b3b3bbd;
+            }
+            .editPhotoLuPen:hover {
+                background-color: #3b3b3bd6;
             }
         }
     }
@@ -160,7 +195,7 @@
             align-items: center;
             min-height: 4em;
             width: 100%;
-            
+            padding: .5em 0em;
             border-top: .1em solid rgb(88 88 88 / 14%);  
             border-bottom: .1em solid rgb(88 88 88 / 14%);
             
