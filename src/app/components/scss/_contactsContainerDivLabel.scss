@@ -53,8 +53,10 @@
         .footerTitle {
             
             .lastMsg {
-                direction: rtl;
+                direction: ltr;
                 user-select: none;
+                font-weight: 300;
+                font-size: 15.5px;
             }
             .unreadMessages {
                 background-color: $bg-isjTest2;

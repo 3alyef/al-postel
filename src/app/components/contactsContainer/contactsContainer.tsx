@@ -115,11 +115,24 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     if (messages) {
                         const lastMsg = messages[messages.length - 1];
                         if (lastMsg && lastMsg.createdIn) {
-                            const date = new Date(lastMsg.createdIn);
-                            const day = date.getDate().toString().padStart(2, '0');
-                            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                            const year = date.getFullYear();
-                            lastUpdate = `${day}/${month}/${year}`;
+                            const now = new Date();
+                            const msgDate = new Date(lastMsg.createdIn);
+                            const day = msgDate.getDate().toString().padStart(2, '0');
+                            const month = (msgDate.getMonth() + 1).toString().padStart(2, '0');
+                            const year = msgDate.getFullYear();
+
+                            const isSameDay = now.toDateString() === msgDate.toDateString();
+                            const isYesterday = now.getDate() - msgDate.getDate() === 1 && now.getMonth() === msgDate.getMonth() && now.getFullYear() === msgDate.getFullYear();
+
+                            if (isSameDay) {
+                                const hours = msgDate.getHours().toString().padStart(2, '0');
+                                const minutes = msgDate.getMinutes().toString().padStart(2, '0');
+                                lastUpdate = `${hours}:${minutes}`;
+                            } else if (isYesterday) {
+                                lastUpdate = "ontem";
+                            } else {
+                                lastUpdate = `${day}.${month}.${year}`;
+                            }
                         }
                         lastMSGContent = lastMsg.message;
                         if (lastMsg.fromUser === userSoul) {
