@@ -335,7 +335,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                         <Image alt="me" src={meImg} fill style={imageFull ? {cursor: "default"} : {borderRadius: '100%'} }
                                         />
                                     </div>
-                                    {!userSettingsProfile ? (
+                                    {userSettingsProfile ? (
                                     !imageFull && (
                                             <div className="changeProfileImageContainer" onClick={() => {
                                                 if(userSettingsProfile){

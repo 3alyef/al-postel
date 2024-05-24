@@ -236,7 +236,9 @@
                             font-weight: 300;
                         }
                     }
-
+                    .changeProfileImageContainer:hover{
+                        animation-play-state: paused;
+                    }
                     .changeProfileImageContainer {
                         position: absolute;
                         width: 100%;
