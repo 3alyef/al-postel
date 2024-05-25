@@ -10,6 +10,8 @@ import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import { LuPen } from "react-icons/lu";
+import { SlPicture } from "react-icons/sl";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface propsContactsContainer {
     _isSemitic: boolean;
@@ -32,7 +34,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [onMessages, setOnMessages] = useState<boolean>(true);
     const [userSettingsProfile, setUserSettingsProfile] = useState<boolean>(false);
     const [imageFull, setImageFull] = useState<boolean>(false);
-
+    const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
+    const [changePhotoOptions, setChangePhotoOptions] = useState<boolean>(false);
     useEffect(()=>{
         const meImage = localStorage.getItem("imagemUserToPreLogin")
         if(meImage) {
@@ -98,8 +101,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         lastMSGContent: string | undefined; 
         whoLastSender: string | undefined;
     }
-    const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
-
+    
     useEffect(() => {
 
         const updateRoomsData = () => {
@@ -169,6 +171,21 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         updateRoomsData();
     }, [updateRooms, messagesContent, userSoul]);
     
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Element;
+            
+            if (changePhotoOptions && !target.closest('.changePhotoOptionsContent')) {
+                setChangePhotoOptions(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [changePhotoOptions]);
     return ( 
         <div className="flex flex-col h-full relative">
             <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
@@ -343,7 +360,10 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                                 }
                                                 
                                             }}>
-                                                <div className="changeProfileImage" style={imageFull ? imageFullStyle : undefined}>
+                                                <div className="changeProfileImage" style={imageFull ? imageFullStyle : undefined} onClick={(e)=>{
+                                                    e.stopPropagation();
+                                                    setChangePhotoOptions(true)
+                                                }}>
                                                     <Image
                                                         alt="alpostel"
                                                         src={'/imgs/logo.png?v=4'}
@@ -363,11 +383,58 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                             <p>Teste de mensagem de STATUS</p>
                                         </div>
                                     )}
+                                    
+                                    
+                                        
+                                    
                                 </div>
                             </div>
                         </div>
                   
-                    
+                        <div className="changePhotoOptions" style={changePhotoOptions ? {display: 'flex'} : {display: 'none'}}>
+                            <div className="intermediatePhotoOpt">
+                                <div className="changePhotoOptionsContent" style={changePhotoOptions ? {left: '0%'} : {left: '-35%'}}>
+                                    <div className="headerPhotoOptions">
+                                        {/*<div className="closePhotoOptions">
+                                            x
+                                        </div>*/}
+                                        <div className="alpostelContainer">
+                                            <Image
+                                                alt="alpostel"
+                                                src={'/imgs/logo.png?v=4'}
+                                                fill
+                                                className="alpostelChangeProfileLogo"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="centralizeOptions">
+                                        <div className="photoOptions">
+                                            <div className="matzlamah optContainer">
+                                                <div className="optionsContent">
+                                                    <MdOutlinePhotoCamera />
+                                                </div>
+                                                <label>
+                                                    Camera
+                                                </label>
+                                            </div>
+                                            <div className="galery optContainer">
+                                                <div className="optionsContent">
+                                                    <SlPicture />
+                                                </div>
+                                                <label>
+                                                    Galery
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div className="deletePhoto">
+                                            <div className="optionsContent">
+                                                <RiDeleteBin6Line />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                
                 </main>
             </div>
         </div>

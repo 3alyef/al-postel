@@ -301,7 +301,110 @@
             }
             
         }
-        
+        .changePhotoOptions {
+            background-color: rgba(19, 19, 19, 0.24);
+            width: 100%;
+            height: 100%;
+            //display: flex;
+
+            justify-content: flex-end;
+            position: absolute;
+            top: 0;
+            .intermediatePhotoOpt {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                .changePhotoOptionsContent {
+                    position: absolute;
+                    border-radius: 0em .5em .5em 0em;
+                    background-color: black;
+                    //min-height: 4em;
+                    height: 100%;
+                    width: 15%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 0.5em;
+                    .headerPhotoOptions {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-around;
+                        width: 100%;
+                        /* min-height: 17%; */
+                        padding: 1em .5em;
+                        border-bottom: 2px solid #3535356c;
+                        .alpostelContainer {
+                            position: relative;
+                            aspect-ratio: 1/1;
+                            width: 2em;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                    
+                    
+                    .centralizeOptions {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        justify-content: space-evenly;
+                        flex-direction: column;
+                        .optionsContent {
+                            cursor: pointer;
+                            font-size: 1.75em;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 1.75em;
+                            //background-color: brown;
+                            border: 2px solid #3535356c;
+                            border-radius: 100%;
+                            aspect-ratio: 1 / 1;
+                        }
+                        .photoOptions {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 100%;
+                            height: 55%;
+                            gap: 1em;
+                            /* padding: 1em .5em; */
+                            border-bottom: 2px solid rgba(53, 53, 53, .424);
+                            .optContainer {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                label {
+                                    color: #ffffffed;
+                                    font-size: .75em;
+                                    font-weight: 300;
+
+                                }
+                            }
+                        }
+                        .photoOptions:hover {
+                            background-color: #474747ba;
+                        }
+                        .photoOptions:active {
+                            background-color: #4747478c;
+                        }
+                        .deletePhoto {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                    
+                }
+
+                    
+                
+            }   
+        }
     }
 }
 

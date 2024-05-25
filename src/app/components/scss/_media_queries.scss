@@ -55,6 +55,9 @@
         display: block !important;
     }
 
+    .photoOptions {
+        flex-direction: column;
+    }
     .footerBarContacts {
         //position: fixed;
         //bottom: 0;
