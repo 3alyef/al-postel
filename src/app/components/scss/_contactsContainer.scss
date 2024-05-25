@@ -387,10 +387,10 @@
                                 }
                             }
                         }
-                        .photoOptions:hover {
+                        .optContainer:hover, .deletePhoto:hover {
                             background-color: #474747ba;
                         }
-                        .photoOptions:active {
+                        .optContainer:active, .deletePhoto:active {
                             background-color: #4747478c;
                         }
                         .deletePhoto {
