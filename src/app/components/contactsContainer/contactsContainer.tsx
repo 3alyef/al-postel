@@ -36,6 +36,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [imageFull, setImageFull] = useState<boolean>(false);
     const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
     const [changePhotoOptions, setChangePhotoOptions] = useState<boolean>(false);
+    const [imageFile, setImageFile] = useState<File>()
     useEffect(()=>{
         const meImage = localStorage.getItem("imagemUserToPreLogin")
         if(meImage) {
@@ -186,6 +187,25 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
             document.removeEventListener("click", handleClickOutside);
         };
     }, [changePhotoOptions]);
+
+    const handleDivClick = () => {
+        document.getElementById('fileInput')?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            setImageFile(file)
+            
+        }
+    };
+
+    useEffect(()=>{
+        console.log('imageFile: ', imageFile)
+        if(imageFile){
+            serverIo.setProfileImage(imageFile)
+        }
+    }, [imageFile])
     return ( 
         <div className="flex flex-col h-full relative">
             <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
@@ -410,20 +430,34 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     <div className="centralizeOptions">
                                         <div className="photoOptions">
                                             <div className="matzlamah optContainer">
-                                                <div className="optionsContent">
+                                                <div className="optionsContent" onClick={()=>{
+                                                    console.log("CAMERA")
+                                                    
+                                                }}>
                                                     <MdOutlinePhotoCamera />
                                                 </div>
                                                 <label>
                                                     Camera
                                                 </label>
+                                                
                                             </div>
                                             <div className="galery optContainer">
-                                                <div className="optionsContent">
+                                                <div className="optionsContent" onClick={()=>{
+                                                    console.log("Galery");
+                                                    handleDivClick()
+                                                }}>
                                                     <SlPicture />
                                                 </div>
                                                 <label>
                                                     Galery
                                                 </label>
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    style={{ display: 'none' }}
+                                                    accept="image/*"
+                                                    onChange={handleFileChange}
+                                                />
                                             </div>
                                         </div>
                                         <div className="deletePhoto">
@@ -434,6 +468,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     </div>
                                 </div>
                             </div>
+
                         </div>                
                 </main>
             </div>

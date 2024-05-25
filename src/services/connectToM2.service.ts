@@ -289,4 +289,18 @@ export class ConnectM2 {
     public setTypingState({state, userSoulFrom, userSoulTo}:{state: boolean, userSoulFrom: string, userSoulTo: string}) {
         this.socket.emit("setTypingState", {state, userSoulFrom, userSoulTo})
     }
+    public setProfileImage(imagem: File){
+        
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const imageData = reader.result as ArrayBuffer;
+            // Enviando a imagem para o servidor como um ArrayBuffer
+            this.socket.emit("setProfileImage", { image: imageData, type: imagem.type , name: imagem.name});
+        };
+
+        reader.readAsArrayBuffer(imagem);
+        
+
+    }
 }
