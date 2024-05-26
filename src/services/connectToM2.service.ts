@@ -109,7 +109,7 @@ export class ConnectM2 {
                         imageData: el.friendData.imageData,
                         last_name: el.friendData.last_name
                     };
-                    console.log("imageData", el.friendData.imageData)
+                    //console.log("imageData", el.friendData.imageData)
                     // Adiciona a nova sala
                     if (!newRooms.has(el.friendData.userSoul)) {
                         newRooms.set(el.friendData.userSoul, [newRoom]);
@@ -211,6 +211,19 @@ export class ConnectM2 {
                 
                 return friendsOnline
             })
+        })
+
+        this.socket.on("updateFriendData", ({soulName, imageProps})=>{
+            setUpdateRooms((previous) => {
+                const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(previous);
+                
+                const userData = newRooms.get(soulName);
+                if(userData){
+                    userData[0].imageData = imageProps
+                }
+                //console.log('newRooms', newRooms, 'soulName', soulName, 'updateFriendData ========= ', imageProps)
+                return newRooms;
+            });
         })
        
     }
