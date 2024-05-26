@@ -36,7 +36,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [roomsListByUserSoul, setRoomsListByUserSoul] = useState<Map<string, string>>(new Map())
     const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map);
     const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map());
-    const [userProps, setUserProps] = useState<DecodedData[]>([]);
+    const [userProps, setUserProps] = useState<DecodedData>();
 
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");

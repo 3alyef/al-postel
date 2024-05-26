@@ -6,7 +6,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdGroups, MdOutlineMessage, MdOutlinePhotoCamera } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
-import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
+import { ConnectM2, DecodedData, imageProps } from "@/services/connectToM2.service";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import { LuPen } from "react-icons/lu";
@@ -21,7 +21,7 @@ interface propsContactsContainer {
     userSoul: string;
     setScreenMsg: Dispatch<SetStateAction<Map<string, propsRoom>>>
     setSoulNameNow: Dispatch<SetStateAction<string>>;
-    userProps: DecodedData[];
+    userProps: DecodedData | undefined;
     messagesContent: Map<string, propsMessagesContent[]>;
 }
 
@@ -38,12 +38,16 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [changePhotoOptions, setChangePhotoOptions] = useState<boolean>(false);
     const [imageFile, setImageFile] = useState<File>()
     useEffect(()=>{
-        const meImage = localStorage.getItem("imagemUserToPreLogin")
-        if(meImage) {
-            setImg(meImage)
+        console.log(userProps)
+
+        if(userProps && userSoul && userProps.userSoul === userSoul){
+            console.log('userProps.imageProps', userProps.imageProps)
+            if(userProps.imageProps){
+                setImg(userProps.imageProps.userImage)
+            }
         }
 
-    }, [])
+    }, [userProps])
 
 
     async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom ) {
@@ -68,10 +72,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
        
     }
-
-    useEffect(()=>{
-        console.log('userProps', userProps)
-    }, [userProps])
 
     const onProfilePhotoStyle: CSSProperties = {
         width: "7.5em"
@@ -399,7 +399,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                         )
                                     ) : (
                                         <div className="nameAndMsgSTATUS">
-                                            <h3>{userProps[0]?.first_name || ''}</h3>
+                                            <h3>{userProps?.first_name || ''}</h3>
                                             <p>Teste de mensagem de STATUS</p>
                                         </div>
                                     )}

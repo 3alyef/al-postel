@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 interface propsDivLabel {
     sourceImage: string | undefined;
@@ -18,11 +18,19 @@ interface propsDivLabel {
 
 }
 export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent}: propsDivLabel){
-    
+    const [imageUser, setImageUser] = useState<string>('/imgs/assets/person.png')
+
+    useEffect(()=>{
+        if(sourceImage){
+            setImageUser(sourceImage)
+        }
+        
+    }, [sourceImage])
     return(
         <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-soulname={soulName}>
             <div className="contactGroupPhoto">
-                <Image alt="profile photo" src={sourceImage ? sourceImage : '/imgs/assets/person.png'} fill/>
+                <Image alt="profile photo" src={imageUser} fill/>
+                {/*<img alt="profile photo" src={imageUser} className="w-full h-full"/>*/}
             </div>
             <div className="aboutContactMsgs">
                 <div className="subTitle">

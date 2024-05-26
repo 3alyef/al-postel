@@ -23,6 +23,11 @@ export interface sendMsg {
     toGroup?: string;
     createdIn: string
 }
+export interface imageProps {
+    userImage: string;
+    lastUpdateIn: string;
+    _id: string
+}
 
 export type DecodedData  = {
     userId: string;
@@ -31,6 +36,7 @@ export type DecodedData  = {
     last_name: string;
     email: string;
     costumName: costumName;
+    imageProps: imageProps | null;
     iat?: number;
     exp?: number;
 
@@ -48,7 +54,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData[]>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -56,9 +62,9 @@ export class ConnectM2 {
         this.socket.on("updateSoul", (el: {soulName: string, userProps: DecodedData})=>{
             setUserSoul(el.soulName);
             setUserProps((prev)=>{
-                const newV = prev;
-                if(newV.length === 0){
-                    newV.push(el.userProps)
+                let newV = prev;
+                if(el.userProps && typeof el.userProps.userSoul === 'string'){
+                    newV = el.userProps
                 }
                 
                 return newV
@@ -103,7 +109,7 @@ export class ConnectM2 {
                         imageData: el.friendData.imageData,
                         last_name: el.friendData.last_name
                     };
-        
+                    console.log("imageData", el.friendData.imageData)
                     // Adiciona a nova sala
                     if (!newRooms.has(el.friendData.userSoul)) {
                         newRooms.set(el.friendData.userSoul, [newRoom]);
