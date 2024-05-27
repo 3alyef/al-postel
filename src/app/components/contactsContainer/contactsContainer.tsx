@@ -3,16 +3,17 @@ import { desactiveScreens } from "@/services/desactiveScreens.service";
 import Image from "next/image";
 import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { MdGroups, MdOutlineMessage, MdOutlinePhotoCamera } from "react-icons/md";
+import { MdGroups, MdOutlineGroupAdd, MdOutlineMessage, MdOutlinePhotoCamera } from "react-icons/md";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { SearchUser } from "../searchUser/searchUser";
-import { ConnectM2, DecodedData, imageProps } from "@/services/connectToM2.service";
+import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import { LuPen } from "react-icons/lu";
 import { SlPicture } from "react-icons/sl";
 import { RiDeleteBin6Line } from "react-icons/ri";
-
+import { propsGroups } from "@/interfaces/groups.interface";
+import { MdPersonAddAlt1 } from "react-icons/md";
 interface propsContactsContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
@@ -23,9 +24,11 @@ interface propsContactsContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     userProps: DecodedData | undefined;
     messagesContent: Map<string, propsMessagesContent[]>;
+    groupsDataById: Map<string, propsGroups[]>;
+    setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>
 }
 
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById, setGroupsDataById}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -36,7 +39,9 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [imageFull, setImageFull] = useState<boolean>(false);
     const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
     const [changePhotoOptions, setChangePhotoOptions] = useState<boolean>(false);
-    const [imageFile, setImageFile] = useState<File>()
+    const [imageFile, setImageFile] = useState<File>();
+    const [addGroupIcon, setAddGroupIcon] = useState<boolean>(false);
+    const [addPersonaIcon, setAddPersonaIcon] = useState<boolean>(true)
     useEffect(()=>{
         console.log(userProps)
 
@@ -48,8 +53,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
 
     }, [userProps])
-
-
     async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom ) {
         console.log('soulNameC', soulNameC);
 
@@ -172,6 +175,9 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         updateRoomsData();
     }, [updateRooms, messagesContent, userSoul]);
     
+    useEffect(()=>{
+        console.log('groupsDataById', groupsDataById)
+    }, [groupsDataById])
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Element;
@@ -208,10 +214,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     }, [imageFile])
     return ( 
         <div className="flex flex-col h-full relative">
-            <div className="userScreen flex flex-col w-full h-full absolute bg-slate-100"
-            style={{right: onProfile ? "0%": "150%", zIndex: onProfile ? 1:-1}}>
-
-            </div>
             <div className="contactsContainer flex flex-col h-full">
                 <div className="headerBarContacts">
                     
@@ -226,30 +228,52 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             }
                         ) }/>
                     </div>
+                    {onAlPostelLogo && (
+                        <div className="personaGroupOpt">
+                            <div className="addGroupIcon" onClick={()=>{
+                                if(!addGroupIcon){
+                                    setAddGroupIcon(true)
+                                    setAddPersonaIcon(false)
+                                }
+                            }}>
+                                <MdOutlineGroupAdd />
+                            </div>
+                            <div className="addPersonaIcon" onClick={()=>{
+                                if(!addPersonaIcon){
+                                    setAddPersonaIcon(true)
+                                    setAddGroupIcon(false)
+                                }
+                            }}>
+                                <MdPersonAddAlt1 />
+                            </div>
+                        </div>
+                    )}
+                    
                 </div> 
                 <div className="mainContacts">
                     <div className="contactsGroupsList">           
                         <div className="alPostelLogoScreen"
-                        style={{top: onAlPostelLogo ? "0%":"-100%"}}>
-                            <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}
-                            desactiveSearchUser={()=>
-                                desactiveScreens(
-                                {
-                                    root: onAlPostelLogo, 
-                                    competitors: [onProfile, onGroups, onMessages, settings],  
-                                    setCompetitors: [setOnProfile, setOnGroups, setOnMessages, setSettings], 
-                                    setRoot:  setOnAlPostelLogo,
-                                    setOnMessages: setOnMessages
-                                }
-                            ) }/>
+                        style={{display: onAlPostelLogo ? "block":"none"}}>
+                            {addPersonaIcon && (
+                                <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}
+                                desactiveSearchUser={()=>
+                                    desactiveScreens(
+                                    {
+                                        root: onAlPostelLogo, 
+                                        competitors: [onProfile, onGroups, onMessages, settings],  
+                                        setCompetitors: [setOnProfile, setOnGroups, setOnMessages, setSettings], 
+                                        setRoot:  setOnAlPostelLogo,
+                                        setOnMessages: setOnMessages
+                                    }
+                                ) }/>
+                            )}
                         </div>
                         <div className="groupsScreen"
-                        style={{top: onGroups ? "0%":"-100%"}}>
-
+                        style={{display: onGroups ? "flex":"none"}}>
+                            GRUPOS
                         </div>
-                        <div className="flex flex-col messagesScreen pt-[7px] gap-[2px]"
-                        style={{top: onMessages ? "0%":"-100%"}}>
- 
+                        <div className="flex-col messagesScreen pt-[7px] gap-[2px]" style={{display: onMessages ? "flex":"none"}}>
+                            {/** */}
                             {roomsData.flat().map(room => (
                                 <ContactsContainerDivLabel
                                     soulName={room.soulName}
@@ -391,9 +415,10 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                                         className="alpostelChangeProfileLogo"
                                                         
                                                     />
-                                                    <div className="matzlamahChangeProfilePhoto">
+                                                    {/**<div className="matzlamahChangeProfilePhoto">
                                                         <MdOutlinePhotoCamera />
-                                                    </div>
+                                                    </div> */}
+                                                    
                                                 </div>
                                             </div>
                                         )

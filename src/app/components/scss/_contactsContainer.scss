@@ -12,7 +12,7 @@
         background-color: $bg-color-header;
         min-height: 12.5%;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         padding: 5px 15px;
         
@@ -24,6 +24,34 @@
             //justify-content: center; 
             width: 2em;
             //width: calc((25% / 100) * 25);
+        }
+
+
+        .personaGroupOpt {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1em;
+
+            .addGroupIcon, .addPersonaIcon {
+                cursor: pointer;
+                padding: 0.45em;
+                //background-color: black;
+                font-size: 1.25em;
+                aspect-ratio: 1 / 1;
+                border-radius: 100%;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .addGroupIcon:hover, .addPersonaIcon:hover {
+                background-color: #15151538;
+            }
+            .addGroupIcon:active, .addPersonaIcon:active {
+                background-color: #15151567;
+            }
         }
 
 
@@ -247,7 +275,7 @@
                         display: flex;
                         padding: .25em;
                         align-items: flex-end;
-                        justify-content: flex-end;
+                        justify-content: center;
                         border-radius: 100%;
                         cursor: pointer;
                         .changeProfileImage {
@@ -409,7 +437,7 @@
         }
     }
 }
-
+/*
 .userScreen {
     transition: right .5s ease-in;
-}
+}*/

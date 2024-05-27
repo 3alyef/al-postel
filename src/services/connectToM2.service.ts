@@ -1,5 +1,6 @@
 
 import { propsMessagesContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
+import { propsGroups } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
@@ -54,7 +55,7 @@ export class ConnectM2 {
         });
     }
 
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>, setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });

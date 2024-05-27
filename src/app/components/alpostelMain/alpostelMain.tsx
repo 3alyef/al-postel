@@ -4,6 +4,7 @@ import ContactsContainer from "../contactsContainer/contactsContainer";
 import MsgsContainer from "../msgsContainer/msgsContainer";
 import { ConnectM2, DecodedData } from "@/services/connectToM2.service";
 import { costumName } from "@/interfaces/searchByEmail.interface";
+import { propsGroups } from "@/interfaces/groups.interface";
 interface propsAlpostelMain {
     _isSemitic: boolean;
 }
@@ -37,14 +38,14 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map);
     const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map());
     const [userProps, setUserProps] = useState<DecodedData>();
-
+    const [groupsDataById, setGroupsDataById] = useState<Map<string, propsGroups[]>>(new Map())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
             const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent);
-            server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom, setFriendsOnline, setUserProps);
+            server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom, setFriendsOnline, setUserProps, setGroupsDataById);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
         }
@@ -58,7 +59,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                     <>
 
                         <section className={`sectionContact ${soulNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent}/>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent}setGroupsDataById={setGroupsDataById} groupsDataById={groupsDataById}/>
                         </section>
                         
                         <section className={`sectionMsg ${!(soulNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
