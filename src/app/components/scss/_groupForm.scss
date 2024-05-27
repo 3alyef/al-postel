@@ -1,0 +1,28 @@
+.groupForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    //height: 100%;
+    .centralizeGroupForm {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0em .5em;
+        gap: .75em;
+        .groupImage {
+            position: relative;
+            width: 2.5em;
+            aspect-ratio: 1/1;
+            border-radius: 100%;
+        }
+
+        .inputNameGroup {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .5em;
+            
+        }
+    }
+    
+}

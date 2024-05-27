@@ -14,6 +14,7 @@ import { SlPicture } from "react-icons/sl";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { propsGroups } from "@/interfaces/groups.interface";
 import { MdPersonAddAlt1 } from "react-icons/md";
+import GroupForm from "../groupForm/groupForm";
 interface propsContactsContainer {
     _isSemitic: boolean;
     serverIo: ConnectM2;
@@ -267,6 +268,13 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     }
                                 ) }/>
                             )}
+
+                            {addGroupIcon && (
+                                <>
+                                    <GroupForm _isSemitic={_isSemitic}/>
+                                
+                                </>
+                            )}
                         </div>
                         <div className="groupsScreen"
                         style={{display: onGroups ? "flex":"none"}}>
@@ -454,7 +462,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     </div>
                                     <div className="centralizeOptions">
                                         <div className="photoOptions">
-                                            <div className="matzlamah optContainer">
+                                            {/** <div className="matzlamah optContainer">
                                                 <div className="optionsContent" onClick={()=>{
                                                     console.log("CAMERA")
                                                     
@@ -465,7 +473,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                                     Camera
                                                 </label>
                                                 
-                                            </div>
+                                            </div>*/}
+                                            
                                             <div className="galery optContainer">
                                                 <div className="optionsContent" onClick={()=>{
                                                     console.log("Galery");
