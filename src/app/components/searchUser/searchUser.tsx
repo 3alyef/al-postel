@@ -12,10 +12,11 @@ interface propsSearchUser {
     updateRooms: Map<string, propsRoom[]>;
     setUpdateRooms: Dispatch<Map<string, propsRoom[]>>;
     showMessages: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, userSoul?:string, roomPropsC?:propsRoom) => Promise<void>;
-    desactiveSearchUser: () => void
+    desactiveSearchUser: () => void;
+    costumAlign?: string
 }
 
-export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, showMessages, desactiveSearchUser}: propsSearchUser) {
+export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, showMessages, desactiveSearchUser, costumAlign}: propsSearchUser) {
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
     const [searchError, setSearchError] = useState<boolean>(false)
     const [searchFormValue, setSearchFormValue] = useState<string>("");
@@ -93,7 +94,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, s
          
     }
     return(
-        <div className="searchUserComponent">
+        <div className={`searchUserComponent ${costumAlign}`}>
             <div className="searchUserContainer">
                 <div className="flex justify-center px-2">
                         <InputText _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={searchError} setOnFocusStyle={setOnFocusSearchStyle} setValue={setSearchFormValue} text="Search" type="text" value={searchFormValue}  costumerClassDivContainer="costumerClassDivContainer"/>

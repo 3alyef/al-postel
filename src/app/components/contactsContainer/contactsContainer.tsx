@@ -253,8 +253,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 </div> 
                 <div className="mainContacts">
                     <div className="contactsGroupsList">           
-                        <div className="alPostelLogoScreen"
-                        style={{display: onAlPostelLogo ? "block":"none"}}>
+                        <div className="alPostelLogoScreen py-[.75em]"
+                        style={{display: onAlPostelLogo ? "grid":"none"}}>
                             {addPersonaIcon && (
                                 <SearchUser _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} showMessages={showMessages}
                                 desactiveSearchUser={()=>
@@ -266,7 +266,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                         setRoot:  setOnAlPostelLogo,
                                         setOnMessages: setOnMessages
                                     }
-                                ) }/>
+                                ) } costumAlign="alignCostum"/>
                             )}
 
                             {addGroupIcon && (

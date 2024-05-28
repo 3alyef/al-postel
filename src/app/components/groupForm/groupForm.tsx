@@ -43,47 +43,48 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
         <>
             <div className="groupForm">
                 <div className="centralizeGroupForm">
-                    <div className="nameGroupForm">
-                        <div className="groupImage" onClick={
-                            ()=>{
-                                handleDivClick();
-                            }
-                        }>
-                            <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
-                        </div>
-                        <div className="inputNameGroup">
-                            <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName}/>
-                            <EmojisList costumWidth="50px"/>
-                        </div>
-                        <input
-                            type="file"
-                            id="fileInputGroup"
-                            style={{ display: 'none' }}
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                    <div className="groupOptKhv">
-                        <h4 className="participantsNumber">
-                            <span>Amigos:</span><span>{participantsValue}</span>
-                        </h4>
-                        <div className="participantsScreen">
-                            <div className="personaIconGroup addPersonaIconGroup max-w-[50px]" onClick={()=>{
-                                console.log('add participant')
-                            }}>
-                                <MdPersonAddAlt1 />
+                    <div className="subHeaderGroupForm">
+                        <div className="nameGroupForm">
+                            <div className="groupImage" onClick={
+                                ()=>{
+                                    handleDivClick();
+                                }
+                            }>
+                                <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
                             </div>
-                            
-                            <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                console.log('remove participant')
-                            }}>
-                                
+                            <div className="inputNameGroup">
+                                <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName}/>
+                                <EmojisList costumWidth="50px"/>
                             </div>
-
-                            <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                console.log('remove participant')
-                            }}>
-                                
+                            <input
+                                type="file"
+                                id="fileInputGroup"
+                                style={{ display: 'none' }}
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                        <div className="groupOptKhv">
+                            <h4 className="participantsNumber">
+                                <span>Amigos:</span><span>{participantsValue}</span>
+                            </h4>
+                            <div className="participantsScreen">
+                                <div className="personaIconGroup addPersonaIconGroup max-w-[50px]" onClick={()=>{
+                                    console.log('add participant')
+                                }}>
+                                    <MdPersonAddAlt1 />
+                                </div>
+                        
+                                <div className="personaIconGroup w-[50px]" onClick={()=>{
+                                    console.log('remove participant')
+                                }}>
+                        
+                                </div>
+                                <div className="personaIconGroup w-[50px]" onClick={()=>{
+                                    console.log('remove participant')
+                                }}>
+                        
+                                </div>
                             </div>
                         </div>
                     </div>
