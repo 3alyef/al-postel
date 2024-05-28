@@ -53,8 +53,8 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                                 <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
                             </div>
                             <div className="inputNameGroup">
-                                <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName}/>
-                                <EmojisList costumWidth="50px"/>
+                                <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName} caretW={true}/>
+                                <EmojisList costumWidth="50px" />
                             </div>
                             <input
                                 type="file"

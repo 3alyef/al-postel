@@ -15,10 +15,11 @@ interface propsInputText {
     onFocusFunction: () => void;
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
-    onBlur?:(value: boolean)=>void
+    onBlur?:(value: boolean)=>void;
+    caretW?: boolean
 }
 
-export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer }: propsInputText) {
+export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer, caretW }: propsInputText) {
     const inputRef = useRef<HTMLInputElement>(null);
     
     const [borderStyle, setBorderStyle] = useState<string>('1.8px solid rgb(0, 0, 0)');
@@ -65,6 +66,7 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
                         onFocus={onFocusFunction}
                         onBlur={() => {
                             onBlur? onBlur(false): setOnFocusStyle(false)}}
+                        style={caretW ? {caretColor: 'white'} : undefined}
                     />
                     <div
                         className={`${processErrorStyle ? "labelsAllert" : "labels"} ${!_isSemitic && "left-[7px]"}`}
