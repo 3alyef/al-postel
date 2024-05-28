@@ -13,6 +13,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import MessageLabel from "../messageLabel/messageLabel";
 import TextareaMsg from "../textareaMsg/textareaMsg";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
+import EmojisList from "../emojisList/emojisList";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -220,9 +221,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         </div>
                         <div className=" footerBarMsgs">
                             <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
-                                <div className="emojiBtn">
-                                    <MdOutlineEmojiEmotions className="text-white w-[75%] h-[75%]"/>
-                                </div>   
+                                <EmojisList/>
                                 <div className="messageInput">
                                     <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
                                 </div>  

@@ -1,0 +1,21 @@
+.emojiBtn {
+    //background-color: $btn-color;
+    //width: 52px;
+    padding: .2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1/1;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.emojiBtn:hover {
+    background-color: $btn-color;
+    
+}
+
+.emojiBtn:active {
+    background-color: $btn-color-active;  
+      
+}
