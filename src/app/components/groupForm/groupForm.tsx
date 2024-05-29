@@ -95,13 +95,13 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                     <div className="createGroup">
                         <div className="createGroupBtn w-[50px] h-[50px]">
                             {onAddContactsScreen ? (
-                                _isSemitic ? (
+                                !_isSemitic ? (
                                     <span>
                                         <GrLinkNext />
                                     </span>
                                     
                                 ) : (
-                                    <span style={{rotate: '90deg'}}>
+                                    <span style={{rotate: '180deg'}}>
                                         <GrLinkNext />
                                     </span>
                                 )
