@@ -5,6 +5,7 @@ import { MdOutlineEmojiEmotions, MdPersonAddAlt1 } from "react-icons/md";
 import InputText from "../inputText/inputText";
 import EmojisList from "../emojisList/emojisList";
 import { AiOutlineCheck } from "react-icons/ai";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 interface propsGroupForm {
     _isSemitic: boolean
 }
@@ -13,7 +14,8 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
     const [groupName, setGroupName] = useState<string>('');
     const [imageFile, setImageFile] = useState<File>();
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
-    const [participantsValue, setParticipantsValue] = useState<number>(0)
+    const [participantsValue, setParticipantsValue] = useState<number>(0);
+    const [onAddContactsScreen, setOnAddContactsScreen] = useState<boolean>(false)
     function onFocusSearchFunc() {
         setOnFocusSearchStyle(true);
     }
@@ -70,7 +72,9 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                             </h4>
                             <div className="participantsScreen">
                                 <div className="personaIconGroup addPersonaIconGroup max-w-[50px]" onClick={()=>{
-                                    console.log('add participant')
+                                    if(!onAddContactsScreen){
+                                        setOnAddContactsScreen(true)
+                                    }
                                 }}>
                                     <MdPersonAddAlt1 />
                                 </div>
@@ -90,7 +94,15 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                     </div>
                     <div className="createGroup">
                         <div className="createGroupBtn w-[50px] h-[50px]">
-                            <AiOutlineCheck />
+                            {onAddContactsScreen ? (
+                                _isSemitic ? (
+                                    <FaArrowRight />
+                                ) : (
+                                    <FaArrowLeft />
+                                )
+                            ) : (
+                                <AiOutlineCheck />
+                            )}
                         </div>
                     </div>
                 </div>
