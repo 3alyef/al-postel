@@ -1,11 +1,11 @@
 "use client"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { MdOutlineEmojiEmotions, MdPersonAddAlt1 } from "react-icons/md";
+import {MdPersonAddAlt1 } from "react-icons/md";
 import InputText from "../inputText/inputText";
 import EmojisList from "../emojisList/emojisList";
 import { AiOutlineCheck } from "react-icons/ai";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { GrLinkNext } from "react-icons/gr";
 interface propsGroupForm {
     _isSemitic: boolean
 }
@@ -96,9 +96,14 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                         <div className="createGroupBtn w-[50px] h-[50px]">
                             {onAddContactsScreen ? (
                                 _isSemitic ? (
-                                    <FaArrowRight />
+                                    <span>
+                                        <GrLinkNext />
+                                    </span>
+                                    
                                 ) : (
-                                    <FaArrowLeft />
+                                    <span style={{rotate: '90deg'}}>
+                                        <GrLinkNext />
+                                    </span>
                                 )
                             ) : (
                                 <AiOutlineCheck />
