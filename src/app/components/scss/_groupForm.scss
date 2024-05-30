@@ -96,6 +96,20 @@ $padronBgGroupForm: #1f2a1b2b;
 
                     
                 }
+                .participantsScreen::-webkit-scrollbar {
+                    height: 12px; /* Altura da barra de rolagem */
+                }
+        
+                .participantsScreen::-webkit-scrollbar-thumb {
+                    background-color: rgba(255, 255, 255, 0.5); /* Cor branca transparente */
+                    border-radius: 6px; /* Bordas arredondadas */
+                }
+        
+                .participantsScreen::-webkit-scrollbar-track {
+                    background: transparent; /* Fundo transparente */
+                }
+
+                
             }
 
             .contactsSelectedImagesRefer {
@@ -114,6 +128,12 @@ $padronBgGroupForm: #1f2a1b2b;
                     flex-wrap: nowrap;
                     padding: .5em .25em;
                     gap: .5em;
+
+                    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+                    scrollbar-width: none;  /* Firefox */
+                }
+                .contactsSelectedImages::-webkit-scrollbar {
+                    display: none;
                 }
             }
 
