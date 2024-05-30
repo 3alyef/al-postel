@@ -48,7 +48,7 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
     };
     return (
         <>
-            <div className="groupForm">
+            <div className="groupForm groupFormRefer">
                 <div className="centralizeGroupForm">
                     <div className="subHeaderGroupForm">
                         {
