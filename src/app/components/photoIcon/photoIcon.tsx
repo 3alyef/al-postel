@@ -14,7 +14,7 @@ export default function PhotoIcon({sourceImage}:propsPhotoIcon){
     }, [sourceImage])
     return(
         <>
-            <div className="personaIconGroup min-w-[50px]" onClick={()=>{
+            <div className="personaIconGroup min-w-[50px] w-[50px]" onClick={()=>{
                 console.log('remove participant')
             }}>
                 <Image src={imageUser} fill alt="user photo"/>
