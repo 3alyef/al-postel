@@ -46,51 +46,70 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
             <div className="groupForm">
                 <div className="centralizeGroupForm">
                     <div className="subHeaderGroupForm">
-                        <div className="nameGroupForm">
-                            <div className="groupImage" onClick={
-                                ()=>{
-                                    handleDivClick();
-                                }
-                            }>
-                                <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
-                            </div>
-                            <div className="inputNameGroup">
-                                <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName} caretW={true}/>
-                                <EmojisList costumWidth="50px" />
-                            </div>
-                            <input
-                                type="file"
-                                id="fileInputGroup"
-                                style={{ display: 'none' }}
-                                accept="image/*"
-                                onChange={handleFileChange}
-                            />
-                        </div>
-                        <div className="groupOptKhv">
-                            <h4 className="participantsNumber">
-                                <span>Amigos:</span><span>{participantsValue}</span>
-                            </h4>
-                            <div className="participantsScreen">
-                                <div className="personaIconGroup addPersonaIconGroup max-w-[50px]" onClick={()=>{
-                                    if(!onAddContactsScreen){
-                                        setOnAddContactsScreen(true)
-                                    }
-                                }}>
-                                    <MdPersonAddAlt1 />
-                                </div>
+                        {
+                            !onAddContactsScreen ? (
+                                <>  
+                                    <div className="nameGroupForm">
+                                        <div className="groupImage" onClick={
+                                            ()=>{
+                                                handleDivClick();
+                                            }
+                                        }>
+                                            <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
+                                        </div>
+                                        <div className="inputNameGroup">
+                                            <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName} caretW={true}/>
+                                            <EmojisList costumWidth="50px" />
+                                        </div>
+                                        <input
+                                            type="file"
+                                            id="fileInputGroup"
+                                            style={{ display: 'none' }}
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </div>
+                                    <div className="groupOptKhv">
+                                        <h4 className="participantsNumber">
+                                            <span>Amigos:</span><span>{participantsValue}</span>
+                                        </h4>
+                                        <div className="participantsScreen">
+                                            <div className="personaIconGroup addPersonaIconGroup max-w-[50px]" onClick={()=>{
+                                                if(!onAddContactsScreen){
+                                                    setOnAddContactsScreen(true)
+                                                }
+                                            }}>
+                                                <MdPersonAddAlt1 />
+                                            </div>
+                                    
+                                            <div className="personaIconGroup w-[50px]" onClick={()=>{
+                                                console.log('remove participant')
+                                            }}>
+                                    
+                                            </div>
+                                            <div className="personaIconGroup w-[50px]" onClick={()=>{
+                                                console.log('remove participant')
+                                            }}>
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="contactsSelectedImagesRefer">
+                                        <div className="contactsSelectedImages">
+                                        </div>
+                                    </div>
+                                    <div className="contactsListRefer">
+                                        <div className="contactsListToSelect">
+
+                                        </div>
+                                    </div>
+                                </>
+                            )
+                        }
                         
-                                <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                    console.log('remove participant')
-                                }}>
-                        
-                                </div>
-                                <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                    console.log('remove participant')
-                                }}>
-                        
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div className="createGroup">
                         <div className="createGroupBtn w-[50px] h-[50px]">
@@ -99,7 +118,6 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                                     <span>
                                         <GrLinkNext />
                                     </span>
-                                    
                                 ) : (
                                     <span style={{rotate: '180deg'}}>
                                         <GrLinkNext />
