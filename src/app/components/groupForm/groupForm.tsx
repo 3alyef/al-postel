@@ -6,6 +6,7 @@ import InputText from "../inputText/inputText";
 import EmojisList from "../emojisList/emojisList";
 import { AiOutlineCheck } from "react-icons/ai";
 import { GrLinkNext } from "react-icons/gr";
+import PhotoIcon from "../photoIcon/photoIcon";
 interface propsGroupForm {
     _isSemitic: boolean
 }
@@ -40,7 +41,11 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                 URL.revokeObjectURL(imageUrl);
             };
         }
-    }, [imageFile])
+    }, [imageFile]);
+    const photoIcons = [];
+    for (let l = 0; l < 15; l++) {
+        photoIcons.push(<PhotoIcon key={l} sourceImage="" />);
+    };
     return (
         <>
             <div className="groupForm">
@@ -82,16 +87,9 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                                                 <MdPersonAddAlt1 />
                                             </div>
                                     
-                                            <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                                console.log('remove participant')
-                                            }}>
-                                    
-                                            </div>
-                                            <div className="personaIconGroup w-[50px]" onClick={()=>{
-                                                console.log('remove participant')
-                                            }}>
-                                    
-                                            </div>
+                                            
+                                            <PhotoIcon sourceImage=""/>
+                                            {photoIcons}
                                         </div>
                                     </div>
                                 </>
@@ -99,6 +97,7 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                                 <>
                                     <div className="contactsSelectedImagesRefer">
                                         <div className="contactsSelectedImages">
+                                            {photoIcons}
                                         </div>
                                     </div>
                                     <div className="contactsListRefer">
