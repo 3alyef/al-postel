@@ -97,7 +97,8 @@ $padronBgGroupForm: #1f2a1b2b;
                     
                 }
                 .participantsScreen::-webkit-scrollbar {
-                    height: 12px; /* Altura da barra de rolagem */
+                    width: 7px;
+                    height: 12px;
                 }
         
                 .participantsScreen::-webkit-scrollbar-thumb {
