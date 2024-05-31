@@ -54,7 +54,7 @@ export class ConnectM2 {
             }
         });
     }
-
+    private soulName: string = ''
     public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>, setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
@@ -62,6 +62,7 @@ export class ConnectM2 {
 
         this.socket.on("updateSoul", (el: {soulName: string, userProps: DecodedData})=>{
             setUserSoul(el.soulName);
+            this.soulName = el.soulName;
             setUserProps((prev)=>{
                 let newV = prev;
                 if(el.userProps && typeof el.userProps.userSoul === 'string'){
@@ -168,8 +169,13 @@ export class ConnectM2 {
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
-            console.log('newMsg', el)
-           this.addMsg({...el, msgCase: el.messageData.fromUser})
+            console.log(this.soulName, 'newMsg', el)
+            
+            if(el.messageData.fromUser !== this.soulName){
+                this.addMsg({...el, msgCase: el.messageData.fromUser})
+            } else {
+                this.addMsg({...el, msgCase: el.messageData.toUser})   
+            }
         })
 
         this.socket.on("msgStatus", (data: msgStatus)=>{
