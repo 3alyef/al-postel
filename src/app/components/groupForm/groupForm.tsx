@@ -43,7 +43,7 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
         }
     }, [imageFile]);
     const photoIcons = [];
-    for (let l = 0; l < 25; l++) {
+    for (let l = 0; l < 55; l++) {
         photoIcons.push(<PhotoIcon key={l} sourceImage="" />);
     };
     return (
