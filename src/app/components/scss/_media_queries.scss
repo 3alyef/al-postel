@@ -68,8 +68,8 @@
 
     .groupForm {
         width: 100% !important;
-        .participantsScreen {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
+        /*.participantsScreen {
+            grid-template-columns: 1fr 1fr 1fr !important;
+        }*/
     }
 }
