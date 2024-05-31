@@ -99,9 +99,9 @@ $padronBgGroupForm: #1f2a1b2b;
 
                     
                 }
-                /*
+                
                 .participantsScreen::-webkit-scrollbar {
-                    width: 7px;
+                    width: 6px;
                     height: 12px;
                 }
         
@@ -113,7 +113,7 @@ $padronBgGroupForm: #1f2a1b2b;
                 .participantsScreen::-webkit-scrollbar-track {
                     background: transparent; 
                 }
-                */
+                
                 
             }
 
@@ -134,12 +134,13 @@ $padronBgGroupForm: #1f2a1b2b;
                     padding: .5em .25em;
                     gap: .5em;
 
-                    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-                    scrollbar-width: none;  /* Firefox */
+                   /* -ms-overflow-style: none;
+                    scrollbar-width: none;*/
                 }
+                /*
                 .contactsSelectedImages::-webkit-scrollbar {
                     display: none;
-                }
+                }*/
             }
 
             .contactsListRefer {
