@@ -168,6 +168,7 @@ export class ConnectM2 {
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
+            console.log('newMsg', el)
            this.addMsg({...el, msgCase: el.messageData.fromUser})
         })
 
