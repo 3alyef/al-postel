@@ -56,23 +56,22 @@ $padronBgGroupForm: #1f2a1b2b;
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                padding: 0 1em; 
-                align-items: center;
-                //gap: 1em;
+                //padding: 0 .25em;
+                align-items: flex-end;
                 .participantsNumber {
                     color: #ffffff4a;
                     font-weight: 400;
                     font-size: 17px;
-                    align-self: flex-start;
-
+                    //align-self: flex-start;
+                    padding: .75em;
                 }
                 .participantsScreen {
                     position: absolute;
                     margin-top: 7%;
-                    width: 95%;
-                    height: 87%;
+                    width: 100%;
+                    height: 92%;
                     overflow: auto;
-                    padding: .75em 0;
+                    padding: .5em;
                     gap: .5em;
                     display: grid;
                     //padding: 0 .5em;
