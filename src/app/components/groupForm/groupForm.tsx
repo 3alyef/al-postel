@@ -56,17 +56,24 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
     };
 
     async function addSoulToList(e: React.MouseEvent<HTMLDivElement, MouseEvent> ) {
-        let soulName = e.currentTarget.dataset.soulname; 
+        let soulName = e.currentTarget.dataset.soulname;
+        console.log(soulName) 
         if(soulName) {
             setParticipantsSoulNames(prev=>{
                 let newValue = prev;
-                newValue.push(soulName);
+                
+                if(newValue.includes(soulName)){
+                    newValue = newValue.filter(e => e != soulName)
+                } else {
+                    newValue.push(soulName);
+                }
                 return newValue;
             })
         }
     }
 
     useEffect(()=>{
+        console.log('participantsSoulNames', participantsSoulNames)
         setParticipantsValue(participantsSoulNames.length)
         const updateRoomsData = () => {
             const novasSalasData: roomsDataProps[][] = [];
