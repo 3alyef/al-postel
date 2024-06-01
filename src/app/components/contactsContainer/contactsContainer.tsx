@@ -56,10 +56,10 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [addGroupIcon, setAddGroupIcon] = useState<boolean>(false);
     const [addPersonaIcon, setAddPersonaIcon] = useState<boolean>(true)
     useEffect(()=>{
-        console.log(userProps)
+        //console.log(userProps)
 
         if(userProps && userSoul && userProps.userSoul === userSoul){
-            console.log('userProps.imageProps', userProps.imageProps)
+            //console.log('userProps.imageProps', userProps.imageProps)
             if(userProps.imageProps){
                 setImg(userProps.imageProps.userImage)
             }

@@ -62,9 +62,9 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
             console.log('soulNamePart', soulNamePart) 
             setParticipantsSoulNames(prev=>{
                 let newValue = prev;
-                
+                console.log('newValue', newValue)
                 if(newValue.includes(soulNamePart)){
-                    newValue.filter(el=>el !== soulNamePart)
+                    newValue = newValue.filter(el=>el !== soulNamePart)
                 } else {
                     newValue.push(soulNamePart);
                 }
@@ -143,10 +143,6 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                             }}>
                                                 <MdPersonAddAlt1 />
                                             </div>
-                                    
-                                            
-                                            <PhotoIcon sourceImage=""/>
-                                           
                                             {roomsDataSelected.flat().map(room => (
                                                 <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} />
                                             ))}
