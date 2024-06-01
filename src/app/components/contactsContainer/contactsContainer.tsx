@@ -176,9 +176,9 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         updateRoomsData();
     }, [updateRooms, messagesContent, userSoul]);
     
-    useEffect(()=>{
+    /*useEffect(()=>{
         console.log('groupsDataById', groupsDataById)
-    }, [groupsDataById])
+    }, [groupsDataById])*/
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Element;
@@ -272,7 +272,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             {addGroupIcon && (
                                 <>
                                     <GroupForm _isSemitic={_isSemitic}
-                                    roomsData={roomsData}/>
+                                    roomsData={roomsData} updateRooms={updateRooms}/>
                                 
                                 </>
                             )}

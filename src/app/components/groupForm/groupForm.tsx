@@ -9,17 +9,21 @@ import { GrLinkNext } from "react-icons/gr";
 import PhotoIcon from "../photoIcon/photoIcon";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { roomsDataProps } from "../contactsContainer/contactsContainer";
+import { propsRoom } from "../alpostelMain/alpostelMain";
 interface propsGroupForm {
     _isSemitic: boolean;
     roomsData: roomsDataProps[][];
+    updateRooms: Map<string, propsRoom[]>
 }
-export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
+export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGroupForm) {
     const [imageGroup, setImageGroup] = useState<string>();
     const [groupName, setGroupName] = useState<string>('');
     const [imageFile, setImageFile] = useState<File>();
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
     const [participantsValue, setParticipantsValue] = useState<number>(0);
     const [onAddContactsScreen, setOnAddContactsScreen] = useState<boolean>(false);
+    const [participantsSoulNames, setParticipantsSoulNames] = useState<string[]>([]);
+    const [roomsDataSelected, setRoomsDataSelected] = useState<roomsDataProps[][]>([]); 
   
     function onFocusSearchFunc() {
         setOnFocusSearchStyle(true);
@@ -51,7 +55,47 @@ export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
         photoIcons.push(<PhotoIcon key={l} sourceImage="" />);
     };
 
+    async function addSoulToList(e: React.MouseEvent<HTMLDivElement, MouseEvent> ) {
+        let soulName = e.currentTarget.dataset.soulname; 
+        if(soulName) {
+            setParticipantsSoulNames(prev=>{
+                let newValue = prev;
+                newValue.push(soulName);
+                return newValue;
+            })
+        }
+    }
 
+    useEffect(()=>{
+        setParticipantsValue(participantsSoulNames.length)
+        const updateRoomsData = () => {
+            const novasSalasData: roomsDataProps[][] = [];
+
+            updateRooms.forEach((propsSalaArray, key) => {
+                if (participantsSoulNames.includes(key)) {
+                    const salaArray = propsSalaArray.map((propsSala, indice) => ({
+                        soulName: propsSala.userSoul,
+                        key: `${key}-${indice}`,
+                        sourceImage: propsSala.imageData?.userImage,
+                        unreadMessages: 0,
+                        customName: propsSala.costumName?.custom_name,
+                        isGroup: false,
+                        email: propsSala.email,
+                        roomName: key,
+                        lastMsgData: '',
+                        lastMSGContent: '',
+                        whoLastSender: '',
+                    }));
+                    novasSalasData.push(salaArray);
+                }
+            });
+
+            setRoomsDataSelected(novasSalasData);
+        };
+
+        
+        updateRoomsData();
+    }, [participantsSoulNames])
     return (
         <>
             <div className="groupForm groupFormRefer">
@@ -95,7 +139,10 @@ export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
                                     
                                             
                                             <PhotoIcon sourceImage=""/>
-                                            {photoIcons}
+                                           
+                                            {roomsDataSelected.flat().map(room => (
+                                                <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} />
+                                            ))}
                                         </div>
                                     </div>
                                 </>
@@ -103,7 +150,9 @@ export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
                                 <>
                                     <div className="contactsSelectedImagesRefer">
                                         <div className="contactsSelectedImages">
-                                            {photoIcons}
+                                            {roomsDataSelected.flat().map(room => (
+                                                <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} />
+                                            ))}
                                         </div>
                                     </div>
                                     <div className="contactsListRefer">
@@ -117,7 +166,7 @@ export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
                                                 _custom_name_contact={room.customName}
                                                 _isGroup={room.isGroup}
                                                 email={room.email}
-                                                onClick={()=>{console.log('oi')}}
+                                                onClick={(e)=>addSoulToList(e)}
                                                 roomName={room.roomName}
                                                 lastMsgData={room.lastMsgData}
                                                 lastMSGContent={room.lastMSGContent}
