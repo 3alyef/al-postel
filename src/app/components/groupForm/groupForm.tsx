@@ -50,10 +50,6 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
             };
         }
     }, [imageFile]);
-    const photoIcons = [];
-    for (let l = 0; l < 55; l++) {
-        photoIcons.push(<PhotoIcon key={l} sourceImage="" />);
-    };
 
     async function addSoulToList(e: React.MouseEvent<HTMLDivElement, MouseEvent> ) {
         let soulNamePart = e.currentTarget.dataset.soulname;
@@ -104,7 +100,31 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
 
         console.log('roomsDataSelected', roomsDataSelected)
         updateRoomsData();
-    }, [participantsSoulNames])
+    }, [participantsSoulNames]);
+    function createGroupBtn() {
+        if(onAddContactsScreen){
+            if(onAddContactsScreen){
+                setOnAddContactsScreen(false)
+            }
+        } else {
+            // CRIAR GRUPO
+        }
+    }
+    function handlePhotoIcon(e: React.MouseEvent<HTMLDivElement, MouseEvent>){
+        let soulNamePart = e.currentTarget.dataset.soulname;
+        
+        if(soulNamePart) {
+            //console.log('soulNamePart', soulNamePart) 
+            setParticipantsSoulNames((prev) => {
+                let newValue = [...prev];
+                //console.log('newValue', newValue);
+                if (newValue.includes(soulNamePart)) {
+                    newValue = newValue.filter(el => el !== soulNamePart);
+                }
+                return newValue;
+            });
+        }
+    }
     return (
         <>
             <div className="groupForm groupFormRefer">
@@ -146,7 +166,8 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                                 <MdPersonAddAlt1 />
                                             </div>
                                             {roomsDataSelected.flat().map(room => (
-                                                <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} />
+                                                <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} userSoul={room.soulName} 
+                                                onClick={handlePhotoIcon}/>
                                             ))}
                                         </div>
                                     </div>
@@ -154,31 +175,40 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                             ) : (
                                 <>
                                     <div className="contactsSelectedImagesRefer">
-                                        <div className="contactsSelectedImages">
+                                        <div className="contactsSelectedImages" style={participantsValue > 0 ? {padding: ".5em .95em"}: undefined}>
                                             {roomsDataSelected.flat().map(room => (
-                                                <PhotoIcon key={room.soulName+room.roomName} sourceImage={room.sourceImage} />
+                                                <PhotoIcon key={room.soulName+room.roomName} sourceImage={room.sourceImage} 
+                                                userSoul={room.soulName} 
+                                                onClick={handlePhotoIcon}/>
                                             ))}
                                         </div>
                                     </div>
                                     <div className="contactsListRefer">
                                         <div className="contactsListToSelect">
-                                        {roomsData.flat().map(room => (
-                                            <ContactsContainerDivLabel
-                                                soulName={room.soulName}
-                                                key={room.key}
-                                                sourceImage={room.sourceImage}
-                                                unreadMessages={room.unreadMessages}
-                                                _custom_name_contact={room.customName}
-                                                _isGroup={room.isGroup}
-                                                email={room.email}
-                                                onClick={(e)=>addSoulToList(e)}
-                                                roomName={room.roomName}
-                                                lastMsgData={room.lastMsgData}
-                                                lastMSGContent={room.lastMSGContent}
-                                                whoLastSender={room.whoLastSender}
-                                                type2={true}
-                                            />
-                                        ))}
+                                            {roomsData.flat().map((room) => {
+                                                
+
+                                                return(
+                                                    <ContactsContainerDivLabel
+                                                        soulName={room.soulName}
+                                                        key={room.key}
+                                                        sourceImage={room.sourceImage}
+                                                        unreadMessages={room.unreadMessages}
+                                                        _custom_name_contact={room.customName}
+                                                        _isGroup={room.isGroup}
+                                                        email={room.email}
+                                                        onClick={(e)=>addSoulToList(e)}
+                                                        roomName={room.roomName}
+                                                        lastMsgData={room.lastMsgData}
+                                                        lastMSGContent={room.lastMSGContent}
+                                                        whoLastSender={room.whoLastSender}
+                                                        type2={true}
+                                                        isSelected={participantsSoulNames.includes(room.soulName)}
+                                                    />
+                                                )
+                                            }
+                                            
+                                            )}
                                         </div>
                                     </div>
                                 </>
@@ -187,7 +217,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                         
                     </div>
                     <div className="createGroup">
-                        <div className="createGroupBtn w-[50px] h-[50px]">
+                        <div className="createGroupBtn w-[50px] h-[50px]" onClick={createGroupBtn}>
                             {onAddContactsScreen ? (
                                 !_isSemitic ? (
                                     <span>

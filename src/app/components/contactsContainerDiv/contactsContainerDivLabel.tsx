@@ -16,9 +16,10 @@ interface propsDivLabel {
     whoLastSender?:string;
     lastMSGContent?:string;
     type2?: boolean;
+    isSelected?: boolean;
 
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent, type2}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent, type2, isSelected}: propsDivLabel){
     const [imageUser, setImageUser] = useState<string>('/imgs/assets/person.png')
 
     useEffect(()=>{
@@ -29,7 +30,9 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
     }, [sourceImage])
     return(
         <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-soulname={soulName}>
-            <div className="contactGroupPhoto">
+            <div className="contactGroupPhoto" style={type2 && isSelected ? {
+                border: "2px solid blue"
+            } : undefined }>
                 <Image alt="profile photo" src={imageUser} fill/>
                 {/*<img alt="profile photo" src={imageUser} className="w-full h-full"/>*/}
             </div>
