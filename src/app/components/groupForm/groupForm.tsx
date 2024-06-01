@@ -98,6 +98,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                     novasSalasData.push(salaArray);
                 }
             })
+            setRoomsDataSelected(novasSalasData)
             
         };
 
