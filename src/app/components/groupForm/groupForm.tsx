@@ -60,16 +60,16 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
         
         if(soulNamePart) {
             console.log('soulNamePart', soulNamePart) 
-            setParticipantsSoulNames(prev=>{
-                let newValue = prev;
-                console.log('newValue', newValue)
-                if(newValue.includes(soulNamePart)){
-                    newValue = newValue.filter(el=>el !== soulNamePart)
+            setParticipantsSoulNames((prev) => {
+                let newValue = [...prev];
+                //console.log('newValue', newValue);
+                if (newValue.includes(soulNamePart)) {
+                    newValue = newValue.filter(el => el !== soulNamePart);
                 } else {
                     newValue.push(soulNamePart);
                 }
                 return newValue;
-            })
+            });
         }
     }
 
