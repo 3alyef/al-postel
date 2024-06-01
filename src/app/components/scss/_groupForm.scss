@@ -209,3 +209,17 @@ $padronBgGroupForm: #1f2a1b2b;
     
     
 }
+.onSelect {
+    border: 1px solid $bg-isTest;
+}
+.onSelect, .personaIconGroup {
+    border-radius: 100%;
+    box-shadow: 0px 0px 7px 5px #00000047;
+}
+
+.personaIconGroup:hover {
+    border: 1px solid $btn-color-active;
+}
+.type2contactGroupPhoto:hover {
+    border: 1px solid $bg-isTest;
+}

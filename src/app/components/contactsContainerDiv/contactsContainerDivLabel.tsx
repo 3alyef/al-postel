@@ -30,11 +30,10 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
     }, [sourceImage])
     return(
         <div className="contactsContainerDiv" onClick={(e)=>{ onClick(e); }} data-soulname={soulName}>
-            <div className="contactGroupPhoto rounded-[100%]" style={type2 && isSelected ? {
-                border: "2px solid blue"
-            } : undefined }>
+            <div className={`contactGroupPhoto ${type2 && "type2contactGroupPhoto"} rounded-[100%] ${
+                type2 && isSelected && "onSelect"
+            }`}>
                 <Image alt="profile photo" src={imageUser} fill/>
-                {/*<img alt="profile photo" src={imageUser} className="w-full h-full"/>*/}
             </div>
             <div className="aboutContactMsgs">
                 <div className="subTitle">
