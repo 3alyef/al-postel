@@ -64,7 +64,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                 let newValue = prev;
                 
                 if(newValue.includes(soulNamePart)){
-                    newValue = newValue.filter(e => e != soulNamePart)
+                    newValue.filter(el=>el !== soulNamePart)
                 } else {
                     newValue.push(soulNamePart);
                 }
@@ -101,7 +101,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
             setRoomsDataSelected(novasSalasData);
         };
 
-        
+        console.log('roomsDataSelected', roomsDataSelected)
         updateRoomsData();
     }, [participantsSoulNames])
     return (
@@ -159,7 +159,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                     <div className="contactsSelectedImagesRefer">
                                         <div className="contactsSelectedImages">
                                             {roomsDataSelected.flat().map(room => (
-                                                <PhotoIcon key={room.soulName} sourceImage={room.sourceImage} />
+                                                <PhotoIcon key={room.soulName+room.roomName} sourceImage={room.sourceImage} />
                                             ))}
                                         </div>
                                     </div>
