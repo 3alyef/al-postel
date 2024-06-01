@@ -122,6 +122,7 @@ export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
                                                 lastMsgData={room.lastMsgData}
                                                 lastMSGContent={room.lastMSGContent}
                                                 whoLastSender={room.whoLastSender}
+                                                type2={true}
                                             />
                                         ))}
                                         </div>

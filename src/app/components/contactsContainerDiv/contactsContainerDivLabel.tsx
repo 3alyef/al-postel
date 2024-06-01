@@ -14,10 +14,11 @@ interface propsDivLabel {
     soulName: string;
     lastMsgData?: string;
     whoLastSender?:string;
-    lastMSGContent?:string
+    lastMSGContent?:string;
+    type2?: boolean;
 
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent, type2}: propsDivLabel){
     const [imageUser, setImageUser] = useState<string>('/imgs/assets/person.png')
 
     useEffect(()=>{
@@ -37,32 +38,39 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                     <h3 className="nameContactGroup">
                         {_custom_name_contact ? _custom_name_contact : email+'' }
                     </h3>
+                    {
+                        !type2 && (
+                            <p className={`lastTime ${unreadMessages > 0 ? "padronDataColor": "text-white font-[400]"}`}>
+                                {lastMsgData || ''}
+                            </p>
+                        )
+                    }
                     
-                    <p className={`lastTime ${unreadMessages > 0 ? "padronDataColor": "text-white font-[400]"}`}>
-                        {lastMsgData || ''}
-                    </p>
                 </div>
-
-                <div className="footerTitle">
-                    <p className="lastMsg">
-                        {
-                           _isGroup && (
-                                <span>
-                                    {_howLeast}
-                                </span>
-                            )
-                        }
-                        {whoLastSender || ''}
-                        {whoLastSender && ": "}
-                        {lastMSGContent || ''}
-                    </p>
-                    {unreadMessages > 0 && (
-                        <p className="unreadMessages">
-                            <span>{unreadMessages}</span>
+                {!type2 && (
+                    <div className="footerTitle">
+                    
+                        <p className="lastMsg">
+                            {
+                            _isGroup && (
+                                    <span>
+                                        {_howLeast}
+                                    </span>
+                                )
+                            }
+                            {whoLastSender || ''}
+                            {whoLastSender && ": "}
+                            {lastMSGContent || ''}
                         </p>
-                    )}
+                        {unreadMessages > 0 && (
+                            <p className="unreadMessages">
+                                <span>{unreadMessages}</span>
+                            </p>
+                        )}
 
-                </div>
+                    </div>        
+                )}
+                
             </div>
         </div>
     )
