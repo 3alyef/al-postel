@@ -158,7 +158,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                             <span>Amigos:</span><span>{participantsValue}</span>
                                         </h4>
                                         <div className="participantsScreen">
-                                            <div className="personaIconGroup addPersonaIconGroup max-w-[50px] w-[50px]" onClick={()=>{
+                                            <div className=" addPersonaIconGroup max-w-[50px] w-[50px]" onClick={()=>{
                                                 if(!onAddContactsScreen){
                                                     setOnAddContactsScreen(true)
                                                 }

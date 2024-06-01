@@ -16,7 +16,7 @@ export default function PhotoIcon({sourceImage, onClick, userSoul}:propsPhotoIco
     }, [sourceImage])
     return(
         <>
-            <div className="personaIconGroup min-w-[50px] w-[50px]" onClick={onClick} data-userSoul={userSoul}>
+            <div className="personaIconGroup min-w-[50px] w-[50px]" onClick={onClick} data-soulname={userSoul}>
                 <Image src={imageUser} fill alt="user photo"/>
             </div>
         </>
