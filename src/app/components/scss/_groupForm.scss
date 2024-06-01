@@ -133,14 +133,22 @@ $padronBgGroupForm: #1f2a1b2b;
                     flex-wrap: nowrap;
                     padding: .5em .25em;
                     gap: .5em;
-
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
                 }
                 
                 .contactsSelectedImages::-webkit-scrollbar {
-                    display: none;
+                    width: 6px;
+                    height: 12px;
                 }
+        
+                .contactsSelectedImages::-webkit-scrollbar-thumb {
+                    background-color: rgba(255, 255, 255, 0.5); 
+                    border-radius: 6px;
+                }
+        
+                .contactsSelectedImages::-webkit-scrollbar-track {
+                    background: transparent; 
+                }
+                
             }
 
             .contactsListRefer {

@@ -71,5 +71,12 @@
         /*.participantsScreen {
             grid-template-columns: 1fr 1fr 1fr !important;
         }*/
+        .contactsSelectedImages {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .contactsSelectedImages::-webkit-scrollbar {
+            display: none;
+        }
     }
 }
