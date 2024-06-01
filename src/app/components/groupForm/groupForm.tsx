@@ -78,27 +78,26 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
         setParticipantsValue(participantsSoulNames.length)
         const updateRoomsData = () => {
             const novasSalasData: roomsDataProps[][] = [];
-
-            updateRooms.forEach((propsSalaArray, key) => {
-                if (participantsSoulNames.includes(key)) {
-                    const salaArray = propsSalaArray.map((propsSala, indice) => ({
+            participantsSoulNames.forEach((sName)=>{
+                const roomProps = updateRooms.get(sName);
+                if(roomProps){
+                    const salaArray = roomProps.map((propsSala, indice) => ({
                         soulName: propsSala.userSoul,
-                        key: `${key}-${indice}`,
+                        key: `${sName}-${indice}`,
                         sourceImage: propsSala.imageData?.userImage,
                         unreadMessages: 0,
                         customName: propsSala.costumName?.custom_name,
                         isGroup: false,
                         email: propsSala.email,
-                        roomName: key,
+                        roomName: sName,
                         lastMsgData: '',
                         lastMSGContent: '',
                         whoLastSender: '',
                     }));
                     novasSalasData.push(salaArray);
                 }
-            });
-
-            setRoomsDataSelected(novasSalasData);
+            })
+            
         };
 
         console.log('roomsDataSelected', roomsDataSelected)
