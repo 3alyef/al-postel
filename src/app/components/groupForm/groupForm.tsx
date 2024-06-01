@@ -74,7 +74,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
     }
 
     useEffect(()=>{
-        console.log('participantsSoulNames', participantsSoulNames)
+        console.log('-------------------------participantsSoulNames-------------------------', participantsSoulNames)
         setParticipantsValue(participantsSoulNames.length)
         const updateRoomsData = () => {
             const novasSalasData: roomsDataProps[][] = [];
