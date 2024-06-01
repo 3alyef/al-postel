@@ -28,7 +28,19 @@ interface propsContactsContainer {
     groupsDataById: Map<string, propsGroups[]>;
     setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>
 }
-
+export interface roomsDataProps {
+    soulName: string; 
+    key: string; 
+    sourceImage: string | undefined; 
+    unreadMessages: number; 
+    customName: string | undefined; 
+    isGroup: boolean; 
+    email: string | undefined; 
+    roomName: string; 
+    lastMsgData: string | undefined; 
+    lastMSGContent: string | undefined; 
+    whoLastSender: string | undefined;
+}
 export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById, setGroupsDataById}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
@@ -93,19 +105,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         justifyContent: 'center'
     }
 
-    interface roomsDataProps {
-        soulName: string; 
-        key: string; 
-        sourceImage: string | undefined; 
-        unreadMessages: number; 
-        customName: string | undefined; 
-        isGroup: boolean; 
-        email: string | undefined; 
-        roomName: string; 
-        lastMsgData: string | undefined; 
-        lastMSGContent: string | undefined; 
-        whoLastSender: string | undefined;
-    }
+    
     
     useEffect(() => {
 
@@ -271,7 +271,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
 
                             {addGroupIcon && (
                                 <>
-                                    <GroupForm _isSemitic={_isSemitic}/>
+                                    <GroupForm _isSemitic={_isSemitic}
+                                    roomsData={roomsData}/>
                                 
                                 </>
                             )}
@@ -281,7 +282,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             GRUPOS
                         </div>
                         <div className="flex-col messagesScreen pt-[7px] gap-[2px]" style={{display: onMessages ? "flex":"none"}}>
-                            {/** */}
+                        
                             {roomsData.flat().map(room => (
                                 <ContactsContainerDivLabel
                                     soulName={room.soulName}

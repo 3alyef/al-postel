@@ -1,22 +1,26 @@
 "use client"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import {MdPersonAddAlt1 } from "react-icons/md";
 import InputText from "../inputText/inputText";
 import EmojisList from "../emojisList/emojisList";
 import { AiOutlineCheck } from "react-icons/ai";
 import { GrLinkNext } from "react-icons/gr";
 import PhotoIcon from "../photoIcon/photoIcon";
+import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
+import { roomsDataProps } from "../contactsContainer/contactsContainer";
 interface propsGroupForm {
-    _isSemitic: boolean
+    _isSemitic: boolean;
+    roomsData: roomsDataProps[][];
 }
-export default function GroupForm({_isSemitic}: propsGroupForm) {
+export default function GroupForm({_isSemitic, roomsData }: propsGroupForm) {
     const [imageGroup, setImageGroup] = useState<string>();
     const [groupName, setGroupName] = useState<string>('');
     const [imageFile, setImageFile] = useState<File>();
     const [onFocusSearchStyle, setOnFocusSearchStyle] = useState<boolean>(false);
     const [participantsValue, setParticipantsValue] = useState<number>(0);
-    const [onAddContactsScreen, setOnAddContactsScreen] = useState<boolean>(false)
+    const [onAddContactsScreen, setOnAddContactsScreen] = useState<boolean>(false);
+  
     function onFocusSearchFunc() {
         setOnFocusSearchStyle(true);
     }
@@ -46,6 +50,8 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
     for (let l = 0; l < 55; l++) {
         photoIcons.push(<PhotoIcon key={l} sourceImage="" />);
     };
+
+
     return (
         <>
             <div className="groupForm groupFormRefer">
@@ -102,7 +108,22 @@ export default function GroupForm({_isSemitic}: propsGroupForm) {
                                     </div>
                                     <div className="contactsListRefer">
                                         <div className="contactsListToSelect">
-
+                                        {roomsData.flat().map(room => (
+                                            <ContactsContainerDivLabel
+                                                soulName={room.soulName}
+                                                key={room.key}
+                                                sourceImage={room.sourceImage}
+                                                unreadMessages={room.unreadMessages}
+                                                _custom_name_contact={room.customName}
+                                                _isGroup={room.isGroup}
+                                                email={room.email}
+                                                onClick={()=>{console.log('oi')}}
+                                                roomName={room.roomName}
+                                                lastMsgData={room.lastMsgData}
+                                                lastMSGContent={room.lastMSGContent}
+                                                whoLastSender={room.whoLastSender}
+                                            />
+                                        ))}
                                         </div>
                                     </div>
                                 </>
