@@ -234,7 +234,7 @@ export class ConnectM2 {
         })
         
         this.socket.on("updateGroup", (groupData: propsGroups)=>{
-            console.log('{_id, groupName, groupParticipants, groupAdministratorParticipants}', groupData);
+            //console.log('{_id, groupName, groupParticipants, groupAdministratorParticipants}', groupData);
             if(groupData){
                 setGroupsDataById(prev => {
                     const newData = prev;
@@ -341,7 +341,7 @@ export class ConnectM2 {
         
 
     }
-    public createNewGroup(el: {groupName: string, groupParticipants: string[]}){
+    public createNewGroup(el: {groupImage: {image: File | undefined , type: string | undefined , name: string | undefined } , groupName: string, groupParticipants: string[]}){
         this.socket.emit("newGroup", el);
     }
 }

@@ -25,6 +25,7 @@ interface propsContactsContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     userProps: DecodedData | undefined;
     messagesContent: Map<string, propsMessagesContent[]>;
+    groupsDataById: Map<string, propsGroups>
 }
 export interface roomsDataProps {
     soulName: string; 
@@ -39,7 +40,7 @@ export interface roomsDataProps {
     lastMSGContent: string | undefined; 
     whoLastSender: string | undefined;
 }
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -204,7 +205,11 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         if(imageFile){
             serverIo.setProfileImage(imageFile)
         }
-    }, [imageFile])
+    }, [imageFile]);
+
+    useEffect(()=>{
+        console.log('groupsDataById', groupsDataById)
+    }, [groupsDataById])
     return ( 
         <div className="flex flex-col h-full relative">
             <div className="contactsContainer flex flex-col h-full">

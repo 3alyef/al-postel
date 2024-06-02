@@ -109,7 +109,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
                 setOnAddContactsScreen(false)
             }
         } else {
-            serverIo.createNewGroup({groupName, groupParticipants: participantsSoulNames})
+            serverIo.createNewGroup({groupImage: {image: imageFile, name: imageFile?.name, type: imageFile?.type}, groupName, groupParticipants: participantsSoulNames})
         }
     }
     function handlePhotoIcon(e: React.MouseEvent<HTMLDivElement, MouseEvent>){
@@ -141,10 +141,12 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
                                                 handleDivClick();
                                             }
                                         }>
-                                            <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill/>
+                                            <Image src={imageGroup || '/imgs/logo.png?v=4'} alt="group image" fill
+                                            className="rounded-[100%]"/>
                                         </div>
                                         <div className="inputNameGroup">
-                                            <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName} caretW={true}/>
+                                            <InputText _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusSearchStyle} setValue={setGroupName} text="Nome do grupo" type="text" value={groupName} caretW={true}
+                                            costumerClass="text-white"/>
                                             <EmojisList costumWidth="50px" />
                                         </div>
                                         <input
