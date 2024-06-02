@@ -347,6 +347,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     <ContactsContainerDivLabel
                                         email="" onClick={()=>{console.log('click group')}}
                                         roomName={room.groupName} soulName={room._id} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
+                                        key={room.key}
                                     />
 
                                 ))
