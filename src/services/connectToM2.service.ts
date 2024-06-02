@@ -1,4 +1,3 @@
-
 import { propsMessagesContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
 import { propsGroups } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
@@ -55,7 +54,7 @@ export class ConnectM2 {
         });
     }
     private soulName: string = ''
-    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>, setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>) {
+    public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>, setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
         });
@@ -233,7 +232,19 @@ export class ConnectM2 {
                 return newRooms;
             });
         })
-       
+        
+        this.socket.on("updateGroup", (groupData: propsGroups)=>{
+            console.log('{_id, groupName, groupParticipants, groupAdministratorParticipants}', groupData);
+            if(groupData){
+                setGroupsDataById(prev => {
+                    const newData = prev;
+                    if(!newData.has(groupData._id)){
+                        newData.set(groupData._id, groupData)
+                    }
+                    return newData
+                })
+            }
+        })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {
@@ -329,5 +340,8 @@ export class ConnectM2 {
         reader.readAsArrayBuffer(imagem);
         
 
+    }
+    public createNewGroup(el: {groupName: string, groupParticipants: string[]}){
+        this.socket.emit("newGroup", el);
     }
 }

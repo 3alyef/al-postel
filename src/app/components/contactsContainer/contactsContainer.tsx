@@ -25,8 +25,6 @@ interface propsContactsContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     userProps: DecodedData | undefined;
     messagesContent: Map<string, propsMessagesContent[]>;
-    groupsDataById: Map<string, propsGroups[]>;
-    setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups[]>>>
 }
 export interface roomsDataProps {
     soulName: string; 
@@ -41,7 +39,7 @@ export interface roomsDataProps {
     lastMSGContent: string | undefined; 
     whoLastSender: string | undefined;
 }
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById, setGroupsDataById}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -56,8 +54,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [addGroupIcon, setAddGroupIcon] = useState<boolean>(false);
     const [addPersonaIcon, setAddPersonaIcon] = useState<boolean>(true)
     useEffect(()=>{
-        //console.log(userProps)
-
         if(userProps && userSoul && userProps.userSoul === userSoul){
             //console.log('userProps.imageProps', userProps.imageProps)
             if(userProps.imageProps){
@@ -175,10 +171,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         
         updateRoomsData();
     }, [updateRooms, messagesContent, userSoul]);
-    
-    /*useEffect(()=>{
-        console.log('groupsDataById', groupsDataById)
-    }, [groupsDataById])*/
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Element;
@@ -272,7 +264,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             {addGroupIcon && (
                                 <>
                                     <GroupForm _isSemitic={_isSemitic}
-                                    roomsData={roomsData} updateRooms={updateRooms}/>
+                                    roomsData={roomsData} updateRooms={updateRooms} serverIo={serverIo}/>
                                 
                                 </>
                             )}

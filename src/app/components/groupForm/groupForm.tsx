@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import {MdPersonAddAlt1 } from "react-icons/md";
+import { useEffect, useState } from "react"
+import { MdPersonAddAlt1 } from "react-icons/md";
 import InputText from "../inputText/inputText";
 import EmojisList from "../emojisList/emojisList";
 import { AiOutlineCheck } from "react-icons/ai";
@@ -10,12 +10,14 @@ import PhotoIcon from "../photoIcon/photoIcon";
 import { ContactsContainerDivLabel } from "../contactsContainerDiv/contactsContainerDivLabel";
 import { roomsDataProps } from "../contactsContainer/contactsContainer";
 import { propsRoom } from "../alpostelMain/alpostelMain";
+import { ConnectM2 } from "@/services/connectToM2.service";
 interface propsGroupForm {
     _isSemitic: boolean;
     roomsData: roomsDataProps[][];
-    updateRooms: Map<string, propsRoom[]>
+    updateRooms: Map<string, propsRoom[]>;
+    serverIo: ConnectM2;
 }
-export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGroupForm) {
+export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo }: propsGroupForm) {
     const [imageGroup, setImageGroup] = useState<string>();
     const [groupName, setGroupName] = useState<string>('');
     const [imageFile, setImageFile] = useState<File>();
@@ -107,7 +109,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                 setOnAddContactsScreen(false)
             }
         } else {
-            // CRIAR GRUPO
+            serverIo.createNewGroup({groupName, groupParticipants: participantsSoulNames})
         }
     }
     function handlePhotoIcon(e: React.MouseEvent<HTMLDivElement, MouseEvent>){
@@ -186,8 +188,6 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                     <div className="contactsListRefer">
                                         <div className="contactsListToSelect">
                                             {roomsData.flat().map((room) => {
-                                                
-
                                                 return(
                                                     <ContactsContainerDivLabel
                                                         soulName={room.soulName}
@@ -214,7 +214,6 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms }: propsGr
                                 </>
                             )
                         }
-                        
                     </div>
                     <div className="createGroup">
                         <div className="createGroupBtn w-[50px] h-[50px]" onClick={createGroupBtn}>

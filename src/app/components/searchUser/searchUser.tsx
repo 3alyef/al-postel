@@ -98,13 +98,6 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, s
             <div className="searchUserContainer">
                 <div className="flex justify-center px-2">
                         <InputText _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocusSearchFunc} onFocusStyle={onFocusSearchStyle} processErrorStyle={searchError} setOnFocusStyle={setOnFocusSearchStyle} setValue={setSearchFormValue} text="Search" type="text" value={searchFormValue}  costumerClassDivContainer="costumerClassDivContainer"/>
-               
-                        
-                        {/*
-                            <div className="btnSearchContainer">
-                                <input className="searchBTN" type="submit" value={"click"}/>
-                            </div>
-                        */}
                  
                 </div>
                 <div className="contactsDivSearch">
