@@ -40,6 +40,10 @@ export interface roomsDataProps {
     lastMSGContent: string | undefined; 
     whoLastSender: string | undefined;
 }
+
+export interface propsDataGroups extends propsGroups {
+    key: string;
+}
 export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
@@ -50,6 +54,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     const [userSettingsProfile, setUserSettingsProfile] = useState<boolean>(false);
     const [imageFull, setImageFull] = useState<boolean>(false);
     const [roomsData, setRoomsData] = useState<roomsDataProps[][]>([]);
+    const [groupsData, setGroupsData] = useState<propsDataGroups[]>([])
     const [changePhotoOptions, setChangePhotoOptions] = useState<boolean>(false);
     const [imageFile, setImageFile] = useState<File>();
     const [addGroupIcon, setAddGroupIcon] = useState<boolean>(false);
@@ -208,7 +213,68 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     }, [imageFile]);
 
     useEffect(()=>{
-        console.log('groupsDataById', groupsDataById)
+        console.log('groupsDataById', groupsDataById);
+        const updateGroupsData = () => {
+            const updateGroupsData: propsDataGroups[] = Array.from(groupsDataById).map(([key, propsRoom]) =>{
+                //const messages = messagesContent.get(propsRoom.userSoul);
+
+                let lastUpdate;
+                let unreadMsgs = 0;
+                let lastMSGContent;
+                let whoLastSender;
+
+                /*if (messages) {
+                    const lastMsg = messages[messages.length - 1];
+                    if (lastMsg && lastMsg.createdIn) {
+                        const now = new Date();
+                        const msgDate = new Date(lastMsg.createdIn);
+                        const day = msgDate.getDate().toString().padStart(2, '0');
+                        const month = (msgDate.getMonth() + 1).toString().padStart(2, '0');
+                        const year = msgDate.getFullYear();
+
+                        const isSameDay = now.toDateString() === msgDate.toDateString();
+                        const isYesterday = now.getDate() - msgDate.getDate() === 1 && now.getMonth() === msgDate.getMonth() && now.getFullYear() === msgDate.getFullYear();
+
+                        if (isSameDay) {
+                            const hours = msgDate.getHours().toString().padStart(2, '0');
+                            const minutes = msgDate.getMinutes().toString().padStart(2, '0');
+                            lastUpdate = `${hours}:${minutes}`;
+                        } else if (isYesterday) {
+                            lastUpdate = "ontem";
+                        } else {
+                            lastUpdate = `${day}.${month}.${year}`;
+                        }
+                    }
+                    lastMSGContent = lastMsg.message;
+                    if (lastMsg.fromUser === userSoul) {
+                        whoLastSender = "you";
+                    }
+                    messages.forEach((el) => {
+                        if (el.viewStatus
+                            && el.fromUser !== userSoul && el.viewStatus !== "seen") {
+                            unreadMsgs++;
+                        }
+                    });
+                }*/
+
+                return {
+                    _id: propsRoom._id,
+                    key,
+                    unreadMessages: unreadMsgs,
+                    groupAdministratorParticipants: propsRoom.groupAdministratorParticipants,
+                    groupName: propsRoom.groupName,
+                    groupParticipants: propsRoom.groupParticipants,
+                    imageData: propsRoom.imageData
+                };
+
+            }
+            );
+
+            setGroupsData(updateGroupsData);
+        };
+
+        
+        updateGroupsData();
     }, [groupsDataById])
     return ( 
         <div className="flex flex-col h-full relative">
@@ -276,7 +342,15 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         </div>
                         <div className="groupsScreen"
                         style={{display: onGroups ? "flex":"none"}}>
-                            GRUPOS
+                            {
+                                groupsData.flat().map(room => (
+                                    <ContactsContainerDivLabel
+                                        email="" onClick={()=>{console.log('click group')}}
+                                        roomName={room.groupName} soulName={room._id} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
+                                    />
+
+                                ))
+                            }
                         </div>
                         <div className="flex-col messagesScreen pt-[7px] gap-[2px]" style={{display: onMessages ? "flex":"none"}}>
                         

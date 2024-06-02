@@ -54,7 +54,7 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                     
                         <p className="lastMsg">
                             {
-                            _isGroup && (
+                                _isGroup && (
                                     <span>
                                         {_howLeast}
                                     </span>
