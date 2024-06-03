@@ -340,7 +340,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 </>
                             )}
                         </div>
-                        <div className="groupsScreen"
+                        <div className="groupsScreen flex-col pt-[7px] gap-[2px]"
                         style={{display: onGroups ? "flex":"none"}}>
                             {
                                 groupsData.map((room) => {
