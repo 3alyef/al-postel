@@ -177,7 +177,7 @@ export class ConnectM2 {
             }
             
         })
-        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
+        /*this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
             if(el.messageData.length > 0) {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
@@ -186,7 +186,7 @@ export class ConnectM2 {
                 })
             }
             
-        })
+        })*/
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
             console.log(this.soulName, 'newMsg', el)
