@@ -66,23 +66,24 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     function sendMsg(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        
+        console.log(msg, "/*/*/*/", groupsScreenProps)
         if(msg.length > 0 ) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
-            const roomNameNow = roomsListByUserSoul.get(soulNameNow);
+            
             if(screenProps?.userSoul && !isGroup){
+                const roomNameNow = roomsListByUserSoul.get(soulNameNow);
                 const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
                 console.log("msgS",msgS);
                 serverIo.sendMsg(false, msgS);
             } 
-            if (groupsScreenProps?.userSoul && isGroup && roomNameNow) {
+            if (groupsScreenProps?.userSoul && isGroup) {
                 const msgS: sendMsgGroup = {
                     createdIn,
                     deletedTo: "none",
                     fromUser: userSoul,
                     message: msg,
-                    toGroup: roomNameNow,
+                    toGroup: soulNameNow,
                     toUsers: groupsScreenProps.groupParticipants,
                     viewStatus: undefined
                 };
