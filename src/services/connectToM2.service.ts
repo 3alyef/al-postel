@@ -1,4 +1,4 @@
-import { propsMessagesContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
+import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
 import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
@@ -23,6 +23,15 @@ export interface sendMsg {
     toGroup?: string;
     createdIn: string
 }
+export interface sendMsgGroup {
+    fromUser: string;
+    deletedTo: "none" | "justFrom" | "all";
+    toUsers: string[];
+    viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
+    message: string;
+    toGroup: string;
+    createdIn: string
+}
 export interface imageProps {
     userImage: string;
     lastUpdateIn: string;
@@ -44,9 +53,11 @@ export type DecodedData  = {
 
 export class ConnectM2 {
     public socket: Socket;
-    private setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>
-    constructor(m2: string, token: string, setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>) {
+    private setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>;
+    private setMessagesGroupContent: Dispatch<SetStateAction<Map <string, propsMessagesGroupContent[]>>>
+    constructor(m2: string, token: string, setMessagesContent: Dispatch<SetStateAction<Map <string, propsMessagesContent[]>>>, setMessagesGroupContent: Dispatch<SetStateAction<Map <string, propsMessagesGroupContent[]>>>) {
         this.setMessagesContent = setMessagesContent;
+        this.setMessagesGroupContent = setMessagesGroupContent;
         this.socket = io(m2, {
             extraHeaders: {
                 authorization: token // Vamos adicionar o token de autorização aqui
@@ -166,6 +177,16 @@ export class ConnectM2 {
             }
             
         })
+        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
+            if(el.messageData.length > 0) {
+                this.setMessagesGroupContent((prev)=>{
+                    const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
+                    newMessages.set(el.messageData[0].toGroup, el.messageData);
+                    return newMessages
+                })
+            }
+            
+        })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
             console.log(this.soulName, 'newMsg', el)
@@ -175,6 +196,11 @@ export class ConnectM2 {
             } else {
                 this.addMsg({...el, msgCase: el.messageData.toUser})   
             }
+        })
+        this.socket.on("newGroupMsg", (el: {messageData: propsMessagesGroupContent})=>{
+            console.log(this.soulName, 'newGroupMsg', el);
+            this.addGroupMsg(el.messageData)
+            
         })
 
         this.socket.on("msgStatus", (data: msgStatus)=>{
@@ -285,17 +311,43 @@ export class ConnectM2 {
         });
     }
 
-    public sendMsg(isGroup: boolean, msgData: sendMsg) {
-        
-        if(!isGroup && msgData.toRoom){
+    public sendMsg(isGroup: boolean, msgData: sendMsg | undefined, msgGroup?: sendMsgGroup) {
+         
+        if(!isGroup && msgData && msgData.toRoom){
             this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
             this.addMsg({messageData: {...msgData}, room: msgData.toRoom, msgCase: msgData.toUser})
-        }else if(isGroup && msgData.toGroup){
-            this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, message: msgData.message, toGroup: msgData.toGroup, createdIn: msgData.createdIn})
+        }else if(isGroup && msgGroup && msgGroup.toGroup){
+            this.socket.emit("sendMsg", {...msgGroup, isGroup: true});
+            this.addGroupMsg(msgGroup)
         } 
     }
     public newGroup(soulName: string){
         this.socket.emit("newGroup", {soulName})
+    }
+    private addGroupMsg(msg:sendMsgGroup) {
+        this.setMessagesGroupContent((previous)=>{
+            const newData:Map<string, propsMessagesGroupContent[]> = new Map(previous)
+            if (msg.message) {
+                const newMessage: propsMessagesGroupContent = {
+                    fromUser: msg.fromUser,
+                    deletedTo: msg.deletedTo,
+                    viewStatus: msg.viewStatus,
+                    toUsers: msg.toUsers,
+                    message: msg.message,
+                    createdIn: msg.createdIn,
+                    toGroup: msg.toGroup
+                };
+                if (newData.has(msg.toGroup)) {
+                    const rooms = newData.get(msg.toGroup);
+                    rooms?.push(newMessage);
+                } else {
+                    newData.set(msg.toGroup, [newMessage]);
+                }
+                return newData;
+            } else {
+                return previous;
+            }
+        })
     }
 
     private addMsg(el: {messageData: propsMessagesContent, room: string, msgCase: string}){

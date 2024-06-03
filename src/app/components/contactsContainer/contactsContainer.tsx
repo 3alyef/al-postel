@@ -71,7 +71,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
 
     }, [userProps])
     async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom, type2?: boolean ) {
-        console.log('soulNameC', soulNameC);
+        //console.log('soulNameC', soulNameC);
 
         let soulName: string | undefined;
         let roomProps: propsRoom[] | undefined = [];
@@ -99,6 +99,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 setScreenMsg(roomMap)  
             }
         }
+        console.log('soulName', soulName)
         setSoulNameNow(soulName ? soulName : '');
         if(groupProps && soulName){
             const roomMap: Map<string, propsGroups> = new Map();

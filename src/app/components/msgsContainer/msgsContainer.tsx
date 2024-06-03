@@ -3,9 +3,9 @@
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import { useEffect, useState, SetStateAction, Dispatch, useRef } from 'react';
 import Image from "next/image";
-import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
+import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { IoMdSend } from "react-icons/io";
-import { ConnectM2 } from "@/services/connectToM2.service";
+import { ConnectM2, sendMsgGroup } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import MessageLabel from "../messageLabel/messageLabel";
@@ -27,20 +27,23 @@ interface propsMsgContainer {
     typingStateRoom: Map<string, boolean>;
     friendsOnline: Map<string, boolean>;
     screenMsgGroup: Map<string, propsGroups>;
-    isGroup: boolean
+    isGroup: boolean;
+    messageGroupContent: Map<string, propsMessagesGroupContent[]>;
+    setMessagesGroupContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>();
     const [groupsScreenProps, setGroupsScreenProps] = useState<propsGroups>();
     const [menu, setMenu] = useState<boolean>(false);
     const [msg, setMsg] = useState<string>("");
     const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
+    const [messagesContainerByGroup, setMessagesContainerByGroup] = useState<propsMessagesGroupContent[]>([])
     const [isTyping, setIsTyping] = useState<boolean>(false)
     const [friendIsTyping, setFriendIsTyping] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
-
+    const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     useEffect(()=>{
         if(isGroup){
             const msgArray = Array.from(screenMsgGroup.values());
@@ -53,9 +56,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
         
        
-    }, [screenMsg, isGroup]);
+    }, [screenMsgGroup, screenMsg, isGroup]);
 
-    const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
+    
     const onFocus = ()=>{
         setOnFocusStyle(true);
         
@@ -63,13 +66,28 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     function sendMsg(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        if(msg.length > 0 && screenProps?.userSoul) {
+        
+        if(msg.length > 0 ) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
             const roomNameNow = roomsListByUserSoul.get(soulNameNow);
-            const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
-            console.log("msgS",msgS);
-            serverIo.sendMsg(false, msgS);
+            if(screenProps?.userSoul && !isGroup){
+                const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
+                console.log("msgS",msgS);
+                serverIo.sendMsg(false, msgS);
+            } 
+            if (groupsScreenProps?.userSoul && isGroup && roomNameNow) {
+                const msgS: sendMsgGroup = {
+                    createdIn,
+                    deletedTo: "none",
+                    fromUser: userSoul,
+                    message: msg,
+                    toGroup: roomNameNow,
+                    toUsers: groupsScreenProps.groupParticipants,
+                    viewStatus: undefined
+                };
+                serverIo.sendMsg(true, undefined, msgS);
+            }
             setMsg('');
             setIsTyping(false);
         }
@@ -94,7 +112,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             
             const roomNameNow = roomsListByUserSoul.get(soulNameNow);
             // console.log("roomNameNow", roomNameNow)
-            if(roomNameNow){
+            if(roomNameNow && !isGroup){
                 //console.log('magsContainer => roomNameNow', roomNameNow)
                 const messagesForRoom = messagesContent.get(soulNameNow);
                 if (messagesForRoom) {
@@ -105,6 +123,16 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     setMessagesContainerByRoom([])
                 }
             }
+            if(roomNameNow && isGroup) {
+                const messagesForRoom = messageGroupContent.get(soulNameNow);
+                if (messagesForRoom) {
+                    //console.log("Before sorting:", messagesForRoom);
+                    console.log('messagesForRoom', messagesForRoom)
+                    setMessagesContainerByGroup(messagesForRoom);
+                } else {
+                    setMessagesContainerByGroup([])
+                }
+            }
             
         };
 
@@ -112,7 +140,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         
         scrollToBottom();
     
-    }, [soulNameNow, messagesContent]);
+    }, [soulNameNow, messagesContent, messageGroupContent]);
 
     function onBlur(){
         setOnFocusStyle(false);
@@ -144,7 +172,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         //console.log('mudou o friendsOnline', friendsOnline, 'soulNameNow',soulNameNow)
         const friendStatus = friendsOnline.get(soulNameNow);
         if(typeof friendStatus === 'boolean') {
-            setIsOnlineFriend(friendStatus)
+            setIsOnlineFriend(friendStatus);
         }
     }, [friendsOnline, soulNameNow])
     return(
@@ -303,16 +331,14 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                     <div className="main" >
                                         {
                                     
-                                            messagesContainerByRoom.map((el, index) => {
-                                                const createdDate = new Date(el.createdIn);
+                                            messagesContainerByGroup.map((msg, index) => {
+                                                const createdDate = new Date(msg.createdIn);
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                     
                                                 return (
-                                                    <MessageLabel
-                                                    soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
-                                                    setMessagesContent={setMessagesContent}
-                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
-                                    
+                                                    <div className="p-[2em] bg-slate-200">
+                                                        {msg.message}
+                                                    </div>
                                                 );
                                             })
                                         }
@@ -320,9 +346,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         <div ref={messagesEndRef}/>
                                     </div>
                                 </div>
-                            
-                           
-                            
                         </div>
                         <div className=" footerBarMsgs">
                             <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">

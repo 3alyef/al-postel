@@ -18,6 +18,17 @@ export interface propsRoom {
 
 }
 
+export interface propsMessagesGroupContent {
+    _id?: string;
+    fromUser: string;
+    deletedTo: "none" | "justFrom" | "all";
+    viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
+    toUsers: string[];
+    message: string;
+    toGroup: string;
+    createdIn:  string
+}
+
 export interface propsMessagesContent {
     _id?: string;
     fromUser: string;
@@ -40,13 +51,14 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map());
     const [userProps, setUserProps] = useState<DecodedData>();
     const [groupsDataById, setGroupsDataById] = useState<Map<string, propsGroups>>(new Map());
-    const [isGroup, setIsGroup] = useState<boolean>(false)
+    const [isGroup, setIsGroup] = useState<boolean>(false);
+    const [messageGroupContent, setMessagesGroupContent] = useState<Map<string, propsMessagesGroupContent[]>>(new Map())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
         
         if (tokenToM2 && m2URL) {
-            const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent);
+            const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent, setMessagesGroupContent);
             server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom, setFriendsOnline, setUserProps, setGroupsDataById);
             setServerIo(server);
             console.log('updateRooms', updateRooms)
@@ -68,7 +80,8 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                         <section className={`sectionMsg ${!(soulNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
                             
                             <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
-                            userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow}
+                            userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow} messageGroupContent={messageGroupContent}
+                            setMessagesGroupContent={setMessagesGroupContent}
                             roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}
                             screenMsgGroup={screenMsgGroup} isGroup={isGroup}/>
                         </section>
