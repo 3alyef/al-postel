@@ -336,7 +336,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                     
                                                 return (
-                                                    <div className="p-[2em] bg-slate-200">
+                                                    <div className="p-[2em] bg-slate-200" key={msg.createdIn}>
                                                         {msg.message}
                                                     </div>
                                                 );
