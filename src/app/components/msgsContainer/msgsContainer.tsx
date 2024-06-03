@@ -177,6 +177,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             setIsOnlineFriend(friendStatus);
         }
     }, [friendsOnline, soulNameNow])
+    useEffect(()=>{
+        console.log('messagesContainerByGroup', messagesContainerByGroup);
+    }, [messagesContainerByGroup])
     return(
         <>
             {screenProps?.userSoul && !isGroup && (
