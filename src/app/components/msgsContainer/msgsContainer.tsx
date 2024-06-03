@@ -86,6 +86,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     toUsers: groupsScreenProps.groupParticipants,
                     viewStatus: undefined
                 };
+                console.log('msgS', msgS)
                 serverIo.sendMsg(true, undefined, msgS);
             }
             setMsg('');
@@ -127,7 +128,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 const messagesForRoom = messageGroupContent.get(soulNameNow);
                 if (messagesForRoom) {
                     //console.log("Before sorting:", messagesForRoom);
-                    console.log('messagesForRoom', messagesForRoom)
+                    //console.log('messagesForRoom', messagesForRoom)
                     setMessagesContainerByGroup(messagesForRoom);
                 } else {
                     setMessagesContainerByGroup([])
@@ -137,7 +138,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         };
 
         updateMessages();
-        
+        console.log('messageGroupContent', messageGroupContent)
         scrollToBottom();
     
     }, [soulNameNow, messagesContent, messageGroupContent]);
@@ -302,7 +303,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             }
                                         )
                                     }}>
-                                        <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                        <Image alt="me" src={groupsScreenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
                                     </div>
                                     <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
                                         <span className="nameUserSpan">

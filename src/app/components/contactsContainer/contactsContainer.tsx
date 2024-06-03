@@ -77,7 +77,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         let roomProps: propsRoom[] | undefined = [];
         let groupProps:  propsGroups | undefined;
         if(type2){
-            console.log('é grupo')
             setIsGroup(true)
             soulName = e.currentTarget.dataset.soulname; 
             groupProps = Array.from(groupsDataById).find(([key, propsGroup]) => key === soulName)?.[1];
