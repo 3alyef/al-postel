@@ -3,10 +3,8 @@
 import { desactiveScreens } from "@/services/desactiveScreens.service";
 import { useEffect, useState, SetStateAction, Dispatch, useRef } from 'react';
 import Image from "next/image";
-import { IoSettingsOutline } from "react-icons/io5";
 import { propsMessagesContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { IoMdSend } from "react-icons/io";
-import {  MdOutlineEmojiEmotions } from "react-icons/md";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -14,6 +12,7 @@ import MessageLabel from "../messageLabel/messageLabel";
 import TextareaMsg from "../textareaMsg/textareaMsg";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import EmojisList from "../emojisList/emojisList";
+import { propsGroups } from "@/interfaces/groups.interface";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -26,11 +25,14 @@ interface propsMsgContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     roomsListByUserSoul: Map<string, string>;
     typingStateRoom: Map<string, boolean>;
-    friendsOnline: Map<string, boolean>
+    friendsOnline: Map<string, boolean>;
+    screenMsgGroup: Map<string, propsGroups>;
+    isGroup: boolean
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
-    const [screenProps, setScreenProps] = useState<propsRoom>()
+    const [screenProps, setScreenProps] = useState<propsRoom>();
+    const [groupsScreenProps, setGroupsScreenProps] = useState<propsGroups>();
     const [menu, setMenu] = useState<boolean>(false);
     const [msg, setMsg] = useState<string>("");
     const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
@@ -40,11 +42,18 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
 
     useEffect(()=>{
-        const msgArray = Array.from(screenMsg.values());
-        setScreenProps(msgArray[0]);
-        console.log("msgArray", msgArray)
+        if(isGroup){
+            const msgArray = Array.from(screenMsgGroup.values());
+            setGroupsScreenProps(msgArray[0]);
+            console.log("msgArray", msgArray);
+        } else {
+            const msgArray = Array.from(screenMsg.values());
+            setScreenProps(msgArray[0]);
+            console.log("msgArray", msgArray);
+        }
+        
        
-    }, [screenMsg]);
+    }, [screenMsg, isGroup]);
 
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const onFocus = ()=>{
@@ -140,7 +149,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [friendsOnline, soulNameNow])
     return(
         <>
-            {screenProps?.userSoul && (
+            {screenProps?.userSoul && !isGroup && (
                 <div className="flex flex-col">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts headerBarMsgs py-[5px]">
@@ -179,6 +188,102 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
                                             }
                                         </span>
+                                    </div>
+                                </div>
+                                <div className="settingsContacts">
+                                    <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
+                                        {
+                                            root: menu, 
+                                            competitors: [onProfile],  
+                                            setCompetitors: [setOnProfile], 
+                                            setRoot: setMenu,
+                                            setOnMessages: setMenu
+                                        }
+                                    ) }/>
+                                </div>
+                        </div>
+                        <div className="mainContacts mainMsgs">
+                                <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
+                                    <div className="main" >
+                                        {
+                                    
+                                            messagesContainerByRoom.map((el, index) => {
+                                                const createdDate = new Date(el.createdIn);
+                                                const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                    
+                                                return (
+                                                    <MessageLabel
+                                                    soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
+                                                    setMessagesContent={setMessagesContent}
+                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
+                                    
+                                                );
+                                            })
+                                        }
+                                    
+                                        <div ref={messagesEndRef}/>
+                                    </div>
+                                </div>
+                            
+                           
+                            
+                        </div>
+                        <div className=" footerBarMsgs">
+                            <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
+                                <EmojisList/>
+                                <div className="messageInput">
+                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
+                                </div>  
+                                <button className="sendMsg flex items-center justify-center" type="submit">
+                                    <IoMdSend className="text-white w-[75%] h-[75%]"
+                                    style={{rotate: _isSemitic ? '180deg':'0deg'}}/>
+                                </button>
+                            </form>
+                                
+                        </div>
+                    </div>
+                </div>
+            
+            )}
+            {groupsScreenProps?.userSoul && isGroup && (
+                <div className="flex flex-col">
+                    <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
+                        <div className="headerBarContacts headerBarMsgs py-[5px]">
+                                <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
+                                    setSoulNameNow('')
+                                }}>
+                                    <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
+                                        {_isSemitic ? (
+                                            <FaArrowRight />
+                                        ):
+                                        (
+                                            <FaArrowLeft />      
+                                        )}
+                                    
+                                    </div>
+                                    
+                                    <div className="profilePhotoMainContacts"
+                                    onClick={()=>{
+                                        desactiveScreens(
+                                            {
+                                                root: onProfile,
+                                                competitors: [menu],
+                                                setCompetitors: [setMenu],
+                                                setRoot: setOnProfile,
+                                                setOnMessages: setOnProfile
+                                            }
+                                        )
+                                    }}>
+                                        <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                    </div>
+                                    <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
+                                        <span className="nameUserSpan">
+                                            {groupsScreenProps.groupName}
+                                        </span>
+                                        {/*<span className="digOrOn">
+                                            {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
+                                            }
+                                        </span>*/}
                                     </div>
                                 </div>
                                 <div className="settingsContacts">

@@ -1,5 +1,5 @@
 import { propsMessagesContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
-import { propsGroups } from "@/interfaces/groups.interface";
+import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
@@ -233,13 +233,19 @@ export class ConnectM2 {
             });
         })
         
-        this.socket.on("updateGroup", (groupData: propsGroups)=>{
+        this.socket.on("updateGroup", (groupData: propsGroupsR)=>{
             //console.log('{_id, groupName, groupParticipants, groupAdministratorParticipants}', groupData);
             if(groupData){
                 setGroupsDataById(prev => {
                     const newData = prev;
                     if(!newData.has(groupData._id)){
-                        newData.set(groupData._id, groupData)
+                        newData.set(groupData._id, {
+                            groupAdministratorParticipants: groupData.groupAdministratorParticipants,
+                            groupName: groupData.groupName,
+                            groupParticipants: groupData.groupParticipants,
+                            imageData: groupData.imageData,
+                            userSoul: groupData._id
+                        })
                     }
                     return newData
                 })

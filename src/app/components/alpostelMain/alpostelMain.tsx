@@ -32,13 +32,15 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [updateRooms, setUpdateRooms] = useState<Map<string, propsRoom[]>>(new Map());
     const [userSoul, setUserSoul] = useState<string>('');
     const [screenMsg, setScreenMsg] = useState<Map<string, propsRoom>>(new Map());
+    const [screenMsgGroup, setScreenMsgGroup] = useState<Map<string, propsGroups>>(new Map())
     const [soulNameNow, setSoulNameNow] = useState<string>("")
     const [messagesContent, setMessagesContent] = useState<Map <string, propsMessagesContent[]>>(new Map())
     const [roomsListByUserSoul, setRoomsListByUserSoul] = useState<Map<string, string>>(new Map())
     const [typingStateRoom, setTypingStateRoom] = useState<Map<string, boolean>>(new Map);
     const [friendsOnline, setFriendsOnline] = useState<Map<string, boolean>>(new Map());
     const [userProps, setUserProps] = useState<DecodedData>();
-    const [groupsDataById, setGroupsDataById] = useState<Map<string, propsGroups>>(new Map())
+    const [groupsDataById, setGroupsDataById] = useState<Map<string, propsGroups>>(new Map());
+    const [isGroup, setIsGroup] = useState<boolean>(false)
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
@@ -59,14 +61,16 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                     <>
 
                         <section className={`sectionContact ${soulNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
-                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent} groupsDataById={groupsDataById}/>
+                            <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent} groupsDataById={groupsDataById}
+                            setScreenMsgGroup={setScreenMsgGroup} setIsGroup={setIsGroup}/>
                         </section>
                         
                         <section className={`sectionMsg ${!(soulNameNow.length > 0) ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "5px 0px 0px 5px": "0px 5px 5px 0px"}}>
                             
                             <MsgsContainer screenMsg={screenMsg} messagesContent={messagesContent} _isSemitic={_isSemitic} serverIo={serverIo}
                             userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow}
-                            roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}/>
+                            roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}
+                            screenMsgGroup={screenMsgGroup} isGroup={isGroup}/>
                         </section>
                     </>
                 )

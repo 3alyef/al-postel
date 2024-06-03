@@ -25,7 +25,9 @@ interface propsContactsContainer {
     setSoulNameNow: Dispatch<SetStateAction<string>>;
     userProps: DecodedData | undefined;
     messagesContent: Map<string, propsMessagesContent[]>;
-    groupsDataById: Map<string, propsGroups>
+    groupsDataById: Map<string, propsGroups>;
+    setScreenMsgGroup: Dispatch<SetStateAction<Map<string, propsGroups>>>;
+    setIsGroup: Dispatch<SetStateAction<boolean>>
 }
 export interface roomsDataProps {
     soulName: string; 
@@ -44,7 +46,7 @@ export interface roomsDataProps {
 export interface propsDataGroups extends propsGroups {
     key: string;
 }
-export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById}:propsContactsContainer){
+export default function ContactsContainer({_isSemitic, serverIo, updateRooms, setUpdateRooms, userSoul, setScreenMsg, setSoulNameNow, userProps, messagesContent, groupsDataById, setScreenMsgGroup, setIsGroup}:propsContactsContainer){
     const [meImg, setImg] = useState<string>("/imgs/assets/person.png");
     const [settings, setSettings] = useState<boolean>(false);
     const [onProfile, setOnProfile] = useState<boolean>(false);
@@ -68,26 +70,42 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         }
 
     }, [userProps])
-    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom ) {
+    async function showMessages(e: React.MouseEvent<HTMLDivElement, MouseEvent>, soulNameC?:string, roomPropsC?:propsRoom, type2?: boolean ) {
         console.log('soulNameC', soulNameC);
 
         let soulName: string | undefined;
         let roomProps: propsRoom[] | undefined = [];
-        if(!soulNameC || !roomPropsC ){
+        let groupProps:  propsGroups | undefined;
+        if(type2 && soulName){
+            setIsGroup(true)
             soulName = e.currentTarget.dataset.soulname; 
-            roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
-        } else { 
-            soulName = soulNameC;
-            roomProps.push(roomPropsC);
-        };
-        setSoulNameNow(soulName ? soulName : '');
-        
-        console.log('roomProps', roomProps)
-        if(roomProps && soulName){
-            const roomMap: Map<string, propsRoom> = new Map();
-            roomMap.set(soulName, roomProps[0])
-            setScreenMsg(roomMap)  
+            groupProps = Array.from(groupsDataById).find(([key, propsGroup]) => key === soulName)?.[1];
+            
+        } else {
+            setIsGroup(false)
+            if(!soulNameC || !roomPropsC ){
+                soulName = e.currentTarget.dataset.soulname; 
+                roomProps = Array.from(updateRooms).find(([key, propsRoomArray]) => key === soulName)?.[1];
+            } else { 
+                soulName = soulNameC;
+                roomProps.push(roomPropsC);
+            };
+
+
+            console.log('roomProps', roomProps)
+            if(roomProps && soulName){
+                const roomMap: Map<string, propsRoom> = new Map();
+                roomMap.set(soulName, roomProps[0])
+                setScreenMsg(roomMap)  
+            }
         }
+        setSoulNameNow(soulName ? soulName : '');
+        if(groupProps && soulName){
+            const roomMap: Map<string, propsGroups> = new Map();
+            roomMap.set(soulName, groupProps)
+            setScreenMsgGroup(roomMap)  
+        }
+        
        
     }
 
@@ -258,7 +276,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 }*/
 
                 return {
-                    _id: propsRoom._id,
+                    userSoul: propsRoom.userSoul,
                     key,
                     unreadMessages: unreadMsgs,
                     groupAdministratorParticipants: propsRoom.groupAdministratorParticipants,
@@ -347,8 +365,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     console.log('groupsScreen', room)
                                     return (
                                         <ContactsContainerDivLabel
-                                        email="" onClick={()=>{console.log('click group')}}
-                                        roomName={room.groupName} soulName={room._id} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
+                                        email="" onClick={(e)=>{showMessages(e, undefined, undefined, true)}}
+                                        roomName={room.groupName} soulName={room.userSoul} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
                                         key={room.key}
                                         />
                                     )
