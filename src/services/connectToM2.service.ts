@@ -277,6 +277,26 @@ export class ConnectM2 {
                 })
             }
         })
+
+        this.socket.on("msgGroupStatus", (msgData: {createdIn: string, toGroup: string, viewStatus: "onServer" | Map<string, | "delivered" | "seen">})=>{
+            if(msgData.createdIn, msgData.toGroup){
+               
+                this.setMessagesGroupContent((previous)=>{
+                    let newDataValue: "onServer" | Map<string, propsMessagesGroupContent[]> = new Map(previous);
+
+                    let group = newDataValue.get(msgData.toGroup);
+                    if(group){
+                        group.forEach((msg)=> {
+                            if(msg.createdIn === msgData.createdIn){
+                                msg.viewStatus = msgData.viewStatus;
+                            }
+                        })
+                    }
+                    return newDataValue;
+                })
+               
+            }
+        })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {
