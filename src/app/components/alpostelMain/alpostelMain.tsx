@@ -21,7 +21,7 @@ export interface propsRoom {
 export interface propsMessagesGroupContent {
     _id?: string;
     fromUser: string;
-    deletedTo: "none" | "justFrom" | "all";
+    deletedTo: "none" | Map<string, "justTo" | "justFrom" | "all">;
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     toUsers: string[];
     message: string;

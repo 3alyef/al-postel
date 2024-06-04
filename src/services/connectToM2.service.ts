@@ -25,7 +25,7 @@ export interface sendMsg {
 }
 export interface sendMsgGroup {
     fromUser: string;
-    deletedTo: "none" | "justFrom" | "all";
+    deletedTo: "none" | Map<string, "justTo" | "justFrom" | "all">;
     toUsers: string[];
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     message: string;
@@ -177,16 +177,19 @@ export class ConnectM2 {
             }
             
         })
-        /*this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
+        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
             if(el.messageData.length > 0) {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
-                    newMessages.set(el.messageData[0].toGroup, el.messageData);
+                    //newMessages.set(el.messageData[0].toGroup, el.messageData);
+                    console.log("newMessages(previous): ", newMessages);
+
                     return newMessages
                 })
+                console.log("el: messageData", el)
             }
             
-        })*/
+        })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
             console.log(this.soulName, 'newMsg', el)
