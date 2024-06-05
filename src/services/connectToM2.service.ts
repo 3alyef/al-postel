@@ -1,8 +1,9 @@
-import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
+import { propsMessagesContent, propsMessagesGroupContent, propsMessagesGroupContentFromServer, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
 import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
+import { deletedToJsonToMap, viewStatusJsonToMap } from "./deserialization.service";
 
 export interface msgStatus {
     fromUser: string;
@@ -106,7 +107,7 @@ export class ConnectM2 {
                     const roomsList: Map<string, string> = new Map(previous);
                     roomsList.delete(el.friendData.userSoul)
                     roomsList.set(el.friendData.userSoul, el.content)
-                    console.log('roomsList', previous)
+                    //console.log('roomsList', previous)
                     return roomsList;
                 })
                 setUpdateRooms((previous) => {
@@ -160,7 +161,7 @@ export class ConnectM2 {
 
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string, msgCase: string})=>{
             if(el.messageData.length > 0) {
-                console.log('msgCase',el.msgCase)
+                //console.log('msgCase',el.msgCase)
                 this.setMessagesContent((prev)=>{
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev);
                     /*if (newMessages.has(el.msgCase)) {
@@ -177,22 +178,39 @@ export class ConnectM2 {
             }
             
         })
-        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
+        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContentFromServer[]})=>{
             if(el.messageData.length > 0) {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
-                    //newMessages.set(el.messageData[0].toGroup, el.messageData);
-                    console.log("newMessages(previous): ", newMessages);
+                    let msgContainerValue: propsMessagesGroupContent[] = []
+                    el.messageData.forEach((msgContent)=>{
+                        let viewStatus;
+                        if(msgContent.viewStatus){
+                            viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
+                        }
+                        let deletedTo = deletedToJsonToMap(msgContent.deletedTo);
 
+                        let newV: propsMessagesGroupContent = {
+                            ...msgContent,
+                            viewStatus,
+                            deletedTo
+                        }
+                        msgContainerValue.push(newV)
+                    })
+
+                    newMessages.set(el.messageData[0].toGroup, msgContainerValue);
+
+                    console.log("newMessages(previous): ", newMessages);
+                    console.log("messageData: ", el.messageData)
                     return newMessages
                 })
-                console.log("el: messageData", el)
+                //console.log("el: messageData", el.messageData.length >0 ? "yesssss":"no")
             }
-            
+            //console.log("el: messageData", el)
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
-            console.log(this.soulName, 'newMsg', el)
+            //console.log(this.soulName, 'newMsg', el)
             
             if(el.messageData.fromUser !== this.soulName){
                 this.addMsg({...el, msgCase: el.messageData.fromUser})
@@ -201,13 +219,13 @@ export class ConnectM2 {
             }
         })
         this.socket.on("newGroupMsg", (el: {messageData: propsMessagesGroupContent})=>{
-            console.log(this.soulName, 'newGroupMsg', el);
+            //console.log(this.soulName, 'newGroupMsg', el);
             this.addGroupMsg(el.messageData)
             
         })
 
         this.socket.on("msgStatus", (data: msgStatus)=>{
-            console.log('msgStatus', data)
+            //console.log('msgStatus', data)
             this.setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
                 newMessages.forEach((value, key)=>{
@@ -238,7 +256,7 @@ export class ConnectM2 {
             })
         })
         this.socket.on("updateFriendsOnline", ({userSoul, online}: {userSoul: string, online: boolean})=>{
-            console.log({ userSoul, online });
+            //console.log({ userSoul, online });
            
             setFriendsOnline((prev)=>{
                 const friendsOnline = new Map<string, boolean>(prev);
@@ -340,7 +358,7 @@ export class ConnectM2 {
             this.socket.emit("sendMsg", {fromUser: msgData.fromUser, deletedTo: msgData.deletedTo, toUser: msgData.toUser, toRoom: msgData.toRoom, message: msgData.message, createdIn: msgData.createdIn})
             this.addMsg({messageData: {...msgData}, room: msgData.toRoom, msgCase: msgData.toUser})
         }else if(isGroup && msgGroup && msgGroup.toGroup){
-            this.socket.emit("sendMsg", {...msgGroup, isGroup: true});
+            this.socket.emit("sendGroupMsg", msgGroup);
             this.addGroupMsg(msgGroup)
         } 
     }

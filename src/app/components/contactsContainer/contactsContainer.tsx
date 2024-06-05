@@ -92,14 +92,14 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
             };
 
 
-            console.log('roomProps', roomProps)
+            //console.log('roomProps', roomProps)
             if(roomProps && soulName){
                 const roomMap: Map<string, propsRoom> = new Map();
                 roomMap.set(soulName, roomProps[0])
                 setScreenMsg(roomMap)  
             }
         }
-        console.log('soulName', soulName)
+        //console.log('soulName', soulName)
         setSoulNameNow(soulName ? soulName : '');
         if(groupProps && soulName){
             const roomMap: Map<string, propsGroups> = new Map();
@@ -164,7 +164,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                         }
                         lastMSGContent = lastMsg.message;
                         if (lastMsg.fromUser === userSoul) {
-                            whoLastSender = "you";
+                            //whoLastSender = "you";
                         }
                         messages.forEach((el) => {
                             if (el.viewStatus

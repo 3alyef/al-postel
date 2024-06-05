@@ -74,7 +74,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             if(screenProps?.userSoul && !isGroup){
                 const roomNameNow = roomsListByUserSoul.get(soulNameNow);
                 const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
-                console.log("msgS",msgS);
+                //console.log("msgS",msgS);
                 serverIo.sendMsg(false, msgS);
             } 
             if (groupsScreenProps?.userSoul && isGroup) {
@@ -87,7 +87,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     toUsers: groupsScreenProps.groupParticipants,
                     viewStatus: undefined
                 };
-                console.log('msgS', msgS)
+                console.log('msgS Group: ', msgS)
                 serverIo.sendMsg(true, undefined, msgS);
             }
             setMsg('');
