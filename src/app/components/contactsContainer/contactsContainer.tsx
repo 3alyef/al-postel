@@ -359,40 +359,42 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 </>
                             )}
                         </div>
-                        <div className="groupsScreen flex-col pt-[7px] gap-[2px]"
-                        style={{display: onGroups ? "flex":"none"}}>
-                            {
-                                groupsData.map((room) => {
-                                    console.log('groupsScreen', room)
-                                    return (
-                                        <ContactsContainerDivLabel
-                                        email="" onClick={(e)=>{showMessages(e, undefined, undefined, true)}}
-                                        roomName={room.groupName} soulName={room.userSoul} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
-                                        key={room.key}
-                                        />
-                                    )
-                                })
-                            }
+                        <div className="groupsScreen flex-col pt-[7px] gap-[2px] h-[98%]"
+                        style={{display: onGroups ? "grid":"none"}}>
+                            <div className="py-[.25em] fixed h-[72%] w-[56.25%] intermediateDivMsgs intermediateGroups">
+                                {
+                                    groupsData.map((room) => {
+                                        console.log('groupsScreen', room)
+                                        return (
+                                            <ContactsContainerDivLabel
+                                            email="" onClick={(e)=>{showMessages(e, undefined, undefined, true)}}
+                                            roomName={room.groupName} soulName={room.userSoul} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
+                                            key={room.key}
+                                            />
+                                        )
+                                    })
+                                }
+                            </div>
                         </div>
-                        <div className="flex-col messagesScreen pt-[7px] gap-[2px]" style={{display: onMessages ? "flex":"none"}}>
-                        
-                            {roomsData.flat().map(room => (
-                                <ContactsContainerDivLabel
-                                    soulName={room.soulName}
-                                    key={room.key}
-                                    sourceImage={room.sourceImage}
-                                    unreadMessages={room.unreadMessages}
-                                    _custom_name_contact={room.customName}
-                                    _isGroup={room.isGroup}
-                                    email={room.email}
-                                    onClick={showMessages}
-                                    roomName={room.roomName}
-                                    lastMsgData={room.lastMsgData}
-                                    lastMSGContent={room.lastMSGContent}
-                                    whoLastSender={room.whoLastSender}
-                                />
-                            ))}
-                            
+                        <div className="flex-col messagesScreen pt-[7px] gap-[2px] h-[98%]" style={{display: onMessages ? "grid":"none"}}>
+                            <div className="py-[.25em] fixed h-[72%] w-[56.25%] intermediateDivMsgs intermediateGroups">
+                                {roomsData.flat().map(room => (
+                                    <ContactsContainerDivLabel
+                                        soulName={room.soulName}
+                                        key={room.key}
+                                        sourceImage={room.sourceImage}
+                                        unreadMessages={room.unreadMessages}
+                                        _custom_name_contact={room.customName}
+                                        _isGroup={room.isGroup}
+                                        email={room.email}
+                                        onClick={showMessages}
+                                        roomName={room.roomName}
+                                        lastMsgData={room.lastMsgData}
+                                        lastMSGContent={room.lastMSGContent}
+                                        whoLastSender={room.whoLastSender}
+                                    />
+                                ))}
+                            </div>
                         </div>
 
                         <div className="absolute bg-black top-[-100%] w-[100%] h-[100%]">{/*Para correcao de Cor*/}</div>

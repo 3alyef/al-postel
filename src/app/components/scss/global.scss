@@ -22,3 +22,24 @@
 .ltr {
     direction: ltr;
 }
+
+.intermediateGroups {
+    display: flex;
+    flex-direction: column;
+    gap: .75em;
+    position: absolute;
+    overflow-y: auto;
+    max-height: 100%;
+    width: 100%;
+    height: 98.5%;
+}
+.intermediateGroups::-webkit-scrollbar {
+    width: 7px; /* largura da barra de rolagem */
+}
+.intermediateGroups::-webkit-scrollbar-thumb {
+    background-color: #888888d0; /* cor de fundo do polegar */
+    border-radius: 5px; /* borda arredondada do polegar */
+}
+    
+
+

@@ -282,15 +282,16 @@ export class ConnectM2 {
         
         this.socket.on("updateGroup", (groupData: propsGroupsR)=>{
             //console.log('{_id, groupName, groupParticipants, groupAdministratorParticipants}', groupData);
+            console.log("atualizacao group", groupData)
             if(groupData){
                 setGroupsDataById(prev => {
-                    const newData = prev;
+                    const newData = new Map(prev);
                     if(!newData.has(groupData._id)){
                         newData.set(groupData._id, {
                             groupAdministratorParticipants: groupData.groupAdministratorParticipants,
                             groupName: groupData.groupName,
                             groupParticipants: groupData.groupParticipants,
-                            imageData: groupData.imageData,
+                            imageData: groupData.imageData || {lastUpdateIn: undefined, userImage: undefined},
                             userSoul: groupData._id
                         })
                     }
