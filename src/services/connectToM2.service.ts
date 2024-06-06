@@ -188,12 +188,16 @@ export class ConnectM2 {
                         if(msgContent.viewStatus){
                             viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
                         }
-                        let deletedTo = deletedToJsonToMap(msgContent.deletedTo);
+                        let deletedTo;
+                        if(msgContent.deletedTo !== "none"){
+                            deletedTo = deletedToJsonToMap(msgContent.deletedTo);
+                        }
+                        
 
                         let newV: propsMessagesGroupContent = {
                             ...msgContent,
                             viewStatus,
-                            deletedTo
+                            deletedTo: deletedTo || "none"
                         }
                         msgContainerValue.push(newV)
                     })

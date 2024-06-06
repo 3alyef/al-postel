@@ -29,9 +29,10 @@ interface propsMsgContainer {
     screenMsgGroup: Map<string, propsGroups>;
     isGroup: boolean;
     messageGroupContent: Map<string, propsMessagesGroupContent[]>;
-    setMessagesGroupContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>
+    setMessagesGroupContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>;
+    participantsBgColor: Map<string, Map<string, string>>;
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent, participantsBgColor}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>();
     const [groupsScreenProps, setGroupsScreenProps] = useState<propsGroups>();
@@ -44,11 +45,14 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
+
+    
     useEffect(()=>{
         if(isGroup){
             const msgArray = Array.from(screenMsgGroup.values());
             setGroupsScreenProps(msgArray[0]);
             console.log("msgArray", msgArray);
+
         } else {
             const msgArray = Array.from(screenMsg.values());
             setScreenProps(msgArray[0]);
@@ -248,7 +252,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     <MessageLabel
                                                     soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
                                                     setMessagesContent={setMessagesContent}
-                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}/>
+                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
+                                                    setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}/>
                                     
                                                 );
                                             })
@@ -339,12 +344,16 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             messagesContainerByGroup.map((msg, index) => {
                                                 const createdDate = new Date(msg.createdIn);
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                    
+                                                
                                                 return (
-                                                    <div className="p-[2em] bg-slate-200" key={msg.createdIn}>
-                                                        {msg.message}
-                                                    </div>
-                                                );
+                                                    <MessageLabel
+                                                    soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}userSoul={userSoul} serverIo={serverIo}
+                                                    setMessagesContent={setMessagesContent}
+                                                    roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
+                                                    setMessagesGroupsContent={setMessagesGroupContent}
+                                                    participantsBgColor={participantsBgColor}
+                                                    groupName={soulNameNow}/>
+                                                )
                                             })
                                         }
                                     
@@ -356,7 +365,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
                                 <EmojisList/>
                                 <div className="messageInput">
-                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
+                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
                                 </div>  
                                 <button className="sendMsg flex items-center justify-center" type="submit">
                                     <IoMdSend className="text-white w-[75%] h-[75%]"

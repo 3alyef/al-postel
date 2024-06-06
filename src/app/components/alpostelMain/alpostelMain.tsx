@@ -62,7 +62,10 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [userProps, setUserProps] = useState<DecodedData>();
     const [groupsDataById, setGroupsDataById] = useState<Map<string, propsGroups>>(new Map());
     const [isGroup, setIsGroup] = useState<boolean>(false);
-    const [messageGroupContent, setMessagesGroupContent] = useState<Map<string, propsMessagesGroupContent[]>>(new Map())
+    const [messageGroupContent, setMessagesGroupContent] = useState<Map<string, propsMessagesGroupContent[]>>(new Map());
+    const [participantsBgColor, setParticipantsBgColor] = useState<Map<string, Map<string, string>>>(new Map());
+
+    const [participantsData, setParticipantsData] = useState<Map<string, propsRoom>>(new Map ())
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
@@ -75,7 +78,60 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
         }
     }, []); 
 
-    
+    useEffect(()=>{
+        const generateRandomColor = () => {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        };
+        setParticipantsBgColor((previous)=>{
+            let newV: Map<string, Map<string, string>> = new Map(previous)
+            groupsDataById.forEach((value, groupName)=>{
+                let group = newV.get(groupName)
+                if(!group){
+                    group= new Map();
+                    newV.set(groupName, group)
+                }
+                value.groupParticipants.forEach((participant)=>{
+                    if (participant !== userSoul && !group.has(participant)) {
+                        let randomColor;
+                        let colorExists;
+                        do {
+                            randomColor = generateRandomColor();
+                            colorExists = Array.from(group.values()).includes(randomColor);
+                        } while (colorExists);
+                        group.set(participant, randomColor);
+                    }
+                })
+                
+            })
+            return newV
+        })
+
+        setParticipantsData((previous)=>{
+            const newValue:Map<string, propsRoom> = new Map(previous);
+            groupsDataById.forEach((value)=>{
+                const participants = value.groupParticipants.filter(participant => participant !== userSoul);
+                const newParticipants = participants.filter(participant => !newValue.has(participant));
+                newParticipants.forEach((participant) => {
+                    const participantProps = updateRooms.get(participant);
+                    if (participantProps) {
+                        newValue.set(participant, participantProps[0]);
+                    }
+                });
+            })
+
+            return newValue;
+        })
+    }, [groupsDataById, updateRooms]);
+
+    useEffect(()=>{
+        //console.log("participantsBgColor", participantsBgColor)
+        console.log('participantsData', participantsData)
+    }, [/*participantsBgColor*/ participantsData])
     return(
         <>
             { 
@@ -93,7 +149,8 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                             userSoul={userSoul} soulNameNow={soulNameNow} setMessagesContent={setMessagesContent} setSoulNameNow={setSoulNameNow} messageGroupContent={messageGroupContent}
                             setMessagesGroupContent={setMessagesGroupContent}
                             roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}
-                            screenMsgGroup={screenMsgGroup} isGroup={isGroup}/>
+                            screenMsgGroup={screenMsgGroup} isGroup={isGroup}
+                            participantsBgColor={participantsBgColor}/>
                         </section>
                     </>
                 )
