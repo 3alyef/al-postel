@@ -1,6 +1,6 @@
 "use client";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
-import { propsMessagesContent, propsMessagesGroupContent } from "../alpostelMain/alpostelMain";
+import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ConnectM2 } from "@/services/connectToM2.service";
 
@@ -15,16 +15,30 @@ interface propsMessageLabel {
     setMessagesGroupsContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>
     roomsListByUserSoul: Map<string, string>;
     participantsBgColor: Map<string, Map<string, string>>;
-    groupName?:string
+    groupName?:string;
+    participantsData: Map<string, propsRoom>
 }
 
-export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName}: propsMessageLabel){
+export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData}: propsMessageLabel){
     const [bgColor, setBgColor] = useState<string>('');
+    const [dataUser, setDataUser] = useState<propsRoom>();
+    /*useEffect(()=>{
+        console.log('message: -dataUser', dataUser)
+    }, [dataUser])*/
+    useEffect(()=>{
+        console.log()
+        if(messageGroup && messageGroup.fromUser){
+            setDataUser(()=>{
+                let data = participantsData.get(messageGroup.fromUser);
+                return data
+            })
+        }
+    },[participantsData])
     useEffect(()=>{
         if(messageGroup && messageGroup.message && groupName){
             let group = participantsBgColor.get(groupName);
             if(group){
-                let bgC = group.get(soulName);
+                let bgC = group.get(messageGroup.fromUser);
                 if(bgC){
                     setBgColor(bgC)
                 }
@@ -89,14 +103,14 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             backgroundColor: bgColor
         } : undefined}>
             {
-                messageGroup && messageGroup.message && (
+                messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
                     <>
                         <div className="text-white font-normal w-[100%] flex justify-between">
                             <p>
-                                - {}
+                                ~ {dataUser && dataUser.first_name}
                             </p>
                             <p>
-
+                                {dataUser && dataUser.email}
                             </p>
                         </div>
                     </>

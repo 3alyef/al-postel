@@ -90,8 +90,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                 soulName = soulNameC;
                 roomProps.push(roomPropsC);
             };
-
-
             //console.log('roomProps', roomProps)
             if(roomProps && soulName){
                 const roomMap: Map<string, propsRoom> = new Map();

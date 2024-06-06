@@ -448,4 +448,13 @@ export class ConnectM2 {
     public createNewGroup(el: {groupImage: {image: File | undefined , type: string | undefined , name: string | undefined } , groupName: string, groupParticipants: string[]}){
         this.socket.emit("newGroup", el);
     }
+
+    public async getDataUser(userSoul: string): Promise<{dataUser: propsRoom} | {message: "error"}>{
+        this.socket.emit("getDataUser", userSoul);
+        return new Promise((resolve)=>{
+            this.socket.on("getDataUserRes", (data: {dataUser: propsRoom} | {message: "error"})=>{
+                resolve(data);
+            })
+        })
+    }
 }

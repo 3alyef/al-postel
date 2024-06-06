@@ -80,12 +80,20 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
 
     useEffect(()=>{
         const generateRandomColor = () => {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
+            const baseColor = [31, 42, 27]; // RGB for #1f2a1b
+            const variation = 30; // Adjust this value for more or less variation
+
+            const randomChannel = (base: number) => {
+                const randomOffset = Math.floor(Math.random() * variation - variation / 2);
+                const newChannel = base + randomOffset;
+                return Math.max(0, Math.min(255, newChannel)).toString(16).padStart(2, '0');
+            };
+
+            const red = randomChannel(baseColor[0]);
+            const green = randomChannel(baseColor[1]);
+            const blue = randomChannel(baseColor[2]);
+
+            return `#${red}${green}${blue}`;
         };
         setParticipantsBgColor((previous)=>{
             let newV: Map<string, Map<string, string>> = new Map(previous)
@@ -116,10 +124,15 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             groupsDataById.forEach((value)=>{
                 const participants = value.groupParticipants.filter(participant => participant !== userSoul);
                 const newParticipants = participants.filter(participant => !newValue.has(participant));
-                newParticipants.forEach((participant) => {
+                newParticipants.forEach( async (participant) => {
                     const participantProps = updateRooms.get(participant);
                     if (participantProps) {
                         newValue.set(participant, participantProps[0]);
+                    } else {
+                        let dataUser = await serverIo?.getDataUser(participant)
+                        if(dataUser && "dataUser" in dataUser){
+                            newValue.set(participant, dataUser.dataUser);
+                        }
                     }
                 });
             })
@@ -150,7 +163,9 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                             setMessagesGroupContent={setMessagesGroupContent}
                             roomsListByUserSoul={roomsListByUserSoul} typingStateRoom={typingStateRoom} friendsOnline={friendsOnline}
                             screenMsgGroup={screenMsgGroup} isGroup={isGroup}
-                            participantsBgColor={participantsBgColor}/>
+                            participantsBgColor={participantsBgColor}
+                            groupsDataById={groupsDataById} updateRooms={updateRooms}
+                            participantsData={participantsData}/>
                         </section>
                     </>
                 )

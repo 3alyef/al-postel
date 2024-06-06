@@ -31,8 +31,11 @@ interface propsMsgContainer {
     messageGroupContent: Map<string, propsMessagesGroupContent[]>;
     setMessagesGroupContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>;
     participantsBgColor: Map<string, Map<string, string>>;
+    groupsDataById: Map<string, propsGroups>;
+    updateRooms: Map<string, propsRoom[]>;
+    participantsData: Map<string, propsRoom>
 }
-export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent, participantsBgColor}: propsMsgContainer){
+export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent, participantsBgColor, groupsDataById, updateRooms, participantsData}: propsMsgContainer){
     const [onProfile, setOnProfile] = useState<boolean>(false);
     const [screenProps, setScreenProps] = useState<propsRoom>();
     const [groupsScreenProps, setGroupsScreenProps] = useState<propsGroups>();
@@ -45,8 +48,20 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
-
-    
+    const [imageURL, setImageURL] = useState<string>()
+    useEffect(()=>{
+        if(isGroup){
+            let groupData = groupsDataById.get(soulNameNow);
+            if(groupData) {
+                setImageURL(groupData.imageData.userImage)
+            }
+        } else {
+            let roomData = updateRooms.get(soulNameNow);
+            if(roomData) {
+                setImageURL(roomData[0].imageData.userImage)
+            }
+        }
+    }, [groupsScreenProps, screenProps, groupsDataById, updateRooms, soulNameNow])
     useEffect(()=>{
         if(isGroup){
             const msgArray = Array.from(screenMsgGroup.values());
@@ -61,6 +76,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         
        
     }, [screenMsgGroup, screenMsg, isGroup]);
+
 
     
     const onFocus = ()=>{
@@ -215,7 +231,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             }
                                         )
                                     }}>
-                                        <Image alt="me" src={screenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                        <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
                                     </div>
                                     <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
                                         <span className="nameUserSpan">
@@ -253,7 +269,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
                                                     setMessagesContent={setMessagesContent}
                                                     roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
-                                                    setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}/>
+                                                    setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
+                                                    participantsData={participantsData}/>
                                     
                                                 );
                                             })
@@ -312,7 +329,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             }
                                         )
                                     }}>
-                                        <Image alt="me" src={groupsScreenProps?.imageData.userImage || "/imgs/assets/person.png"} fill/>
+                                        <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
                                     </div>
                                     <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
                                         <span className="nameUserSpan">
@@ -352,7 +369,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
                                                     setMessagesGroupsContent={setMessagesGroupContent}
                                                     participantsBgColor={participantsBgColor}
-                                                    groupName={soulNameNow}/>
+                                                    groupName={soulNameNow} 
+                                                    participantsData={participantsData}/>
                                                 )
                                             })
                                         }
