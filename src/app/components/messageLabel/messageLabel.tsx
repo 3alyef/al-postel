@@ -99,14 +99,16 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul])
     return (
         <div className={`messageRender min-w-[25%] ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
-        style={(bgColor && messageGroup && messageGroup.message) ? {
-            backgroundColor: bgColor
-        } : undefined}>
+        >
             {
                 messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
                     <>
-                        <div className="text-white font-normal w-[100%] flex justify-between">
-                            <p>
+                        <div className="text-white font-normal w-[100%] flex justify-between gap-[.75em] px-[.3em]">
+                            <p className="ltr font-semibold"
+                            style={(bgColor && messageGroup && messageGroup.message) ? {
+                                color: bgColor
+                            } : undefined}
+                            >
                                 ~ {dataUser && dataUser.first_name}
                             </p>
                             <p>

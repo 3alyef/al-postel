@@ -79,21 +79,34 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     }, []); 
 
     useEffect(()=>{
-        const generateRandomColor = () => {
+        function generateRandomColor(){
             const baseColor = [31, 42, 27]; // RGB for #1f2a1b
             const variation = 30; // Adjust this value for more or less variation
 
             const randomChannel = (base: number) => {
                 const randomOffset = Math.floor(Math.random() * variation - variation / 2);
                 const newChannel = base + randomOffset;
-                return Math.max(0, Math.min(255, newChannel)).toString(16).padStart(2, '0');
+                return Math.max(0, Math.min(255, newChannel));
             };
 
-            const red = randomChannel(baseColor[0]);
-            const green = randomChannel(baseColor[1]);
-            const blue = randomChannel(baseColor[2]);
+            const randomColor = [
+                randomChannel(baseColor[0]),
+                randomChannel(baseColor[1]),
+                randomChannel(baseColor[2])
+            ];
 
-            return `#${red}${green}${blue}`;
+            const combineColors = (color1: number[], color2: number[], alpha: number) => {
+                const combined = color1.map((channel, i) => {
+                    return Math.round(channel * (1 - alpha) + color2[i] * alpha);
+                });
+                return combined.map(channel => channel.toString(16).padStart(2, '0')).join('');
+            };
+
+            const targetColor = [0, 52, 185]; // RGB for #0034b9
+            const alpha = 173 / 255; // Alpha channel
+
+            const combinedColor = combineColors(randomColor, targetColor, alpha);
+            return `#${combinedColor}`;
         };
         setParticipantsBgColor((previous)=>{
             let newV: Map<string, Map<string, string>> = new Map(previous)
