@@ -102,7 +102,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
                 return combined.map(channel => channel.toString(16).padStart(2, '0')).join('');
             };
 
-            const targetColor = [0, 52, 185]; // RGB for #0034b9
+            const targetColor = [0, 50, 180]; // RGB for #0034b9 => [0, 52, 185]
             const alpha = 173 / 255; // Alpha channel
 
             const combinedColor = combineColors(randomColor, targetColor, alpha);

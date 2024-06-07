@@ -106,7 +106,8 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                         <div className="text-white font-normal w-[100%] flex justify-between gap-[.75em] px-[.3em]">
                             <p className="ltr font-semibold"
                             style={(bgColor && messageGroup && messageGroup.message) ? {
-                                color: bgColor
+                                color: bgColor,
+                                textShadow: "0px 0px 20px black"
                             } : undefined}
                             >
                                 ~ {dataUser && dataUser.first_name}

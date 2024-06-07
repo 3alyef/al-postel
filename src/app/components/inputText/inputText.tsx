@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { IoAlertCircleOutline } from "react-icons/io5";
 
 interface propsInputText {
@@ -16,18 +16,24 @@ interface propsInputText {
     onFocusStyle: boolean;
     setOnFocusStyle: Dispatch<SetStateAction<boolean>>;
     onBlur?:(value: boolean)=>void;
-    caretW?: boolean
+    caretW?: boolean;
+    activeFocus?: boolean
 }
 
-export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer, caretW }: propsInputText) {
+export default function InputText({ text, _isSemitic, type, costumerClass, value, setValue, _isRequired, processErrorStyle, messageError, onFocusFunction, onFocusStyle, setOnFocusStyle, onBlur, costumerClassDivContainer, caretW, activeFocus}: propsInputText) {
     const inputRef = useRef<HTMLInputElement>(null);
     
     const [borderStyle, setBorderStyle] = useState<string>('1.8px solid rgb(0, 0, 0)');
-    const [confirmOneTurnAllert, setConfirmOneTurnAllert] = useState<boolean>(false)
+    const [confirmOneTurnAllert, setConfirmOneTurnAllert] = useState<boolean>(false);
     const focusInput = () => {
         inputRef.current?.focus();
-
     }
+    useEffect(()=>{
+        if(activeFocus){
+            focusInput();
+        }
+    }, [activeFocus])
+    
     useEffect(()=>{
         
         if(onFocusStyle){
@@ -67,6 +73,7 @@ export default function InputText({ text, _isSemitic, type, costumerClass, value
                         onBlur={() => {
                             onBlur? onBlur(false): setOnFocusStyle(false)}}
                         style={caretW ? {caretColor: 'white'} : undefined}
+                       
                     />
                     <div
                         className={`${processErrorStyle ? "labelsAllert" : "labels"} ${!_isSemitic && "left-[7px]"}`}

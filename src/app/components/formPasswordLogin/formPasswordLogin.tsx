@@ -22,12 +22,11 @@ interface propsFormRegister {
 export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic, forgotPassword, createAccount, next, textLabelPassword, onFocusFunction, onFocusStyle, setOnFocusStyle, messageError}: propsFormRegister){
     const [passwordValue, setPasswordValue] = useState<string>('');
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
-
+    const [activeFocus, setActiveFocus] = useState<boolean>(false)
     const router = useRouter(); 
     const redirectToAlpostel = () => {
         router.push(`/${locale}/alpostel`); // Redireciona para a página de login
     }
-
     async function dataToM1(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         const email = localStorage.getItem("userEmailToLogin")
@@ -51,11 +50,14 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         }
         
     }
+    useEffect(()=>{
+        setActiveFocus(true)
+    }, [])
     return(
         <form className="w-[100%]" onSubmit={dataToM1}>
             <div className={formCostumerClass}>
         
-                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} messageError={messageError}/>
+                <InputText text={textLabelPassword} _isSemitic={_isSemitic} type="password" costumerClass="text-white" setValue={setPasswordValue} value={passwordValue} _isRequired={true} processErrorStyle={processErrorStyle} onFocusFunction={onFocusFunction} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} messageError={messageError} activeFocus={activeFocus}/>
 
             </div>
             <div className="forgetEmail">
