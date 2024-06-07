@@ -65,7 +65,23 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     const [messageGroupContent, setMessagesGroupContent] = useState<Map<string, propsMessagesGroupContent[]>>(new Map());
     const [participantsBgColor, setParticipantsBgColor] = useState<Map<string, Map<string, string>>>(new Map());
 
-    const [participantsData, setParticipantsData] = useState<Map<string, propsRoom>>(new Map ())
+    const [participantsData, setParticipantsData] = useState<Map<string, propsRoom>>(new Map ());
+    function generateRandomColor() {
+        const baseColor = [160, 180, 151]; // RGB for #a0b497
+        const variation = 30; // Adjust this value for more or less variation
+    
+        const randomChannel = (base: number) => {
+            const randomOffset = Math.floor(Math.random() * variation - variation / 2);
+            const newChannel = base + randomOffset;
+            return Math.max(0, Math.min(255, newChannel)).toString(16).padStart(2, '0');
+        };
+    
+        const red = randomChannel(baseColor[0]);
+        const green = randomChannel(baseColor[1]);
+        const blue = randomChannel(baseColor[2]);
+    
+        return `#${red}${green}${blue}`;
+    };
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
         const m2URL = localStorage.getItem("linkM2");
@@ -79,35 +95,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     }, []); 
 
     useEffect(()=>{
-        function generateRandomColor(){
-            const baseColor = [31, 42, 27]; // RGB for #1f2a1b
-            const variation = 30; // Adjust this value for more or less variation
-
-            const randomChannel = (base: number) => {
-                const randomOffset = Math.floor(Math.random() * variation - variation / 2);
-                const newChannel = base + randomOffset;
-                return Math.max(0, Math.min(255, newChannel));
-            };
-
-            const randomColor = [
-                randomChannel(baseColor[0]),
-                randomChannel(baseColor[1]),
-                randomChannel(baseColor[2])
-            ];
-
-            const combineColors = (color1: number[], color2: number[], alpha: number) => {
-                const combined = color1.map((channel, i) => {
-                    return Math.round(channel * (1 - alpha) + color2[i] * alpha);
-                });
-                return combined.map(channel => channel.toString(16).padStart(2, '0')).join('');
-            };
-
-            const targetColor = [0, 50, 180]; // RGB for #0034b9 => [0, 52, 185]
-            const alpha = 173 / 255; // Alpha channel
-
-            const combinedColor = combineColors(randomColor, targetColor, alpha);
-            return `#${combinedColor}`;
-        };
+        
         setParticipantsBgColor((previous)=>{
             let newV: Map<string, Map<string, string>> = new Map(previous)
             groupsDataById.forEach((value, groupName)=>{
