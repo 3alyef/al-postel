@@ -50,6 +50,7 @@
     
                 
                 .messageRender {
+                    cursor: pointer;
                     //
                     //background-color: white;
                     //
@@ -104,6 +105,10 @@
                     .msgContainer, .msgCreatedIn {
                         color: white
                     }
+                }
+
+                .messageRender:active {
+                    scale: 1.1;
                 }
             }
 

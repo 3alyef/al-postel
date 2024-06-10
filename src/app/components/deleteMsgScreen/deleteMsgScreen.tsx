@@ -6,7 +6,7 @@ interface propsDeleteMsgScreen {
 export default function DeleteMsgScreen({functionContainer}: propsDeleteMsgScreen) {
     
     return (
-        <div className="w-full h-full left-0 absolute deleteMsgScreen" onClick={functionContainer}>
+        <div className="w-full h-full left-0 absolute deleteMsgScreen " onClick={functionContainer}>
             <div className="optContainer">
                 <p>
                     Delete

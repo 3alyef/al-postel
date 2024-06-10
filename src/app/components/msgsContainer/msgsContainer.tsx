@@ -404,7 +404,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     if(event.target === event.currentTarget){
                         setDeleteMsgScreen(false);
                     }
-                    
                 }}/>
             )}
         </>   
