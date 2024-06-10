@@ -78,9 +78,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         
        
     }, [screenMsgGroup, screenMsg, isGroup]);
-
-
-    
     const onFocus = ()=>{
         setOnFocusStyle(true);
         
@@ -403,7 +400,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             
             )}
             {deleteMsgScreen && (
-                <DeleteMsgScreen/>
+                <DeleteMsgScreen functionContainer={(event: React.MouseEvent<HTMLDivElement>)=>{
+                    event.stopPropagation();
+                    setDeleteMsgScreen(false);
+                }}/>
             )}
         </>   
     )

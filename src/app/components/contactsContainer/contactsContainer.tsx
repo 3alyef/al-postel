@@ -530,10 +530,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                             <p>Teste de mensagem de STATUS</p>
                                         </div>
                                     )}
-                                    
-                                    
-                                        
-                                    
                                 </div>
                             </div>
                         </div>
@@ -542,9 +538,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             <div className="intermediatePhotoOpt">
                                 <div className="changePhotoOptionsContent" style={changePhotoOptions ? {left: '0%'} : {left: '-35%'}}>
                                     <div className="headerPhotoOptions">
-                                        {/*<div className="closePhotoOptions">
-                                            x
-                                        </div>*/}
                                         <div className="alpostelContainer">
                                             <Image
                                                 alt="alpostel"
