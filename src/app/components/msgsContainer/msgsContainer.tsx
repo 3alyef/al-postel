@@ -401,8 +401,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             )}
             {deleteMsgScreen && (
                 <DeleteMsgScreen functionContainer={(event: React.MouseEvent<HTMLDivElement>)=>{
-                    event.stopPropagation();
-                    setDeleteMsgScreen(false);
+                    if(event.target === event.currentTarget){
+                        setDeleteMsgScreen(false);
+                    }
+                    
                 }}/>
             )}
         </>   
