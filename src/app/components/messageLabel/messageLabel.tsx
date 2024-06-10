@@ -17,35 +17,25 @@ interface propsMessageLabel {
     roomsListByUserSoul: Map<string, string>;
     participantsBgColor: Map<string, Map<string, string>>;
     groupName?:string;
-    participantsData: Map<string, propsRoom>
+    participantsData: Map<string, propsRoom>;
+    deleteMsgScreen: boolean;
+    setDeleteMsgScreen: Dispatch<SetStateAction<boolean>>
 }
 
-export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData}: propsMessageLabel){
+export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, deleteMsgScreen, setDeleteMsgScreen}: propsMessageLabel){
     //
-    const [messageTest, setMessage] = useState('Press and hold the button');
-
-    const onLongPress = () => {
-        setMessage('Long press detected');
-    };
-
-    const onClick = () => {
-        setMessage('Click detected');
-    };
+    
     const longPressEvent = useLongPress({
-        onLongPress,
-        onClick,
+        onLongPress: ()=>{
+            setDeleteMsgScreen(!deleteMsgScreen);
+        },
+        onClick: ()=>{console.log('click')},
         ms: 500, // 500ms for long press detection
     });
 
-    useEffect(()=>{
-        console.log("messageTest: ", messageTest)
-    }, [messageTest])
     ///
     const [bgColor, setBgColor] = useState<string>('');
     const [dataUser, setDataUser] = useState<propsRoom>();
-    /*useEffect(()=>{
-        console.log('message: -dataUser', dataUser)
-    }, [dataUser])*/
     useEffect(()=>{
         console.log()
         if(messageGroup && messageGroup.fromUser){
@@ -120,6 +110,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul])
     return (
         <div className={`messageRender min-w-[25%] ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
+
         {...longPressEvent}
         >
             {

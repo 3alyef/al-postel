@@ -48,7 +48,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
-    const [imageURL, setImageURL] = useState<string>()
+    const [imageURL, setImageURL] = useState<string>();
+    const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
     useEffect(()=>{
         if(isGroup){
             let groupData = groupsDataById.get(soulNameNow);
@@ -270,7 +271,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     setMessagesContent={setMessagesContent}
                                                     roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
                                                     setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
-                                                    participantsData={participantsData}/>
+                                                    participantsData={participantsData}
+                                                    deleteMsgScreen={deleteMsgScreen}
+                                                    setDeleteMsgScreen={setDeleteMsgScreen}/>
                                     
                                                 );
                                             })
@@ -370,7 +373,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     setMessagesGroupsContent={setMessagesGroupContent}
                                                     participantsBgColor={participantsBgColor}
                                                     groupName={soulNameNow} 
-                                                    participantsData={participantsData}/>
+                                                    participantsData={participantsData}
+                                                    deleteMsgScreen={deleteMsgScreen}
+                                                    setDeleteMsgScreen={setDeleteMsgScreen}/>
                                                 )
                                             })
                                         }
@@ -395,6 +400,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     </div>
                 </div>
             
+            )}
+            {deleteMsgScreen && (
+                <div className="w-full h-full absolute bg-slate-50">
+                    hey
+                </div>
             )}
         </>   
     )
