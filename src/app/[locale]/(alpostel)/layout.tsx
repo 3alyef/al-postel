@@ -13,7 +13,7 @@ export default async function RootLayout({
     className="min-h-[100vh] bg-black flex flex-col "
     >
       <DefaultBackground _isSemitic={_isSemitic}>
-        <main className="alPostelMain">
+        <main className="alPostelMain relative">
           {children}
         </main>
       </DefaultBackground>

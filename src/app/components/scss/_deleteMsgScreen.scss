@@ -1,0 +1,17 @@
+.deleteMsgScreen {
+    background-color: rgba(128, 128, 128, 0.308);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .optContainer {
+        padding: 2em;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: .25em;
+    }
+}

@@ -13,6 +13,7 @@ import TextareaMsg from "../textareaMsg/textareaMsg";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import EmojisList from "../emojisList/emojisList";
 import { propsGroups } from "@/interfaces/groups.interface";
+import DeleteMsgScreen from "../deleteMsgScreen/deleteMsgScreen";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -402,9 +403,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             
             )}
             {deleteMsgScreen && (
-                <div className="w-full h-full absolute bg-slate-50">
-                    hey
-                </div>
+                <DeleteMsgScreen/>
             )}
         </>   
     )
