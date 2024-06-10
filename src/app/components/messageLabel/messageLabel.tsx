@@ -3,6 +3,7 @@ import { BsCheck, BsCheckAll } from "react-icons/bs";
 import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ConnectM2 } from "@/services/connectToM2.service";
+import useLongPress from "@/hooks/useLongPress.hook";
 
 interface propsMessageLabel {
     message?: propsMessagesContent;
@@ -20,6 +21,26 @@ interface propsMessageLabel {
 }
 
 export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData}: propsMessageLabel){
+    //
+    const [messageTest, setMessage] = useState('Press and hold the button');
+
+    const onLongPress = () => {
+        setMessage('Long press detected');
+    };
+
+    const onClick = () => {
+        setMessage('Click detected');
+    };
+    const longPressEvent = useLongPress({
+        onLongPress,
+        onClick,
+        ms: 500, // 500ms for long press detection
+    });
+
+    useEffect(()=>{
+        console.log("messageTest: ", messageTest)
+    }, [messageTest])
+    ///
     const [bgColor, setBgColor] = useState<string>('');
     const [dataUser, setDataUser] = useState<propsRoom>();
     /*useEffect(()=>{
@@ -99,6 +120,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul])
     return (
         <div className={`messageRender min-w-[25%] ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
+        {...longPressEvent}
         >
             {
                 messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
