@@ -19,15 +19,23 @@ interface propsMessageLabel {
     groupName?:string;
     participantsData: Map<string, propsRoom>;
     deleteMsgScreen: boolean;
-    setDeleteMsgScreen: Dispatch<SetStateAction<boolean>>
+    setDeleteMsgScreen: Dispatch<SetStateAction<boolean>>;
+    setMsgCreatedIn: Dispatch<SetStateAction<string>>;
 }
 
-export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, deleteMsgScreen, setDeleteMsgScreen}: propsMessageLabel){
+export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, deleteMsgScreen, setDeleteMsgScreen, setMsgCreatedIn}: propsMessageLabel){
     //
     
     const longPressEvent = useLongPress({
         onLongPress: ()=>{
             setDeleteMsgScreen(!deleteMsgScreen);
+            if(messageGroup){
+                setMsgCreatedIn(messageGroup.createdIn)
+            } else {
+                if(message){
+                    setMsgCreatedIn(message.createdIn)
+                }
+            }
         },
         onClick: ()=>{console.log('click')},
         ms: 500, // 500ms for long press detection
@@ -110,7 +118,6 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul])
     return (
         <div className={`messageRender min-w-[25%] ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
-
         {...longPressEvent}
         >
             {

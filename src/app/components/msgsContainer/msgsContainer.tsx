@@ -51,6 +51,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const [imageURL, setImageURL] = useState<string>();
     const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
+    const [msgCreatedIn, setMsgCreatedIn] = useState<string>('')
     useEffect(()=>{
         if(isGroup){
             let groupData = groupsDataById.get(soulNameNow);
@@ -271,7 +272,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
                                                     participantsData={participantsData}
                                                     deleteMsgScreen={deleteMsgScreen}
-                                                    setDeleteMsgScreen={setDeleteMsgScreen}/>
+                                                    setDeleteMsgScreen={setDeleteMsgScreen}setMsgCreatedIn={setMsgCreatedIn}/>
                                     
                                                 );
                                             })
@@ -373,7 +374,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     groupName={soulNameNow} 
                                                     participantsData={participantsData}
                                                     deleteMsgScreen={deleteMsgScreen}
-                                                    setDeleteMsgScreen={setDeleteMsgScreen}/>
+                                                    setDeleteMsgScreen={setDeleteMsgScreen}
+                                                    setMsgCreatedIn={setMsgCreatedIn}/>
                                                 )
                                             })
                                         }
@@ -404,7 +406,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     if(event.target === event.currentTarget){
                         setDeleteMsgScreen(false);
                     }
-                }}/>
+                }}
+                msgCreatedIn={msgCreatedIn}/>
             )}
         </>   
     )
