@@ -184,6 +184,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 }
                 
                 <p className="msgContainer ltr">{message && message.message || messageGroup && messageGroup.message}</p>
+                
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
                 {

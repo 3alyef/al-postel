@@ -228,7 +228,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             </div>
                                         </div>
                                         <div>
-                                            <h1 className="text-white">
+                                            <h1 className="text-white
+                                            font-[400] text-[18px]">
                                                 {msgCreatedInDelete.length}
                                             </h1>
                                         </div>
