@@ -259,8 +259,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                 <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
                                     <div className="main" >
                                         {
-                                    
-                                            messagesContainerByRoom.map((el, index) => {
+                                            messagesContainerByRoom.map((el) => {
                                                 const createdDate = new Date(el.createdIn);
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                     
@@ -277,7 +276,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 );
                                             })
                                         }
-                                    
                                         <div ref={messagesEndRef}/>
                                     </div>
                                 </div>
@@ -360,7 +358,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                     <div className="main" >
                                         {
                                     
-                                            messagesContainerByGroup.map((msg, index) => {
+                                            messagesContainerByGroup.map((msg) => {
                                                 const createdDate = new Date(msg.createdIn);
                                                 const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                                                 

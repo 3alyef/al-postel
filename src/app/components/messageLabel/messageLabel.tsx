@@ -117,36 +117,40 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul])
     return (
-        <div className={`messageRender min-w-[25%] ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
-        {...longPressEvent}
-        >
-            {
-                messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
-                    <>
-                        <div className="text-white font-normal w-[100%] flex justify-between gap-[.75em] px-[.3em]">
-                            <p className="ltr font-semibold"
-                            style={(bgColor && messageGroup && messageGroup.message) ? {
-                                color: bgColor,
-                                textShadow: "0px 0px 20px black"
-                            } : undefined}
-                            >
-                                ~ {dataUser && dataUser.first_name}
-                            </p>
-                            <p>
-                                {dataUser && dataUser.email}
-                            </p>
-                        </div>
-                    </>
-                )
-            }
-            
-            <p className="msgContainer ltr">{message && message.message || messageGroup && messageGroup.message}</p>
-            <p className="msgCreatedIn flex justify-between w-full">{createdTime}
-            
-            {
-                message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)
-            }
-            </p>
+        <div className='messageRenderContainer'>
+            <div className={`messageRender min-w-[25%] 
+            ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
+            {...longPressEvent}
+            >
+                {
+                    messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
+                        <>
+                            <div className="text-white font-normal w-[100%] flex justify-between gap-[.75em] px-[.3em]">
+                                <p className="ltr font-semibold"
+                                style={(bgColor && messageGroup && messageGroup.message) ? {
+                                    color: bgColor,
+                                    textShadow: "0px 0px 20px black"
+                                } : undefined}
+                                >
+                                    ~ {dataUser && dataUser.first_name}
+                                </p>
+                                <p>
+                                    {dataUser && dataUser.email}
+                                </p>
+                            </div>
+                        </>
+                    )
+                }
+                
+                <p className="msgContainer ltr">{message && message.message || messageGroup && messageGroup.message}</p>
+                <p className="msgCreatedIn flex justify-between w-full">{createdTime}
+                
+                {
+                    message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)
+                }
+                </p>
+            </div>
         </div>
+       
     )
 }
