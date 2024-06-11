@@ -51,7 +51,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
     const [imageURL, setImageURL] = useState<string>();
     const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
-    const [msgCreatedIn, setMsgCreatedIn] = useState<string>('')
+    const [msgCreatedInDelete, setMsgCreatedInDelete] = useState<string[]>([]);
     useEffect(()=>{
         if(isGroup){
             let groupData = groupsDataById.get(soulNameNow);
@@ -199,7 +199,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [friendsOnline, soulNameNow])
     useEffect(()=>{
         console.log('messagesContainerByGroup', messagesContainerByGroup);
-    }, [messagesContainerByGroup])
+    }, [messagesContainerByGroup]);
+
+    function deleteScreenFunc(){
+       
+    }
     return(
         <>
             {screenProps?.userSoul && !isGroup && (
@@ -270,8 +274,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
                                                     setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
                                                     participantsData={participantsData}
-                                                    deleteMsgScreen={deleteMsgScreen}
-                                                    setDeleteMsgScreen={setDeleteMsgScreen}setMsgCreatedIn={setMsgCreatedIn}/>
+                                                    setMsgCreatedInDelete={setMsgCreatedInDelete}
+                                                    funcDeleteMsgScreen={deleteScreenFunc}
+                                                    createdIn={el.createdIn}
+                                                    msgCreatedInDelete={msgCreatedInDelete}/>
                                     
                                                 );
                                             })
@@ -371,9 +377,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                     participantsBgColor={participantsBgColor}
                                                     groupName={soulNameNow} 
                                                     participantsData={participantsData}
-                                                    deleteMsgScreen={deleteMsgScreen}
-                                                    setDeleteMsgScreen={setDeleteMsgScreen}
-                                                    setMsgCreatedIn={setMsgCreatedIn}/>
+                                                    setMsgCreatedInDelete={setMsgCreatedInDelete}
+                                                    funcDeleteMsgScreen={deleteScreenFunc}
+                                                    createdIn={msg.createdIn}
+                                                    msgCreatedInDelete={msgCreatedInDelete}/>
                                                 )
                                             })
                                         }
@@ -399,14 +406,14 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 </div>
             
             )}
-            {deleteMsgScreen && (
+            {/*deleteMsgScreen && (
                 <DeleteMsgScreen functionContainer={(event: React.MouseEvent<HTMLDivElement>)=>{
                     if(event.target === event.currentTarget){
                         setDeleteMsgScreen(false);
                     }
                 }}
                 msgCreatedIn={msgCreatedIn}/>
-            )}
+            )*/}
         </>   
     )
 }

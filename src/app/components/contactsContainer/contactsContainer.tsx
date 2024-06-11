@@ -233,47 +233,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
         console.log('groupsDataById', groupsDataById);
         const updateGroupsData = () => {
             const updateGroupsData: propsDataGroups[] = Array.from(groupsDataById).map(([key, propsRoom]) =>{
-                //const messages = messagesContent.get(propsRoom.userSoul);
-
-                let lastUpdate;
                 let unreadMsgs = 0;
-                let lastMSGContent;
-                let whoLastSender;
-
-                /*if (messages) {
-                    const lastMsg = messages[messages.length - 1];
-                    if (lastMsg && lastMsg.createdIn) {
-                        const now = new Date();
-                        const msgDate = new Date(lastMsg.createdIn);
-                        const day = msgDate.getDate().toString().padStart(2, '0');
-                        const month = (msgDate.getMonth() + 1).toString().padStart(2, '0');
-                        const year = msgDate.getFullYear();
-
-                        const isSameDay = now.toDateString() === msgDate.toDateString();
-                        const isYesterday = now.getDate() - msgDate.getDate() === 1 && now.getMonth() === msgDate.getMonth() && now.getFullYear() === msgDate.getFullYear();
-
-                        if (isSameDay) {
-                            const hours = msgDate.getHours().toString().padStart(2, '0');
-                            const minutes = msgDate.getMinutes().toString().padStart(2, '0');
-                            lastUpdate = `${hours}:${minutes}`;
-                        } else if (isYesterday) {
-                            lastUpdate = "ontem";
-                        } else {
-                            lastUpdate = `${day}.${month}.${year}`;
-                        }
-                    }
-                    lastMSGContent = lastMsg.message;
-                    if (lastMsg.fromUser === userSoul) {
-                        whoLastSender = "you";
-                    }
-                    messages.forEach((el) => {
-                        if (el.viewStatus
-                            && el.fromUser !== userSoul && el.viewStatus !== "seen") {
-                            unreadMsgs++;
-                        }
-                    });
-                }*/
-
                 return {
                     userSoul: propsRoom.userSoul,
                     key,
@@ -283,14 +243,11 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     groupParticipants: propsRoom.groupParticipants,
                     imageData: propsRoom.imageData
                 };
-
             }
             );
 
             setGroupsData(updateGroupsData);
         };
-
-        
         updateGroupsData();
     }, [groupsDataById, userSoul])
     return ( 
@@ -362,7 +319,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                             <div className="py-[.25em] fixed h-[72%] w-[56.25%] intermediateDivMsgs intermediateGroups">
                                 {
                                     groupsData.map((room) => {
-                                        console.log('groupsScreen', room)
+                                        //console.log('groupsScreen', room)
                                         return (
                                             <ContactsContainerDivLabel
                                             email="" onClick={(e)=>{showMessages(e, undefined, undefined, true)}}
@@ -527,7 +484,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                     ) : (
                                         <div className="nameAndMsgSTATUS">
                                             <h3>{userProps?.first_name || ''}</h3>
-                                            <p>Teste de mensagem de STATUS</p>
+                                            {/*<p>Teste de mensagem de STATUS</p>*/}
                                         </div>
                                     )}
                                 </div>
