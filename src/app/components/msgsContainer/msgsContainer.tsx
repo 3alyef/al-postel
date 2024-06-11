@@ -204,90 +204,145 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     function deleteScreenFunc(){
        
     }
+
     return(
-        <>
-            {screenProps?.userSoul && !isGroup && (
+        <> 
+            {(groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup) && (
                 <div className="flex flex-col">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts headerBarMsgs py-[5px]">
-                                <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
-                                    setSoulNameNow('')
-                                }}>
-                                    <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
-                                        {_isSemitic ? (
-                                            <FaArrowRight />
-                                        ):
-                                        (
-                                            <FaArrowLeft />      
-                                        )}
-                                    
+                            {msgCreatedInDelete.length > 0 ? (
+                                <>
+                                    <div className="flex gap-2 justify-center align-center">
+                                        <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
+                                            setMsgCreatedInDelete([])
+                                        }}>
+                                            <div className=" sectionDisplayOk text-white " >
+                                                {_isSemitic ? (
+                                                    <FaArrowRight />
+                                                ):
+                                                (
+                                                    <FaArrowLeft />
+                                                )}
+                                        
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h1 className="text-white">
+                                                {msgCreatedInDelete.length}
+                                            </h1>
+                                        </div>
                                     </div>
-                                    
-                                    <div className="profilePhotoMainContacts"
-                                    onClick={()=>{
-                                        desactiveScreens(
-                                            {
-                                                root: onProfile,
-                                                competitors: [menu],
-                                                setCompetitors: [setMenu],
-                                                setRoot: setOnProfile,
-                                                setOnMessages: setOnProfile
-                                            }
-                                        )
+                                </>
+                            ) : (
+                                <>
+                                    <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
+                                        setSoulNameNow('')
                                     }}>
-                                        <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
-                                    </div>
-                                    <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
-                                        <span className="nameUserSpan">
-                                            {screenProps.costumName.custom_name || screenProps.first_name}
-                                        </span>
-                                        <span className="digOrOn">
-                                            {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
+                                        <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
+                                            {_isSemitic ? (
+                                                <FaArrowRight />
+                                            ):
+                                            (
+                                                <FaArrowLeft />      
+                                            )}
+                                        
+                                        </div>
+                                        
+                                        <div className="profilePhotoMainContacts"
+                                        onClick={()=>{
+                                            desactiveScreens(
+                                                {
+                                                    root: onProfile,
+                                                    competitors: [menu],
+                                                    setCompetitors: [setMenu],
+                                                    setRoot: setOnProfile,
+                                                    setOnMessages: setOnProfile
+                                                }
+                                            )
+                                        }}>
+                                            <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
+                                        </div>
+                                        <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
+                                            <span className="nameUserSpan">
+                                                {screenProps ? (screenProps.costumName.custom_name || screenProps.first_name):
+                                                (groupsScreenProps &&
+                                                groupsScreenProps.groupName)
+                                                }
+                                            </span>
+                                            {
+                                                !groupsScreenProps && (
+                                                    <span className="digOrOn">
+                                                    {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
+                                                    }
+                                                    </span>
+                                                ) 
                                             }
-                                        </span>
+                                            
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="settingsContacts">
-                                    <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
-                                        {
-                                            root: menu, 
-                                            competitors: [onProfile],  
-                                            setCompetitors: [setOnProfile], 
-                                            setRoot: setMenu,
-                                            setOnMessages: setMenu
-                                        }
-                                    ) }/>
-                                </div>
+                                    <div className="settingsContacts">
+                                        <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
+                                            {
+                                                root: menu, 
+                                                competitors: [onProfile],  
+                                                setCompetitors: [setOnProfile], 
+                                                setRoot: setMenu,
+                                                setOnMessages: setMenu
+                                            }
+                                        ) }/>
+                                    </div>
+                                </>
+                            )}
+                                
                         </div>
                         <div className="mainContacts mainMsgs">
-                                <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
-                                    <div className="main" >
-                                        {
-                                            messagesContainerByRoom.map((el) => {
-                                                const createdDate = new Date(el.createdIn);
-                                                const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                    
-                                                return (
-                                                    <MessageLabel
-                                                    soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
-                                                    setMessagesContent={setMessagesContent}
-                                                    roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
-                                                    setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
-                                                    participantsData={participantsData}
-                                                    setMsgCreatedInDelete={setMsgCreatedInDelete}
-                                                    funcDeleteMsgScreen={deleteScreenFunc}
-                                                    createdIn={el.createdIn}
-                                                    msgCreatedInDelete={msgCreatedInDelete}/>
-                                    
-                                                );
-                                            })
-                                        }
-                                        <div ref={messagesEndRef}/>
-                                    </div>
+                            <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
+                                <div className="main" >
+                                    {screenProps?.userSoul && !isGroup && (
+                                        messagesContainerByRoom.map((el) => {
+                                            const createdDate = new Date(el.createdIn);
+                                            const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                
+                                            return (
+                                                <MessageLabel
+                                                soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
+                                                setMessagesContent={setMessagesContent}
+                                                roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
+                                                setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
+                                                participantsData={participantsData}
+                                                setMsgCreatedInDelete={setMsgCreatedInDelete}
+                                                funcDeleteMsgScreen={deleteScreenFunc}
+                                                createdIn={el.createdIn}
+                                                msgCreatedInDelete={msgCreatedInDelete}/>
+                                
+                                            );
+                                        })
+                                    )}
+                                    {groupsScreenProps?.userSoul && isGroup && (
+                                        messagesContainerByGroup.map((msg) => {
+                                            const createdDate = new Date(msg.createdIn);
+                                            const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                            
+                                            return (
+                                                <MessageLabel
+                                                soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}userSoul={userSoul} serverIo={serverIo}
+                                                setMessagesContent={setMessagesContent}
+                                                roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
+                                                setMessagesGroupsContent={setMessagesGroupContent}
+                                                participantsBgColor={participantsBgColor}
+                                                groupName={soulNameNow} 
+                                                participantsData={participantsData}
+                                                setMsgCreatedInDelete={setMsgCreatedInDelete}
+                                                funcDeleteMsgScreen={deleteScreenFunc}
+                                                createdIn={msg.createdIn}
+                                                msgCreatedInDelete={msgCreatedInDelete}/>
+                                            )
+                                        })
+                                    )}
+                                    <div ref={messagesEndRef}/>
                                 </div>
-                            
-                           
-                            
+                            </div>
                         </div>
                         <div className=" footerBarMsgs">
                             <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
@@ -304,116 +359,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         </div>
                     </div>
                 </div>
-            
             )}
-            {groupsScreenProps?.userSoul && isGroup && (
-                <div className="flex flex-col">
-                    <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
-                        <div className="headerBarContacts headerBarMsgs py-[5px]">
-                                <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
-                                    setSoulNameNow('')
-                                }}>
-                                    <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
-                                        {_isSemitic ? (
-                                            <FaArrowRight />
-                                        ):
-                                        (
-                                            <FaArrowLeft />      
-                                        )}
-                                    
-                                    </div>
-                                    
-                                    <div className="profilePhotoMainContacts"
-                                    onClick={()=>{
-                                        desactiveScreens(
-                                            {
-                                                root: onProfile,
-                                                competitors: [menu],
-                                                setCompetitors: [setMenu],
-                                                setRoot: setOnProfile,
-                                                setOnMessages: setOnProfile
-                                            }
-                                        )
-                                    }}>
-                                        <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
-                                    </div>
-                                    <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
-                                        <span className="nameUserSpan">
-                                            {groupsScreenProps.groupName}
-                                        </span>
-                                        {/*<span className="digOrOn">
-                                            {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
-                                            }
-                                        </span>*/}
-                                    </div>
-                                </div>
-                                <div className="settingsContacts">
-                                    <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
-                                        {
-                                            root: menu, 
-                                            competitors: [onProfile],  
-                                            setCompetitors: [setOnProfile], 
-                                            setRoot: setMenu,
-                                            setOnMessages: setMenu
-                                        }
-                                    ) }/>
-                                </div>
-                        </div>
-                        <div className="mainContacts mainMsgs">
-                                <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
-                                    <div className="main" >
-                                        {
-                                    
-                                            messagesContainerByGroup.map((msg) => {
-                                                const createdDate = new Date(msg.createdIn);
-                                                const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                                
-                                                return (
-                                                    <MessageLabel
-                                                    soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}userSoul={userSoul} serverIo={serverIo}
-                                                    setMessagesContent={setMessagesContent}
-                                                    roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
-                                                    setMessagesGroupsContent={setMessagesGroupContent}
-                                                    participantsBgColor={participantsBgColor}
-                                                    groupName={soulNameNow} 
-                                                    participantsData={participantsData}
-                                                    setMsgCreatedInDelete={setMsgCreatedInDelete}
-                                                    funcDeleteMsgScreen={deleteScreenFunc}
-                                                    createdIn={msg.createdIn}
-                                                    msgCreatedInDelete={msgCreatedInDelete}/>
-                                                )
-                                            })
-                                        }
-                                    
-                                        <div ref={messagesEndRef}/>
-                                    </div>
-                                </div>
-                        </div>
-                        <div className=" footerBarMsgs">
-                            <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
-                                <EmojisList/>
-                                <div className="messageInput">
-                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={false} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
-                                </div>  
-                                <button className="sendMsg flex items-center justify-center" type="submit">
-                                    <IoMdSend className="text-white w-[75%] h-[75%]"
-                                    style={{rotate: _isSemitic ? '180deg':'0deg'}}/>
-                                </button>
-                            </form>
-                                
-                        </div>
-                    </div>
-                </div>
-            
-            )}
-            {/*deleteMsgScreen && (
-                <DeleteMsgScreen functionContainer={(event: React.MouseEvent<HTMLDivElement>)=>{
-                    if(event.target === event.currentTarget){
-                        setDeleteMsgScreen(false);
-                    }
-                }}
-                msgCreatedIn={msgCreatedIn}/>
-            )*/}
+           
         </>   
     )
 }

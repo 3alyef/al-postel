@@ -32,6 +32,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         onLongPress: ()=>{
             //setDeleteMsgScreen(!deleteMsgScreen);
             if(selectArea) {
+                console.log('ja esta')
                 setMsgCreatedInDelete(
                     (prev)=>{
                         const newV = prev.filter(created => created !== createdIn);
@@ -39,13 +40,8 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                     }
                 )
             } else {
-                setMsgCreatedInDelete(
-                    (prev)=>{
-                        const newV = prev;
-                        newV.push(createdIn);
-                        return newV
-                    }
-                )
+                console.log('nao esta')
+                setMsgCreatedInDelete(prev => [...prev, createdIn])
             }
             
             funcDeleteMsgScreen();
@@ -53,13 +49,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         },
         onClick: ()=>{            
             if(msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
-                setMsgCreatedInDelete(
-                    (prev)=>{
-                        const newV = prev;
-                        newV.push(createdIn);
-                        return newV;
-                    }
-                )
+                setMsgCreatedInDelete(prev => [...prev, createdIn])
                 setSelectArea(true);
             }
         },
@@ -166,6 +156,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         )
         setSelectArea(false);
     }
+    
     return (
         <div className='messageRenderContainer' data-createdin={createdIn}>
             <div className={`messageRender min-w-[25%] 
@@ -200,7 +191,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 }
                 </p>
             </div>
-            <div className="divDeleteML" style={!selectArea ? {display: 'none'}:undefined}
+            <div className="divDeleteML" style={!selectArea ? {display: 'none'} : undefined}
             onClick={divDeleteML}>
 
             </div>
