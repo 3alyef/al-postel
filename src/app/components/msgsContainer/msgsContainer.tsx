@@ -184,8 +184,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     useEffect(()=>{
         const friendState = typingStateRoom.get(soulNameNow);
         if(typeof friendState === 'boolean'){
-            setFriendIsTyping(friendState)
-            //console.log('=========friendState=========', friendState)
+            setFriendIsTyping(friendState);
         }
         
     }, [typingStateRoom])
