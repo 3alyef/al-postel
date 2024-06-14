@@ -21,7 +21,7 @@ export interface propsRoom {
 export interface propsMessagesGroupContent {
     _id?: string;
     fromUser: string;
-    deletedTo: "none" | Map<string, "justTo" | "justFrom" | "all">;
+    deletedTo: "none" | "justTo" | "justFrom" | "all";
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     toUsers: string[];
     message: string;
@@ -31,7 +31,7 @@ export interface propsMessagesGroupContent {
 export interface propsMessagesGroupContentFromServer {
     _id?: string;
     fromUser: string;
-    deletedTo: string;
+    deletedTo: "none" | "justTo" | "justFrom" | "all";
     viewStatus?: string;
     toUsers: string[];
     message: string;
@@ -42,7 +42,7 @@ export interface propsMessagesGroupContentFromServer {
 export interface propsMessagesContent {
     _id?: string;
     fromUser: string;
-    deletedTo: "none" | "justFrom" | "all";
+    deletedTo: "none" | "justTo" | "justFrom" | "all";
     viewStatus?: "onServer" | "delivered" | "seen";
     toUser: string;
     message: string;

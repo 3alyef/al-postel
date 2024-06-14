@@ -3,7 +3,8 @@ import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
-import { deletedToJsonToMap, viewStatusJsonToMap } from "./deserialization.service";
+import { viewStatusJsonToMap } from "./deserialization.service";
+import { DeleteDuoMsg, DeleteGroupMsg } from "@/interfaces/deleteMsg.interface";
 
 export interface msgStatus {
     fromUser: string;
@@ -26,7 +27,7 @@ export interface sendMsg {
 }
 export interface sendMsgGroup {
     fromUser: string;
-    deletedTo: "none" | Map<string, "justTo" | "justFrom" | "all">;
+    deletedTo: "none" | "justTo" | "justFrom" | "all";
     toUsers: string[];
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     message: string;
@@ -65,7 +66,7 @@ export class ConnectM2 {
             }
         });
     }
-    private soulName: string = ''
+    private soulName: string = '';
     public initialize(setUpdateRooms:Dispatch<SetStateAction<Map<string, propsRoom[]>>>, setUserSoul: Dispatch<SetStateAction<string>>, setRoomsListByUserSoul:Dispatch<SetStateAction<Map<string, string>>>, setTypingStateRoom: Dispatch<SetStateAction<Map<string, boolean>>>, setFriendsOnline: Dispatch<SetStateAction<Map<string, boolean>>>, setUserProps: Dispatch<SetStateAction<DecodedData | undefined>>, setGroupsDataById: Dispatch<SetStateAction<Map<string, propsGroups>>>) {
         this.socket.on("connect", () => {
             console.log("Conectado com sucesso! ID do socket:", this.socket.id);
@@ -112,8 +113,6 @@ export class ConnectM2 {
                 })
                 setUpdateRooms((previous) => {
                     const newRooms: Map<string, propsRoom[]> = new Map<string, propsRoom[]>(previous);
-        
-                   
                     const newRoom: propsRoom = {
                         userSoul: el.friendData.userSoul,
                         email: el.friendData.email,
@@ -159,19 +158,12 @@ export class ConnectM2 {
             
         });
 
-        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], room: string, msgCase: string})=>{
+        this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], roomBySoulName: string})=>{
             if(el.messageData.length > 0) {
                 //console.log('msgCase',el.msgCase)
                 this.setMessagesContent((prev)=>{
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev);
-                    /*if (newMessages.has(el.msgCase)) {
-                        const rooms = newMessages.get(el.msgCase)
-                        rooms?.push(...el.messageData);
-                    } else {
-                        newMessages.set(el.msgCase, el.messageData);
-                    }*/
-                    newMessages.set(el.msgCase, el.messageData);
-                    //console.log("previousMsgs + new", newMessages);
+                    newMessages.set(el.roomBySoulName, el.messageData);
                    
                     return newMessages;
                 })
@@ -188,16 +180,11 @@ export class ConnectM2 {
                         if(msgContent.viewStatus){
                             viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
                         }
-                        let deletedTo;
-                        if(msgContent.deletedTo !== "none"){
-                            deletedTo = deletedToJsonToMap(msgContent.deletedTo);
-                        }
                         
-
                         let newV: propsMessagesGroupContent = {
                             ...msgContent,
                             viewStatus,
-                            deletedTo: deletedTo || "none"
+                            deletedTo: msgContent.deletedTo
                         }
                         msgContainerValue.push(newV)
                     })
@@ -306,7 +293,6 @@ export class ConnectM2 {
 
         this.socket.on("msgGroupStatus", (msgData: {createdIn: string, toGroup: string, viewStatus: "onServer" | Map<string, | "delivered" | "seen">})=>{
             if(msgData.createdIn, msgData.toGroup){
-               
                 this.setMessagesGroupContent((previous)=>{
                     let newDataValue: "onServer" | Map<string, propsMessagesGroupContent[]> = new Map(previous);
 
@@ -322,6 +308,76 @@ export class ConnectM2 {
                 })
                
             }
+        })
+
+        this.socket.on("updateMsgDelDuoStatus", ({createdIn, room, deletedTo}: DeleteDuoMsg)=>{
+            //
+            console.log("updateMsgDelDuoStatus", {createdIn , room , deletedTo});
+            //
+
+            let userSoulName: string = '';
+            setRoomsListByUserSoul((prev)=>{
+                prev.forEach((value, key)=>{
+                    if(value === room){
+                        userSoulName = key;
+                    }
+                })
+                return prev;
+            })
+            //console.log("userSoulName", userSoulName)
+            if(userSoulName.length > 0){
+                this.setMessagesContent((prev)=>{
+                    const newV: Map<string, propsMessagesContent[]> = new Map(prev)
+                    
+                    const msgs = newV.get(userSoulName);
+                    console.log("msgsBF",msgs);
+                    
+                    if(msgs){
+                        msgs.forEach((msg)=>{
+                            if(msg.createdIn === createdIn){
+                                msg.deletedTo = deletedTo;
+                                if(deletedTo === "all"){
+                                    msg.message = "";
+                                } else if(deletedTo === "justFrom" && msg.fromUser === this.soulName){
+                                    msg.message = "";
+                                } else if(deletedTo === "justTo" && msg.toUser === this.soulName){
+                                    msg.message = "";
+                                }
+                            }
+                        })
+                    } 
+                   
+                    console.log("msgsAF",msgs);
+                    return newV
+                })
+            }
+        })
+
+        this.socket.on("updateMsgDelGroupStatus", ({createdIn, room , deletedTo}: DeleteGroupMsg)=>{
+            //
+            console.log("updateMsgDelGroupStatus: ", {createdIn , room , deletedTo});
+            //
+            this.setMessagesGroupContent((previous)=>{
+                const newV: Map<string, propsMessagesGroupContent[]> = new Map(previous);
+                const msgsGp = newV.get(room);
+                if(msgsGp){
+                    msgsGp.forEach((msg)=>{
+                        if(msg.createdIn === createdIn){
+                            msg.deletedTo = deletedTo;
+                            if(deletedTo === "all"){
+                                msg.message = "";
+                            } else if(deletedTo === "justFrom" && msg.fromUser === this.soulName){
+                                msg.message = "";
+                            } else if(deletedTo === "justTo" && msg.toUsers.includes(this.soulName)){
+                                msg.message = "";
+                            }
+                        }
+                    })
+                }
+                
+                
+                return newV;
+            })
         })
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
@@ -457,4 +513,14 @@ export class ConnectM2 {
             })
         })
     }
+
+    public deleteDuoMsg(dataMsg: DeleteDuoMsg) {
+        this.socket.emit("deleteDuoMsg", dataMsg)
+    }
+
+    public deleteGroupMsg(dataMsg: DeleteGroupMsg) {
+
+        this.socket.emit("deleteGroupMsg", dataMsg)
+    }
+
 }

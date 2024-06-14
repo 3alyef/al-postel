@@ -83,4 +83,18 @@
     .msgContainer {
         user-select: none;
     }
+    .deleteMsgScreen {
+        .optContainer {
+            h3 {
+                font-size: 18px !important;
+            }
+            .options {
+                .btnStyleOpt {
+                    font-size: 19px !important;
+                }
+            }
+            
+        }
+    }
+    
 }

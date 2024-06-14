@@ -19,12 +19,12 @@ interface propsMessageLabel {
     groupName?:string;
     participantsData: Map<string, propsRoom>;
     setMsgCreatedInDelete: Dispatch<SetStateAction<string[]>>;
-    funcDeleteMsgScreen: ()=> void;
     createdIn: string;
-    msgCreatedInDelete: string[]
+    msgCreatedInDelete: string[];
+    deletedTo: "none" | "justTo" | "justFrom" | "all";
 }
 
-export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, funcDeleteMsgScreen, createdIn}: propsMessageLabel){
+export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo}: propsMessageLabel){
     const [selectArea, setSelectArea] = useState<boolean>(false)
     //
     
@@ -32,7 +32,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         onLongPress: ()=>{
             //setDeleteMsgScreen(!deleteMsgScreen);
             if(selectArea) {
-                console.log('ja esta')
+                //console.log('ja esta')
                 setMsgCreatedInDelete(
                     (prev)=>{
                         const newV = prev.filter(created => created !== createdIn);
@@ -40,15 +40,15 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                     }
                 )
             } else {
-                console.log('nao esta')
+                //console.log('nao esta')
                 setMsgCreatedInDelete(prev => [...prev, createdIn])
             }
             
-            funcDeleteMsgScreen();
+            //funcDeleteMsgScreen();
             setSelectArea(!selectArea);
         },
         onClick: ()=>{            
-            if(msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
+            if(selectArea && msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
                 setMsgCreatedInDelete(prev => [...prev, createdIn])
                 setSelectArea(true);
             }
@@ -132,12 +132,14 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         
     }, [message, messageGroup, soulName, serverIo, setMessagesContent, setMessagesGroupsContent, userSoul]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Element;
-            
-            if (selectArea && !target.closest('.messageRenderContainer')) {
+            //  !target.closest('.messageRenderContainer')
+            // && target.className !== "divDeleteML" && target.className !== "messageRender" && target.closes
+            if (msgCreatedInDelete.length > 0 && !target.closest('.messageRenderContainer')) {
                 setSelectArea(false);
+                setMsgCreatedInDelete([]);
             }
         };
 
@@ -146,7 +148,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
-    }, [selectArea]);
+    }, [selectArea]);*/
     function divDeleteML(){
         setMsgCreatedInDelete(
             (prev)=>{
@@ -156,9 +158,18 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         )
         setSelectArea(false);
     }
-    
+    useEffect(()=>{
+        if(!msgCreatedInDelete.includes(createdIn)){
+            setSelectArea(false);
+        }
+    }, [msgCreatedInDelete])
     return (
-        <div className='messageRenderContainer' data-createdin={createdIn}>
+        <div className='messageRenderContainer' data-createdin={createdIn} onClick={()=>{
+            if(msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
+                setMsgCreatedInDelete(prev => [...prev, createdIn])
+                setSelectArea(true);
+            }
+        }}>
             <div className={`messageRender min-w-[25%] 
             ${(message && message.fromUser === userSoul || messageGroup && messageGroup.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
             {...longPressEvent}
@@ -192,7 +203,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 }
                 </p>
             </div>
-            <div className="divDeleteML" style={!selectArea ? {display: 'none'} : undefined}
+            <div className="divDeleteML" style={!selectArea ? {display: "none"} : undefined}
             onClick={divDeleteML}>
 
             </div>

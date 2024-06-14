@@ -27,6 +27,30 @@
                 font-weight: 300;
             }
         }
+        .sectionDisplayOk {
+            font-size: 23px;
+            padding: .25em;
+        }
+        .binMsgsBtn {
+            padding: .4em;
+            cursor: pointer;
+            border-radius: 100%;
+            .binMsgs {
+                color: white;
+                font-size: 23px;
+                font-weight: 400;
+                
+            }
+        }
+        .binMsgsBtn:hover, .sectionDisplayOk:hover {
+            background-color: #171a1a41;
+        }
+        .binMsgsBtn:active, .sectionDisplayOk:active {
+            background-color: #171a1a79;
+        }
+
+        
+        
     }
     .mainMsgs {
         position: absolute;

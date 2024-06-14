@@ -13,7 +13,7 @@ import TextareaMsg from "../textareaMsg/textareaMsg";
 import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import EmojisList from "../emojisList/emojisList";
 import { propsGroups } from "@/interfaces/groups.interface";
-import DeleteMsgScreen from "../deleteMsgScreen/deleteMsgScreen";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -52,6 +52,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [imageURL, setImageURL] = useState<string>();
     const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
     const [msgCreatedInDelete, setMsgCreatedInDelete] = useState<string[]>([]);
+    const [toDeleteIsFvT, setToDeleteIsFvT] = useState<boolean>(false)
     useEffect(()=>{
         if(isGroup){
             let groupData = groupsDataById.get(soulNameNow);
@@ -198,22 +199,132 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [friendsOnline, soulNameNow])
     useEffect(()=>{
         console.log('messagesContainerByGroup', messagesContainerByGroup);
-    }, [messagesContainerByGroup]);
+    }, [messagesContainerByGroup])
 
-    function deleteScreenFunc(){
-       
+    useEffect(()=>{
+        function checkMessagesToDelete(messages: any[]) {
+            return messages.some(value => 
+                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul
+            );
+        };
+    
+        if (groupsScreenProps?.userSoul && isGroup) {
+            setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByGroup));
+        } else if (screenProps?.userSoul && !isGroup) {
+            setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByRoom));
+        }
+    }, [msgCreatedInDelete])
+
+    function deleteMsgFunc(deletedTo: "none" | "justTo" | "justFrom" | "all", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
+        if(isGroup && toUsers){
+            serverIo.deleteGroupMsg({createdIn, deletedTo, room: soulNameNow, fromUser, toUsers});
+        } else {
+            let roomName = roomsListByUserSoul.get(soulNameNow);
+            if(roomName && toUser){
+                serverIo.deleteDuoMsg({createdIn, deletedTo, room: roomName, fromUser, toUser});
+            }
+        }
+    }
+    function deleteMsg(deletedTo: "none" | "justTo" | "justFrom" | "all"){
+        if(msgCreatedInDelete.length > 0) {
+            if(toDeleteIsFvT){
+                if(isGroup){
+                    const justToMsgs = messagesContainerByGroup.filter((msg)=>{
+                        if(msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul){
+                            return msg
+                        }
+                    })
+                    let justToCreatedIn: string[] = [];
+                    if(justToMsgs){
+                        justToMsgs.forEach((msg)=>{
+                            justToCreatedIn.push(msg.createdIn);
+                        })
+
+                        justToCreatedIn.forEach((crdIn)=>{
+                            const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
+                            if(msg){
+                                deleteMsgFunc("justTo", crdIn, msg.fromUser, undefined, msg.toUsers);
+                            }
+                        })
+                        
+                        let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn))
+                        normalDelete.forEach((crdIn)=>{
+                            const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
+                            if(msg){
+                                deleteMsgFunc(deletedTo, crdIn, msg.fromUser, undefined, msg.toUsers);
+                            }
+                        })
+                    }
+                } else {
+                    const justToMsgs = messagesContainerByRoom.filter((msg)=>{
+                        if(msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul){
+                            return msg
+                        }
+                    })
+                    let justToCreatedIn: string[] = [];
+                    if(justToMsgs){
+                        justToMsgs.forEach((msg)=>{
+                            justToCreatedIn.push(msg.createdIn);
+                        })
+
+                        justToCreatedIn.forEach((crdIn)=>{
+                            const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
+                            if(msg){
+                                deleteMsgFunc("justTo", crdIn, msg.fromUser, msg.toUser);
+                            }
+                        })
+                        
+                        let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn))
+
+                        normalDelete.forEach((crdIn)=>{
+                            const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
+                            if(msg){
+                                deleteMsgFunc(deletedTo, crdIn, msg.fromUser, msg.toUser);
+                            }
+                            
+                        })
+                        
+                    }
+                }
+            } else {
+                msgCreatedInDelete.forEach((crdIn)=>{
+                    let fromUser = '';
+                    let toUser = '';
+                    let toUsers: string[] = [];
+
+                    if(isGroup){
+                        const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
+                        if(msg){
+                            fromUser = msg.fromUser;
+                            toUsers = msg.toUsers;
+                            deleteMsgFunc(deletedTo, crdIn, fromUser, undefined, toUsers);
+                        }
+                    } else {
+                        const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
+                        if(msg) {
+                            fromUser = msg.fromUser;
+                            toUser = msg.toUser;
+                            deleteMsgFunc(deletedTo, crdIn, fromUser, toUser, undefined);
+                        }
+                        
+                    }
+                    
+                })
+               
+            }
+        }
     }
 
     return(
         <> 
-            {(groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup) && (
-                <div className="flex flex-col">
+            {((groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup)) && (
+                <div className="flex flex-col relative">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
                         <div className="headerBarContacts headerBarMsgs py-[5px]">
                             {msgCreatedInDelete.length > 0 ? (
-                                <>
-                                    <div className="flex gap-2 justify-center align-center">
-                                        <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
+                                <div className="flex items-center justify-between w-[100%]">
+                                    <div className="flex justify-between items-center gap-[1em]">
+                                        <div className=" flex items-center cursor-pointer" onClick={()=>{
                                             setMsgCreatedInDelete([])
                                         }}>
                                             <div className=" sectionDisplayOk text-white " >
@@ -228,12 +339,19 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                         </div>
                                         <div>
                                             <h1 className="text-white
-                                            font-[400] text-[18px]">
+                                            font-[400] text-[19px]">
                                                 {msgCreatedInDelete.length}
                                             </h1>
                                         </div>
                                     </div>
-                                </>
+                                    <div className="binMsgsBtn flex justify-center items-center">
+                                        <h2 className="binMsgs" onClick={()=>{
+                                            setDeleteMsgScreen(!deleteMsgScreen)
+                                        }}>
+                                            <RiDeleteBin6Line />
+                                        </h2>
+                                    </div>
+                                </div>
                             ) : (
                                 <>
                                     <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
@@ -312,9 +430,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
                                                 participantsData={participantsData}
                                                 setMsgCreatedInDelete={setMsgCreatedInDelete}
-                                                funcDeleteMsgScreen={deleteScreenFunc}
                                                 createdIn={el.createdIn}
-                                                msgCreatedInDelete={msgCreatedInDelete}/>
+                                                msgCreatedInDelete={msgCreatedInDelete}
+                                                deletedTo={el.deletedTo}/>
                                 
                                             );
                                         })
@@ -334,9 +452,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 groupName={soulNameNow} 
                                                 participantsData={participantsData}
                                                 setMsgCreatedInDelete={setMsgCreatedInDelete}
-                                                funcDeleteMsgScreen={deleteScreenFunc}
                                                 createdIn={msg.createdIn}
-                                                msgCreatedInDelete={msgCreatedInDelete}/>
+                                                msgCreatedInDelete={msgCreatedInDelete} deletedTo={msg.deletedTo}/>
                                             )
                                         })
                                     )}
@@ -356,6 +473,42 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                 </button>
                             </form>
                                 
+                        </div>
+                    </div>
+                </div>
+            )}
+            {deleteMsgScreen && (
+                <div className="deleteMsgScreen" onClick={(e)=>{
+                    if(e.target === e.currentTarget){
+                        setDeleteMsgScreen(false);
+                    }
+                }}>
+                    <div className="optContainer">
+                        <h3>
+                            Deseja apagar {
+                            msgCreatedInDelete.length > 1 ? 
+                            `${msgCreatedInDelete.length} mensagens` 
+                            : 
+                            "a mensagem"
+                            }?
+                        </h3>
+                        <div className="options">
+                            {!toDeleteIsFvT && (
+                                <button className="btnStyleOpt" onClick={()=>{
+                                    deleteMsg("all");
+                                    setDeleteMsgScreen(false);
+                                    setMsgCreatedInDelete([]);
+                                }}>Apagar para todos</button>
+                            )}
+                            <button className="btnStyleOpt" onClick={()=>{
+                                deleteMsg("justFrom")
+                                setDeleteMsgScreen(false);
+                                setMsgCreatedInDelete([]);
+                            }}>Apagar para mim</button>
+                            <button
+                            onClick={()=>{
+                                setDeleteMsgScreen(false); 
+                            }} className="btnStyleOpt">Cancelar</button>
                         </div>
                     </div>
                 </div>
