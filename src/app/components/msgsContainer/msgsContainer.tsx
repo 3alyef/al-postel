@@ -204,7 +204,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     useEffect(()=>{
         function checkMessagesToDelete(messages: any[]) {
             return messages.some(value => 
-                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul
+                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul /*&& (
+                    value.deletedTo !== "justFrom" || value.deletedTo !== "justTo"
+                )*/ && value.deletedTo !== "none"
             );
         };
     
@@ -215,7 +217,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }, [msgCreatedInDelete])
 
-    function deleteMsgFunc(deletedTo: "none" | "justTo" | "justFrom" | "all", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
+    function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
         if(isGroup && toUsers){
             serverIo.deleteGroupMsg({createdIn, deletedTo, room: soulNameNow, fromUser, toUsers});
         } else {
@@ -225,7 +227,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             }
         }
     }
-    function deleteMsg(deletedTo: "none" | "justTo" | "justFrom" | "all"){
+    function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo"){
         if(msgCreatedInDelete.length > 0) {
             if(toDeleteIsFvT){
                 if(isGroup){
@@ -432,8 +434,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 setMsgCreatedInDelete={setMsgCreatedInDelete}
                                                 createdIn={el.createdIn}
                                                 msgCreatedInDelete={msgCreatedInDelete}
-                                                deletedTo={el.deletedTo}/>
-                                
+                                                deletedTo={el.deletedTo}
+                                                fromUser={el.fromUser}
+                                                isGroup={false} />
                                             );
                                         })
                                     )}
@@ -444,7 +447,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                             
                                             return (
                                                 <MessageLabel
-                                                soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}userSoul={userSoul} serverIo={serverIo}
+                                                soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}
+                                                userSoul={userSoul} serverIo={serverIo}
                                                 setMessagesContent={setMessagesContent}
                                                 roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
                                                 setMessagesGroupsContent={setMessagesGroupContent}
@@ -453,7 +457,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 participantsData={participantsData}
                                                 setMsgCreatedInDelete={setMsgCreatedInDelete}
                                                 createdIn={msg.createdIn}
-                                                msgCreatedInDelete={msgCreatedInDelete} deletedTo={msg.deletedTo}/>
+                                                msgCreatedInDelete={msgCreatedInDelete} deletedTo={msg.deletedTo}
+                                                fromUser={msg.fromUser}
+                                                isGroup={true}
+                                                toUsers={msg.toUsers}/>
                                             )
                                         })
                                     )}

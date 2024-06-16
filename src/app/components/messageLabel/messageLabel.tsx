@@ -4,6 +4,7 @@ import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../a
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import useLongPress from "@/hooks/useLongPress.hook";
+import { RiForbid2Line } from "react-icons/ri";
 
 interface propsMessageLabel {
     message?: propsMessagesContent;
@@ -21,10 +22,13 @@ interface propsMessageLabel {
     setMsgCreatedInDelete: Dispatch<SetStateAction<string[]>>;
     createdIn: string;
     msgCreatedInDelete: string[];
-    deletedTo: "none" | "justTo" | "justFrom" | "all";
+    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    fromUser: string;
+    isGroup: boolean;
+    toUsers?: string[] 
 }
 
-export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo}: propsMessageLabel){
+export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo, fromUser, isGroup, toUsers}: propsMessageLabel){
     const [selectArea, setSelectArea] = useState<boolean>(false)
     //
     
@@ -163,7 +167,9 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             setSelectArea(false);
         }
     }, [msgCreatedInDelete])
-    return (
+    
+    /**!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && fromUser === soulName) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && fromUser === soulName)) */
+    const data = () => (
         <div className='messageRenderContainer' data-createdin={createdIn} onClick={()=>{
             if(msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
                 setMsgCreatedInDelete(prev => [...prev, createdIn])
@@ -194,7 +200,20 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                     )
                 }
                 
-                <p className="msgContainer ltr">{message && message.message || messageGroup && messageGroup.message}</p>
+                <p className="msgContainer ltr">
+                    {
+                        (
+                            !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
+                            && !(deletedTo === "allTo" || deletedTo === "allFrom")
+                        )
+                        ? 
+                        (message && message.message || messageGroup && messageGroup.message) 
+                        : 
+                        (<span className="text-slate-400">
+                            Mensagem Apagada <RiForbid2Line/>
+                        </span>)
+                    }
+                </p>
                 
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
@@ -208,6 +227,17 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
 
             </div>
         </div>
-       
     )
+
+    
+    if(isGroup && toUsers){
+        if(!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && toUsers.includes(fromUser)) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && toUsers.includes(fromUser))){
+            return data();
+        }
+    } else if(!isGroup){
+        if(!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && fromUser === soulName) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && fromUser === soulName)){
+            return data();
+        }
+    }
+    
 }

@@ -16,7 +16,7 @@ export interface msgStatus {
 
 export interface sendMsg {
     fromUser: string;
-    deletedTo: "none" | "justFrom" | "all";
+    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
     viewStatus?: "onServer" | "delivered" | "seen";
     toUser: string;
     toRoom?: string;
@@ -27,7 +27,7 @@ export interface sendMsg {
 }
 export interface sendMsgGroup {
     fromUser: string;
-    deletedTo: "none" | "justTo" | "justFrom" | "all";
+    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
     toUsers: string[];
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     message: string;
