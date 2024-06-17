@@ -209,7 +209,8 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                         ? 
                         (message && message.message || messageGroup && messageGroup.message) 
                         : 
-                        (<span className="text-slate-400">
+                        (<span className="flex items-center gap-1" 
+                        style={{color: "#090909d4"}}>
                             Mensagem Apagada <RiForbid2Line/>
                         </span>)
                     }
