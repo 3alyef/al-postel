@@ -342,6 +342,8 @@ export class ConnectM2 {
                                     msg.message = "";
                                 } else if(deletedTo === "justTo" && msg.toUser === this.soulName){
                                     msg.message = "";
+                                } else if( msg.deletedTo === "allFrom") {
+                                    msg.message = ""
                                 }
                             }
                         })
@@ -370,6 +372,8 @@ export class ConnectM2 {
                                 msg.message = "";
                             } else if(deletedTo === "justTo" && msg.toUsers.includes(this.soulName)){
                                 msg.message = "";
+                            } else if( msg.deletedTo === "allFrom") {
+                                msg.message = ""
                             }
                         }
                     })

@@ -218,6 +218,9 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
                 {
+                    !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
+                    && !(deletedTo === "allTo" || deletedTo === "allFrom") && 
+                    
                     message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)
                 }
                 </p>
