@@ -166,9 +166,34 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         if(!msgCreatedInDelete.includes(createdIn)){
             setSelectArea(false);
         }
-    }, [msgCreatedInDelete])
-    
-    /**!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && fromUser === soulName) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && fromUser === soulName)) */
+    }, [msgCreatedInDelete]);
+    const msgDeleted = ()=> (
+        <span className="flex items-center gap-1" 
+        style={fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"}}>
+            Mensagem Apagada <RiForbid2Line/>
+        </span>
+    )
+    const msg = () => {
+        if((message && message.message)){
+            return <>{message.message}</>
+        } else if (messageGroup && messageGroup.message){
+            return <>{messageGroup.message}</>
+        } else {
+            if(deletedTo === "justAll"){
+                return
+            } else if(deletedTo === "justFrom" && soulName === userSoul) {
+                return
+            } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
+                return
+            } else if(deletedTo === "all") {
+                return msgDeleted();
+            } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
+                return msgDeleted();
+            } else if(deletedTo === "allTo" && userSoul === soulName) {
+                return msgDeleted();
+            }
+        }
+    }
     const data = () => (
         <div className='messageRenderContainer' data-createdin={createdIn} onClick={()=>{
             if(msgCreatedInDelete.length > 0 && !msgCreatedInDelete.includes(createdIn)){
@@ -202,17 +227,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 
                 <p className="msgContainer ltr">
                     {
-                        (
-                            !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
-                            && !(deletedTo === "allTo" || deletedTo === "allFrom")
-                        )
-                        ? 
-                        (message && message.message || messageGroup && messageGroup.message) 
-                        : 
-                        (<span className="flex items-center gap-1" 
-                        style={fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"}}>
-                            Mensagem Apagada <RiForbid2Line/>
-                        </span>)
+                        msg()
                     }
                 </p>
                 
