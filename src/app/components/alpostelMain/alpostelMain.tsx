@@ -151,7 +151,6 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             { 
                 serverIo && (
                     <>
-
                         <section className={`sectionContact ${soulNameNow.length > 0 ? 'sectionDisplayNone' : ''}`} style={{borderRadius: _isSemitic ? "0px 5px 5px 0px": "5px 0px 0px 5px"}}>
                             <ContactsContainer _isSemitic={_isSemitic} serverIo={serverIo} updateRooms={updateRooms} setUpdateRooms={setUpdateRooms} userSoul={userSoul} setScreenMsg={setScreenMsg} setSoulNameNow={setSoulNameNow} userProps={userProps} messagesContent={messagesContent} groupsDataById={groupsDataById}
                             setScreenMsgGroup={setScreenMsgGroup} setIsGroup={setIsGroup}/>

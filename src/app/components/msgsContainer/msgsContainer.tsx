@@ -227,6 +227,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             }
         }
     }
+    
     function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo"){
         if(msgCreatedInDelete.length > 0) {
             if(toDeleteIsFvT){
