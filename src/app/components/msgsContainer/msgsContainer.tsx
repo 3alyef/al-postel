@@ -215,6 +215,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         } else if (screenProps?.userSoul && !isGroup) {
             setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByRoom));
         }
+        console.log("msgCreatedInDelete", msgCreatedInDelete)
     }, [msgCreatedInDelete])
 
     function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
@@ -227,7 +228,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             }
         }
     }
-    
+
     function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo"){
         if(msgCreatedInDelete.length > 0) {
             if(toDeleteIsFvT){
