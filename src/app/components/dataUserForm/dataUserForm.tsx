@@ -30,10 +30,10 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
 
     const onFocus = async ()=>{
         setOnFocusStyle(true);
-        console.log('oi, password')
+        //console.log('oi, password')
 
         const ok:boolean = await verifyAll(locale, email, setBannerReturn, true);
-        console.log(ok)
+        //console.log(ok)
         if(!ok){
             //console.log("tera de reiniciar")
             // Quando o token da senha expirar voltará para a primeira tela

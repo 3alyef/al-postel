@@ -91,7 +91,7 @@ export default function RegisterEmailPassword({locale, _isSemitic, email, passwo
                         setProcessErrorStylePass(false) 
                         setProcessErrorStyleRPass(false)
                         const resp: {message: string, status: number} = await registerUser(firstNameValue, lastNameValue, emailValue, passwordValue, repeatPasswordValue);
-                        console.log("RESPOSTA", resp)
+                        //console.log("RESPOSTA", resp)
                         if(resp.status === 201){
                             redirectToNextPage("login")
                         }

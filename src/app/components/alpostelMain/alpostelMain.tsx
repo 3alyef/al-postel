@@ -90,7 +90,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent, setMessagesGroupContent);
             server.initialize(setUpdateRooms, setUserSoul, setRoomsListByUserSoul, setTypingStateRoom, setFriendsOnline, setUserProps, setGroupsDataById);
             setServerIo(server);
-            console.log('updateRooms', updateRooms)
+            //console.log('updateRooms', updateRooms)
         }
     }, []); 
 
@@ -144,7 +144,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
 
     useEffect(()=>{
         //console.log("participantsBgColor", participantsBgColor)
-        console.log('participantsData', participantsData)
+        //console.log('participantsData', participantsData)
     }, [/*participantsBgColor*/ participantsData])
     return(
         <>

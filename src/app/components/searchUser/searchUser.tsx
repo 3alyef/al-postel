@@ -44,7 +44,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, s
                     const dataUser = await serverIo.searchUser(searchFormValue);
                     console.log(dataUser)
                     if (Array.isArray(dataUser)) {
-                        console.log("entrou")
+                        //console.log("entrou")
                         setSearchResp(dataUser);
                     } else {
                         const isDataUser = dataUser === 'Usuário não encontrado na base de dados'
@@ -76,7 +76,7 @@ export function SearchUser({_isSemitic, serverIo, updateRooms, setUpdateRooms, s
     }, [dataSearchFormChange]);
     
     async function makeNetwork(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        console.log('userSoul', e.currentTarget.dataset.soulname);
+        //console.log('userSoul', e.currentTarget.dataset.soulname);
         
         const userSoul = e.currentTarget.dataset.soulname
         if(!userSoul) return

@@ -1,6 +1,4 @@
 import DataUserForm from "@/app/components/dataUserForm/dataUserForm";
-import EmailLoginProfile from "@/app/components/emailLoginProfile/emailLoginProfile";
-import FormPasswordLogin from "@/app/components/formPasswordLogin/formPasswordLogin";
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 export default async function Singnin({
@@ -25,7 +23,6 @@ export default async function Singnin({
                     <DataUserForm Create_Account={dictionary.Login.Create_Account} Enter_your_password={dictionary.Login.Enter_your_password} Forgot_password={dictionary.Login.Forgot_password} Next={dictionary.Login.Next} _isSemitic={_isSemitic} locale={locale}
                     messageError={dictionary.Login.Incorrect_password}/>
                 </div>
-            
             </section>
         </>
     )

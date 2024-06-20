@@ -223,14 +223,14 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
     };
 
     useEffect(()=>{
-        console.log('imageFile: ', imageFile)
+        //console.log('imageFile: ', imageFile)
         if(imageFile){
             serverIo.setProfileImage(imageFile)
         }
     }, [imageFile]);
 
     useEffect(()=>{
-        console.log('groupsDataById', groupsDataById);
+        //console.log('groupsDataById', groupsDataById);
         const updateGroupsData = () => {
             const updateGroupsData: propsDataGroups[] = Array.from(groupsDataById).map(([key, propsRoom]) =>{
                 let unreadMsgs = 0;
@@ -521,7 +521,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                             
                                             <div className="galery optContainer">
                                                 <div className="optionsContent" onClick={()=>{
-                                                    console.log("Galery");
+                                                    //console.log("Galery");
                                                     handleDivClick()
                                                 }}>
                                                     <SlPicture />

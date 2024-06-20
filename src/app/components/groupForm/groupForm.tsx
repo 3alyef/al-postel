@@ -57,7 +57,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
         let soulNamePart = e.currentTarget.dataset.soulname;
         
         if(soulNamePart) {
-            console.log('soulNamePart', soulNamePart) 
+            //console.log('soulNamePart', soulNamePart) 
             setParticipantsSoulNames((prev) => {
                 let newValue = [...prev];
                 //console.log('newValue', newValue);
@@ -72,8 +72,8 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
     }
 
     useEffect(()=>{
-        console.log('participantsSoulNames', participantsSoulNames);
-        console.log('updateRooms', updateRooms)
+        //console.log('participantsSoulNames', participantsSoulNames);
+        //console.log('updateRooms', updateRooms)
         setParticipantsValue(participantsSoulNames.length)
         const updateRoomsData = () => {
             const novasSalasData: roomsDataProps[][] = [];
@@ -100,7 +100,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
             
         };
 
-        console.log('roomsDataSelected', roomsDataSelected)
+        //console.log('roomsDataSelected', roomsDataSelected)
         updateRoomsData();
     }, [participantsSoulNames]);
     function createGroupBtn() {

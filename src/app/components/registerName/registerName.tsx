@@ -58,7 +58,7 @@ export default function RegisterName({locale, _isSemitic, first_name, last_name,
         const previousURL = GlobalVariables.previousURL;
         if(previousURL.includes("register/email-password")){
             const fName = localStorage.getItem("fNameReg");
-            console.log("fName", fName)
+            //console.log("fName", fName)
             if(fName){
                 setFirstNameValue(fName);
                 const lName = localStorage.getItem("lNameReg");

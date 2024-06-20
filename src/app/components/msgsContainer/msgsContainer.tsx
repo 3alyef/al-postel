@@ -70,12 +70,12 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         if(isGroup){
             const msgArray = Array.from(screenMsgGroup.values());
             setGroupsScreenProps(msgArray[0]);
-            console.log("msgArray", msgArray);
+            //console.log("msgArray", msgArray);
 
         } else {
             const msgArray = Array.from(screenMsg.values());
             setScreenProps(msgArray[0]);
-            console.log("msgArray", msgArray);
+            //console.log("msgArray", msgArray);
         }
         
        
@@ -87,7 +87,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     function sendMsg(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        console.log(msg, "/*/*/*/", groupsScreenProps)
+        //console.log(msg, "/*/*/*/", groupsScreenProps)
         if(msg.length > 0 ) {
             const dateInf = new Date(); 
             const createdIn = dateInf.toISOString();
@@ -108,7 +108,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     toUsers: groupsScreenProps.groupParticipants,
                     viewStatus: undefined
                 };
-                console.log('msgS Group: ', msgS)
+                //console.log('msgS Group: ', msgS)
                 serverIo.sendMsg(true, undefined, msgS);
             }
             setMsg('');
@@ -140,7 +140,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 const messagesForRoom = messagesContent.get(soulNameNow);
                 if (messagesForRoom) {
                     //console.log("Before sorting:", messagesForRoom);
-                    console.log('messagesForRoom', messagesForRoom)
+                    //console.log('messagesForRoom', messagesForRoom)
                     setMessagesContainerByRoom(messagesForRoom);
                 } else {
                     setMessagesContainerByRoom([])
@@ -160,7 +160,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         };
 
         updateMessages();
-        console.log('messageGroupContent', messageGroupContent)
+        //console.log('messageGroupContent', messageGroupContent)
         scrollToBottom();
     
     }, [soulNameNow, messagesContent, messageGroupContent]);
@@ -198,7 +198,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }, [friendsOnline, soulNameNow])
     useEffect(()=>{
-        console.log('messagesContainerByGroup', messagesContainerByGroup);
+        //console.log('messagesContainerByGroup', messagesContainerByGroup);
     }, [messagesContainerByGroup])
 
     useEffect(()=>{
@@ -215,7 +215,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         } else if (screenProps?.userSoul && !isGroup) {
             setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByRoom));
         }
-        console.log("msgCreatedInDelete", msgCreatedInDelete)
+        //console.log("msgCreatedInDelete", msgCreatedInDelete)
     }, [msgCreatedInDelete])
 
     function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
@@ -319,6 +319,9 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }
 
+    useEffect(()=>{
+        console.log("messagesContainerByRoom", messagesContainerByRoom)
+    }, [messagesContainerByRoom])
     return(
         <> 
             {((groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup)) && (
