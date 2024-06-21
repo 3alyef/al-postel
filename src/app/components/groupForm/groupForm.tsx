@@ -90,7 +90,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
                         email: propsSala.email,
                         roomName: sName,
                         lastMsgData: '',
-                        lastMSGContent: '',
+                        lastMSGContent: undefined,
                         whoLastSender: '',
                     }));
                     novasSalasData.push(salaArray);
@@ -206,6 +206,7 @@ export default function GroupForm({_isSemitic, roomsData, updateRooms, serverIo 
                                                         whoLastSender={room.whoLastSender}
                                                         type2={true}
                                                         isSelected={participantsSoulNames.includes(room.soulName)}
+                                                        userSoul={""}
                                                     />
                                                 )
                                             }

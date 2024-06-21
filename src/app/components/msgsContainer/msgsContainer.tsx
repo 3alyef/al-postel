@@ -204,9 +204,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     useEffect(()=>{
         function checkMessagesToDelete(messages: any[]) {
             return messages.some(value => 
-                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul /*&& (
-                    value.deletedTo !== "justFrom" || value.deletedTo !== "justTo"
-                )*/ && value.deletedTo !== "none"
+                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul && !(value.deletedTo !== "none")
             );
         };
     

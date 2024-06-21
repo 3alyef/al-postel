@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import { MouseEventHandler, useEffect, useState } from "react";
+import { propsMessagesContent } from "../alpostelMain/alpostelMain";
+import { msgDeleted } from "../messageLabel/messageLabel";
 
 interface propsDivLabel {
     sourceImage: string | undefined;
@@ -14,12 +16,13 @@ interface propsDivLabel {
     soulName: string;
     lastMsgData?: string;
     whoLastSender?:string;
-    lastMSGContent?:string;
+    lastMSGContent?:propsMessagesContent;
     type2?: boolean;
     isSelected?: boolean;
+    userSoul: string
 
 }
-export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent, type2, isSelected}: propsDivLabel){
+export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unreadMessages, _custom_name_contact, email, onClick, roomName, soulName, lastMsgData, whoLastSender, lastMSGContent, type2, isSelected, userSoul}: propsDivLabel){
     const [imageUser, setImageUser] = useState<string>('/imgs/assets/person.png')
 
     useEffect(()=>{
@@ -62,7 +65,7 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                             }
                             {whoLastSender || ''}
                             {whoLastSender && ": "}
-                            {lastMSGContent || ''}
+                            {lastMSGContent && lastMSGContent.deletedTo === 'none' && lastMSGContent.message  || lastMSGContent && msgDeleted(lastMSGContent.fromUser, userSoul)}
                         </p>
                         {unreadMessages > 0 && (
                             <p className="unreadMessages">

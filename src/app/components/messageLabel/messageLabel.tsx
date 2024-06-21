@@ -27,6 +27,12 @@ interface propsMessageLabel {
     isGroup: boolean;
     toUsers?: string[] 
 }
+export const msgDeleted = (fromUser: string, userSoul: string)=> (
+    <span className="flex items-center gap-1" 
+    style={fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"}}>
+        Mensagem Apagada <RiForbid2Line/>
+    </span>
+)
 
 export default function MessageLabel({message, messageGroup, soulName, createdTime, userSoul, serverIo, setMessagesContent, setMessagesGroupsContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo, fromUser, isGroup, toUsers}: propsMessageLabel){
     const [selectArea, setSelectArea] = useState<boolean>(false)
@@ -167,12 +173,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             setSelectArea(false);
         }
     }, [msgCreatedInDelete]);
-    const msgDeleted = ()=> (
-        <span className="flex items-center gap-1" 
-        style={fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"}}>
-            Mensagem Apagada <RiForbid2Line/>
-        </span>
-    )
+    
     const msg = () => {
         if((message && message.message)){
             return <>{message.message}</>
@@ -186,11 +187,11 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
                 return
             } else if(deletedTo === "all") {
-                return msgDeleted();
+                return msgDeleted(fromUser, userSoul);
             } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
-                return msgDeleted();
+                return msgDeleted(fromUser, userSoul);
             } else if(deletedTo === "allTo" && userSoul === soulName) {
-                return msgDeleted();
+                return msgDeleted(fromUser, userSoul);
             }
         }
     }
@@ -250,11 +251,23 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
 
     
     if(isGroup && toUsers){
-        if(!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && toUsers.includes(fromUser)) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && toUsers.includes(fromUser))){
+        if(
+        !(deletedTo === "justAll") && 
+        !(deletedTo === "justFrom" && fromUser === userSoul) && 
+        !(deletedTo === "justTo" && !toUsers.includes(fromUser)) && 
+        !(deletedTo === "allFrom" && fromUser === userSoul) && 
+        !(deletedTo === "allTo" && !toUsers.includes(fromUser))
+        ){
             return data();
         }
     } else if(!isGroup){
-        if(!(deletedTo === "justAll") && !(deletedTo === "justFrom" && fromUser === userSoul) && !(deletedTo === "justTo" && fromUser === soulName) && !(deletedTo === "allFrom" && fromUser === userSoul) && !(deletedTo === "allTo" && fromUser === soulName)){
+        if(
+        !(deletedTo === "justAll") && 
+        !(deletedTo === "justFrom" && fromUser === userSoul) && 
+        !(deletedTo === "justTo" && fromUser !== soulName) && 
+        !(deletedTo === "allFrom" && fromUser === userSoul) && 
+        !(deletedTo === "allTo" && fromUser !== soulName)
+        ){
             return data();
         }
     }

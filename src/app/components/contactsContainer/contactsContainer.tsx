@@ -39,7 +39,7 @@ export interface roomsDataProps {
     email: string | undefined; 
     roomName: string; 
     lastMsgData: string | undefined; 
-    lastMSGContent: string | undefined; 
+    lastMSGContent: propsMessagesContent | undefined; 
     whoLastSender: string | undefined;
 }
 
@@ -104,8 +104,6 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
             roomMap.set(soulName, groupProps)
             setScreenMsgGroup(roomMap)  
         }
-        
-       
     }
 
     const onProfilePhotoStyle: CSSProperties = {
@@ -139,7 +137,28 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     let whoLastSender;
 
                     if (messages) {
-                        const lastMsg = messages[messages.length - 1];
+                        let lastMsg = messages[messages.length - 1];
+                        for (let i = messages.length - 1; i >= 0; i--) {
+                            if ( messages[i].deletedTo !== "justAll" &&
+                            (messages[i].deletedTo === "none" || messages[i].deletedTo === "all" ||
+                            (messages[i].deletedTo === "allFrom"
+                            && messages[i].fromUser !== userSoul
+                            ) ||
+                            (messages[i].deletedTo === "allTo" 
+                            && messages[i].fromUser === userSoul
+                            ) ||
+                            (messages[i].deletedTo === "justFrom"
+                            && messages[i].fromUser !== userSoul
+                            ) || 
+                            (messages[i].deletedTo === "justTo"
+                            && messages[i].fromUser !== userSoul
+                            ) )
+                            ) {
+                                lastMsg = messages[i];
+                                break; 
+                            }
+                        }
+                    
                         if (lastMsg && lastMsg.createdIn) {
                             const now = new Date();
                             const msgDate = new Date(lastMsg.createdIn);
@@ -160,7 +179,8 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                 lastUpdate = `${day}.${month}.${year}`;
                             }
                         }
-                        lastMSGContent = lastMsg.message;
+                        lastMSGContent = lastMsg;
+
                         if (lastMsg.fromUser === userSoul) {
                             //whoLastSender = "you";
                         }
@@ -325,6 +345,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                             email="" onClick={(e)=>{showMessages(e, undefined, undefined, true)}}
                                             roomName={room.groupName} soulName={room.userSoul} sourceImage={room.imageData.userImage} unreadMessages={0} _custom_name_contact={room.groupName}
                                             key={room.key}
+                                            userSoul={userSoul}
                                             />
                                         )
                                     })
@@ -347,6 +368,7 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                                         lastMsgData={room.lastMsgData}
                                         lastMSGContent={room.lastMSGContent}
                                         whoLastSender={room.whoLastSender}
+                                        userSoul={userSoul}
                                     />
                                 ))}
                             </div>
