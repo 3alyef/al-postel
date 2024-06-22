@@ -65,7 +65,7 @@ export function ContactsContainerDivLabel({sourceImage, _isGroup, _howLeast, unr
                             }
                             {whoLastSender || ''}
                             {whoLastSender && ": "}
-                            {lastMSGContent && lastMSGContent.deletedTo === 'none' && lastMSGContent.message  || lastMSGContent && msgDeleted(lastMSGContent.fromUser, userSoul)}
+                            {lastMSGContent && lastMSGContent.deletedTo === 'none' && lastMSGContent.message  || lastMSGContent && msgDeleted(lastMSGContent.fromUser, userSoul, true)}
                         </p>
                         {unreadMessages > 0 && (
                             <p className="unreadMessages">

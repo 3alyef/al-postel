@@ -135,8 +135,12 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     let unreadMsgs = 0;
                     let lastMSGContent;
                     let whoLastSender;
-
-                    if (messages) {
+                    /*if(messages && messages.length > 0) {
+                        console.log("messages", messages)
+                        let lastMsg = messages[messages.length - 1];
+                        console.log('lastMsg', lastMsg)
+                    }*/
+                    if (messages && messages.length > 0) {
                         let lastMsg = messages[messages.length - 1];
                         for (let i = messages.length - 1; i >= 0; i--) {
                             if ( messages[i].deletedTo !== "justAll" &&

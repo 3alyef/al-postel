@@ -52,7 +52,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     const [imageURL, setImageURL] = useState<string>();
     const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
     const [msgCreatedInDelete, setMsgCreatedInDelete] = useState<string[]>([]);
-    const [toDeleteIsFvT, setToDeleteIsFvT] = useState<boolean>(false)
+    const [showDeleteAll, setShowDeleteAll] = useState<boolean>(false)
     useEffect(()=>{
         if(isGroup){
             let groupData = groupsDataById.get(soulNameNow);
@@ -162,7 +162,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         updateMessages();
         //console.log('messageGroupContent', messageGroupContent)
         scrollToBottom();
-    
+        console.log("messagesContent", messagesContent)
     }, [soulNameNow, messagesContent, messageGroupContent]);
 
     function onBlur(){
@@ -197,23 +197,19 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             setIsOnlineFriend(friendStatus);
         }
     }, [friendsOnline, soulNameNow])
-    useEffect(()=>{
-        //console.log('messagesContainerByGroup', messagesContainerByGroup);
-    }, [messagesContainerByGroup])
 
     useEffect(()=>{
-        function checkMessagesToDelete(messages: any[]) {
-            return messages.some(value => 
-                msgCreatedInDelete.includes(value.createdIn) && value.fromUser !== userSoul && !(value.deletedTo !== "none")
-            );
+        function checkMessagesToDelete(messages: any[]): boolean {
+            let diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && ((msg.deletedTo === "none" || msg.deletedTo !== "justTo") || msg.fromUser !== userSoul))
+            
+            return diverge.length > 0 ? false : true;
         };
     
         if (groupsScreenProps?.userSoul && isGroup) {
-            setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByGroup));
+            setShowDeleteAll(checkMessagesToDelete(messagesContainerByGroup));
         } else if (screenProps?.userSoul && !isGroup) {
-            setToDeleteIsFvT(checkMessagesToDelete(messagesContainerByRoom));
+            setShowDeleteAll(checkMessagesToDelete(messagesContainerByRoom));
         }
-        //console.log("msgCreatedInDelete", msgCreatedInDelete)
     }, [msgCreatedInDelete])
 
     function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
@@ -229,7 +225,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo"){
         if(msgCreatedInDelete.length > 0) {
-            if(toDeleteIsFvT){
+            if(!showDeleteAll){
                 if(isGroup){
                     const justToMsgs = messagesContainerByGroup.filter((msg)=>{
                         if(msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul){
@@ -503,7 +499,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                             }?
                         </h3>
                         <div className="options">
-                            {!toDeleteIsFvT && (
+                            {showDeleteAll && (
                                 <button className="btnStyleOpt" onClick={()=>{
                                     deleteMsg("all");
                                     setDeleteMsgScreen(false);

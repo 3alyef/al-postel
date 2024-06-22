@@ -161,9 +161,45 @@ export class ConnectM2 {
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], roomBySoulName: string})=>{
             if(el.messageData.length > 0) {
                 //console.log('msgCase',el.msgCase)
+                console.log("previousMSGS", el.messageData)
                 this.setMessagesContent((prev)=>{
+                    
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev);
-                    newMessages.set(el.roomBySoulName, el.messageData);
+                    let msgs: propsMessagesContent[];
+
+                    msgs = el.messageData.filter((msg)=>{
+                        let deletedTo = msg.deletedTo;
+                        //msg.deletedTo = deletedTo;
+                        if (deletedTo === "all") {
+                            msg.message = "";
+                            return true;
+                        } else if (deletedTo === "justFrom" && msg.fromUser === this.soulName) {
+                            return false;
+                        } else if (deletedTo === "justTo" && msg.toUser === this.soulName) {
+                            return false;
+                        } else if (deletedTo === "allFrom") {
+                            if(msg.fromUser === this.soulName){
+                                return false;
+                            } else {
+                                msg.message = "";
+                                return true
+                            }
+                        } else if (deletedTo === "allTo") {
+                            if(msg.toUser === this.soulName){
+                                return false;
+                            } else {
+                                msg.message = "";
+                                return true;
+                            }
+                        } else if (deletedTo === "justAll") {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                        
+                    })
+                    console.log("msgs", msgs)
+                    newMessages.set(el.roomBySoulName, msgs);
                    
                     return newMessages;
                 })
@@ -171,10 +207,23 @@ export class ConnectM2 {
             
         })
         this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContentFromServer[]})=>{
+            
             if(el.messageData.length > 0) {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
-                    let msgContainerValue: propsMessagesGroupContent[] = []
+                    let msgContainerValue: propsMessagesGroupContent[] = [];
+                    el.messageData.map((msg) => {
+                        let deletedTo = msg.deletedTo;
+                        if (deletedTo === "all" || 
+                            (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
+                            (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
+                            deletedTo === "allFrom") {
+                            return { ...msg, message: "" };
+                        }
+                        
+                        return msg;
+                    });
+        
                     el.messageData.forEach((msgContent)=>{
                         let viewStatus;
                         if(msgContent.viewStatus){
@@ -191,8 +240,8 @@ export class ConnectM2 {
 
                     newMessages.set(el.messageData[0].toGroup, msgContainerValue);
 
-                    console.log("newMessages(previous): ", newMessages);
-                    console.log("messageData: ", el.messageData)
+                    //console.log("newMessages(previous): ", newMessages);
+                    //console.log("messageData: ", el.messageData)
                     return newMessages
                 })
                 //console.log("el: messageData", el.messageData.length >0 ? "yesssss":"no")
@@ -331,58 +380,70 @@ export class ConnectM2 {
                     
                     const msgs = newV.get(userSoulName);
                     console.log("msgsBF",msgs);
-                    
-                    if(msgs){
-                        msgs.forEach((msg)=>{
-                            if(msg.createdIn === createdIn){
+                    if (msgs) {
+                        const updatedMessages = msgs.filter((msg) => {
+                            if (msg.createdIn === createdIn) {
                                 msg.deletedTo = deletedTo;
-                                if(deletedTo === "all"){
+                                if (deletedTo === "all") {
                                     msg.message = "";
-                                } else if(deletedTo === "justFrom" && msg.fromUser === this.soulName){
-                                    msg.message = "";
-                                } else if(deletedTo === "justTo" && msg.toUser === this.soulName){
-                                    msg.message = "";
-                                } else if( msg.deletedTo === "allFrom") {
-                                    msg.message = ""
+                                } else if (deletedTo === "justFrom" && msg.fromUser === this.soulName) {
+                                    return false;
+                                } else if (deletedTo === "justTo" && msg.toUser === this.soulName) {
+                                    return false;
+                                } else if (deletedTo === "allFrom") {
+                                    if(msg.fromUser === this.soulName){
+                                        return false;
+                                    } else {
+                                        msg.message = ""
+                                    }
+                                } else if (deletedTo === "allTo") {
+                                    if(msg.toUser === this.soulName){
+                                        return false;
+                                    } else {
+                                        msg.message = ""
+                                    }
+                                } else if (deletedTo === "justAll") {
+                                    return false;
                                 }
                             }
-                        })
-                    } 
-                   
+                            return true;
+                        });
+                        newV.set(userSoulName, updatedMessages);
+                    }
                     console.log("msgsAF",msgs);
                     return newV
                 })
             }
         })
 
-        this.socket.on("updateMsgDelGroupStatus", ({createdIn, room , deletedTo}: DeleteGroupMsg)=>{
-            //
-            console.log("updateMsgDelGroupStatus: ", {createdIn , room , deletedTo});
-            //
-            this.setMessagesGroupContent((previous)=>{
-                const newV: Map<string, propsMessagesGroupContent[]> = new Map(previous);
-                const msgsGp = newV.get(room);
-                if(msgsGp){
-                    msgsGp.forEach((msg)=>{
-                        if(msg.createdIn === createdIn){
+        this.socket.on("updateMsgDelGroupStatus", ({ createdIn, room, deletedTo }: DeleteGroupMsg) => {
+            console.log("updateMsgDelGroupStatus: ", { createdIn, room, deletedTo });
+        
+            this.setMessagesGroupContent((previous) => {
+                const newMessages = new Map(previous);
+                const msgsGp = newMessages.get(room);
+        
+                if (msgsGp) {
+                    const updatedMessages = msgsGp.map((msg) => {
+                        if (msg.createdIn === createdIn) {
                             msg.deletedTo = deletedTo;
-                            if(deletedTo === "all"){
-                                msg.message = "";
-                            } else if(deletedTo === "justFrom" && msg.fromUser === this.soulName){
-                                msg.message = "";
-                            } else if(deletedTo === "justTo" && msg.toUsers.includes(this.soulName)){
-                                msg.message = "";
-                            } else if( msg.deletedTo === "allFrom") {
-                                msg.message = ""
+                            if (deletedTo === "all" || 
+                                (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
+                                (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
+                                deletedTo === "allFrom") {
+                                return { ...msg, message: "" };
                             }
                         }
-                    })
+                        return msg;
+                    });
+        
+                    newMessages.set(room, updatedMessages);
                 }
-                
-                
-                return newV;
-            })
-        })
+        
+                return newMessages;
+            });
+        });
+        
     }
     public searchUser(userDataMethod: string): Promise<DataUser[] | string>{
         return new Promise((resolve, reject) => {

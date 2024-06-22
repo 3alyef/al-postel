@@ -141,11 +141,6 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
             return newValue;
         })
     }, [groupsDataById, updateRooms]);
-
-    useEffect(()=>{
-        //console.log("participantsBgColor", participantsBgColor)
-        //console.log('participantsData', participantsData)
-    }, [/*participantsBgColor*/ participantsData])
     return(
         <>
             { 

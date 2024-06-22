@@ -27,9 +27,9 @@ interface propsMessageLabel {
     isGroup: boolean;
     toUsers?: string[] 
 }
-export const msgDeleted = (fromUser: string, userSoul: string)=> (
+export const msgDeleted = (fromUser: string, userSoul: string, type2?:boolean )=> (
     <span className="flex items-center gap-1" 
-    style={fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"}}>
+    style={type2 ? {color: "rgb(239 239 239 / 75%)"} : (fromUser === userSoul? {color: "#090909d4"} : {color: "rgb(239 239 239 / 75%)"})}>
         Mensagem Apagada <RiForbid2Line/>
     </span>
 )
@@ -175,9 +175,9 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [msgCreatedInDelete]);
     
     const msg = () => {
-        if((message && message.message)){
+        if((message && message.message.length > 0)){
             return <>{message.message}</>
-        } else if (messageGroup && messageGroup.message){
+        } else if (messageGroup && messageGroup.message.length > 0){
             return <>{messageGroup.message}</>
         } else {
             if(deletedTo === "justAll"){
@@ -190,7 +190,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
                 return msgDeleted(fromUser, userSoul);
             } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
                 return msgDeleted(fromUser, userSoul);
-            } else if(deletedTo === "allTo" && userSoul === soulName) {
+            } else if(deletedTo === "allTo" && userSoul !== soulName) {
                 return msgDeleted(fromUser, userSoul);
             }
         }
@@ -249,19 +249,25 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         </div>
     )
 
+    useEffect(()=>{
+        console.log("deletedTo === allTo && fromUser !== soulName", deletedTo === "allTo" && fromUser !== soulName)
+        console.log("deletedTo", deletedTo);
+        console.log("deletedTo === justTo && toUsers.includes(fromUser)", toUsers && deletedTo === "justTo" && toUsers.includes(fromUser))
+    }, [deletedTo])
+
     
     if(isGroup && toUsers){
         if(
         !(deletedTo === "justAll") && 
         !(deletedTo === "justFrom" && fromUser === userSoul) && 
-        !(deletedTo === "justTo" && !toUsers.includes(fromUser)) && 
+        !(deletedTo === "justTo" && toUsers.includes(fromUser)) && 
         !(deletedTo === "allFrom" && fromUser === userSoul) && 
-        !(deletedTo === "allTo" && !toUsers.includes(fromUser))
+        !(deletedTo === "allTo" && toUsers.includes(fromUser))
         ){
             return data();
         }
     } else if(!isGroup){
-        if(
+        /*if(
         !(deletedTo === "justAll") && 
         !(deletedTo === "justFrom" && fromUser === userSoul) && 
         !(deletedTo === "justTo" && fromUser !== soulName) && 
@@ -269,7 +275,8 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         !(deletedTo === "allTo" && fromUser !== soulName)
         ){
             return data();
-        }
+        }*/
+        return data();
     }
     
 }
