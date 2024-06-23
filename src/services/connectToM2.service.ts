@@ -161,7 +161,7 @@ export class ConnectM2 {
         this.socket.on("previousMsgs", (el: {messageData: propsMessagesContent[], roomBySoulName: string})=>{
             if(el.messageData.length > 0) {
                 //console.log('msgCase',el.msgCase)
-                console.log("previousMSGS", el.messageData)
+                //console.log("previousMSGS", el.messageData)
                 this.setMessagesContent((prev)=>{
                     
                     const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(prev);
@@ -198,7 +198,7 @@ export class ConnectM2 {
                         }
                         
                     })
-                    console.log("msgs", msgs)
+                    //console.log("msgs", msgs)
                     newMessages.set(el.roomBySoulName, msgs);
                    
                     return newMessages;
@@ -361,7 +361,7 @@ export class ConnectM2 {
 
         this.socket.on("updateMsgDelDuoStatus", ({createdIn, room, deletedTo}: DeleteDuoMsg)=>{
             //
-            console.log("updateMsgDelDuoStatus", {createdIn , room , deletedTo});
+            //console.log("updateMsgDelDuoStatus", {createdIn , room , deletedTo});
             //
 
             let userSoulName: string = '';
@@ -371,15 +371,15 @@ export class ConnectM2 {
                         userSoulName = key;
                     }
                 })
-                return prev;
+                return new Map(prev);
             })
             //console.log("userSoulName", userSoulName)
             if(userSoulName.length > 0){
                 this.setMessagesContent((prev)=>{
-                    const newV: Map<string, propsMessagesContent[]> = new Map(prev)
+                    const newV = new Map(prev);
                     
                     const msgs = newV.get(userSoulName);
-                    console.log("msgsBF",msgs);
+                    //console.log("msgsBF",msgs);
                     if (msgs) {
                         const updatedMessages = msgs.filter((msg) => {
                             if (msg.createdIn === createdIn) {
@@ -414,10 +414,11 @@ export class ConnectM2 {
                     return newV
                 })
             }
+            this.socket.emit("returnToDeleteMsg", true);
         })
 
         this.socket.on("updateMsgDelGroupStatus", ({ createdIn, room, deletedTo }: DeleteGroupMsg) => {
-            console.log("updateMsgDelGroupStatus: ", { createdIn, room, deletedTo });
+            //console.log("updateMsgDelGroupStatus: ", { createdIn, room, deletedTo });
         
             this.setMessagesGroupContent((previous) => {
                 const newMessages = new Map(previous);
@@ -442,6 +443,7 @@ export class ConnectM2 {
         
                 return newMessages;
             });
+            this.socket.emit("returnToDeleteMsg", true);
         });
         
     }
@@ -579,13 +581,37 @@ export class ConnectM2 {
         })
     }
 
-    public deleteDuoMsg(dataMsg: DeleteDuoMsg) {
-        this.socket.emit("deleteDuoMsg", dataMsg)
+    public async deleteDuoMsg(dataMsg: DeleteDuoMsg): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            this.socket.emit("deleteDuoMsg", dataMsg);
+            
+            const listener = (next: boolean) => {
+                this.socket.off("deleteDuoMsgNext", listener);
+                return resolve(next);
+            };
+            
+            this.socket.on("deleteDuoMsgNext", listener);
+            
+        });
     }
 
-    public deleteGroupMsg(dataMsg: DeleteGroupMsg) {
+    public async deleteGroupMsg(dataMsg: DeleteGroupMsg): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            this.socket.emit("deleteGroupMsg", dataMsg);
+            
+            const listener = (next: boolean) => {
+                this.socket.off("deleteGroupMsgNext", listener);
+                return resolve(next);
+            };
+            
+            this.socket.on("deleteGroupMsgNext", listener);
+            
 
-        this.socket.emit("deleteGroupMsg", dataMsg)
+            /*setTimeout(() => {
+                this.socket.off("deleteGroupMsgNext", listener);
+                reject(new Error("deleteGroupMsgNext response timed out"));
+            }, 5000); // Timeout após 5 segundos (ajuste conforme necessário)*/
+        });
     }
 
 }

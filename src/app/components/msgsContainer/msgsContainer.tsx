@@ -200,7 +200,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     useEffect(()=>{
         function checkMessagesToDelete(messages: any[]): boolean {
-            let diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && ((msg.deletedTo === "none" || msg.deletedTo !== "justTo") || msg.fromUser !== userSoul))
+            let diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && 
+            ((msg.deletedTo !== "none" && msg.deletedTo !== "justTo" /*|| msg.deletedTo === ""*/) || msg.fromUser !== userSoul))
             
             return diverge.length > 0 ? false : true;
         };
@@ -212,107 +213,93 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }, [msgCreatedInDelete])
 
-    function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
+    async function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
         if(isGroup && toUsers){
-            serverIo.deleteGroupMsg({createdIn, deletedTo, room: soulNameNow, fromUser, toUsers});
+            let resp = await serverIo.deleteGroupMsg({createdIn, deletedTo, room: soulNameNow, fromUser, toUsers});
+
+            console.log("resp", resp)
         } else {
             let roomName = roomsListByUserSoul.get(soulNameNow);
             if(roomName && toUser){
-                serverIo.deleteDuoMsg({createdIn, deletedTo, room: roomName, fromUser, toUser});
+                let resp = await serverIo.deleteDuoMsg({createdIn, deletedTo, room: roomName, fromUser, toUser});
+                console.log("resp", resp)
             }
         }
     }
 
-    function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo"){
-        if(msgCreatedInDelete.length > 0) {
-            if(!showDeleteAll){
-                if(isGroup){
-                    const justToMsgs = messagesContainerByGroup.filter((msg)=>{
-                        if(msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul){
-                            return msg
+    async function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo") {
+        if (msgCreatedInDelete.length > 0) {
+            if (!showDeleteAll) {
+                if (isGroup) {
+                    const justToMsgs = messagesContainerByGroup.filter(msg =>
+                        msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
+                    );
+    
+                    let justToCreatedIn: string[] = justToMsgs.map(msg => msg.createdIn);
+    
+                    for (const crdIn of justToCreatedIn) {
+                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
+                        if (msg) {
+                            await deleteMsgFunc("justTo", crdIn, msg.fromUser, undefined, msg.toUsers);
                         }
-                    })
-                    let justToCreatedIn: string[] = [];
-                    if(justToMsgs){
-                        justToMsgs.forEach((msg)=>{
-                            justToCreatedIn.push(msg.createdIn);
-                        })
-
-                        justToCreatedIn.forEach((crdIn)=>{
-                            const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
-                            if(msg){
-                                deleteMsgFunc("justTo", crdIn, msg.fromUser, undefined, msg.toUsers);
-                            }
-                        })
-                        
-                        let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn))
-                        normalDelete.forEach((crdIn)=>{
-                            const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
-                            if(msg){
-                                deleteMsgFunc(deletedTo, crdIn, msg.fromUser, undefined, msg.toUsers);
-                            }
-                        })
+                    }
+    
+                    let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn));
+                    for (const crdIn of normalDelete) {
+                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
+                        if (msg) {
+                            await deleteMsgFunc(deletedTo, crdIn, msg.fromUser, undefined, msg.toUsers);
+                        }
                     }
                 } else {
-                    const justToMsgs = messagesContainerByRoom.filter((msg)=>{
-                        if(msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul){
-                            return msg
+                    const justToMsgs = messagesContainerByRoom.filter(msg =>
+                        msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
+                    );
+    
+                    let justToCreatedIn: string[] = justToMsgs.map(msg => msg.createdIn);
+    
+                    for (const crdIn of justToCreatedIn) {
+                        const msg = messagesContainerByRoom.find(el => el.createdIn === crdIn);
+                        if (msg) {
+                            await deleteMsgFunc("justTo", crdIn, msg.fromUser, msg.toUser);
                         }
-                    })
-                    let justToCreatedIn: string[] = [];
-                    if(justToMsgs){
-                        justToMsgs.forEach((msg)=>{
-                            justToCreatedIn.push(msg.createdIn);
-                        })
-
-                        justToCreatedIn.forEach((crdIn)=>{
-                            const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
-                            if(msg){
-                                deleteMsgFunc("justTo", crdIn, msg.fromUser, msg.toUser);
-                            }
-                        })
-                        
-                        let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn))
-
-                        normalDelete.forEach((crdIn)=>{
-                            const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
-                            if(msg){
-                                deleteMsgFunc(deletedTo, crdIn, msg.fromUser, msg.toUser);
-                            }
-                            
-                        })
-                        
+                    }
+    
+                    let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn));
+                    for (const crdIn of normalDelete) {
+                        const msg = messagesContainerByRoom.find(el => el.createdIn === crdIn);
+                        if (msg) {
+                            await deleteMsgFunc(deletedTo, crdIn, msg.fromUser, msg.toUser);
+                        }
                     }
                 }
             } else {
-                msgCreatedInDelete.forEach((crdIn)=>{
+                for (const crdIn of msgCreatedInDelete) {
                     let fromUser = '';
                     let toUser = '';
                     let toUsers: string[] = [];
-
-                    if(isGroup){
-                        const msg = messagesContainerByGroup.find((el)=> el.createdIn === crdIn);
-                        if(msg){
+    
+                    if (isGroup) {
+                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
+                        if (msg) {
                             fromUser = msg.fromUser;
                             toUsers = msg.toUsers;
-                            deleteMsgFunc(deletedTo, crdIn, fromUser, undefined, toUsers);
+                            await deleteMsgFunc(deletedTo, crdIn, fromUser, undefined, toUsers);
                         }
                     } else {
-                        const msg = messagesContainerByRoom.find((el)=> el.createdIn === crdIn);
-                        if(msg) {
+                        const msg = messagesContainerByRoom.find(el => el.createdIn === crdIn);
+                        if (msg) {
                             fromUser = msg.fromUser;
                             toUser = msg.toUser;
-                            deleteMsgFunc(deletedTo, crdIn, fromUser, toUser, undefined);
+                            await deleteMsgFunc(deletedTo, crdIn, fromUser, toUser, undefined);
                         }
-                        
                     }
-                    
-                })
-               
+                }
             }
         }
     }
-
+    
+    
     useEffect(()=>{
         console.log("messagesContainerByRoom", messagesContainerByRoom)
     }, [messagesContainerByRoom])

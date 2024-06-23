@@ -267,7 +267,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             return data();
         }
     } else if(!isGroup){
-        /*if(
+        if(
         !(deletedTo === "justAll") && 
         !(deletedTo === "justFrom" && fromUser === userSoul) && 
         !(deletedTo === "justTo" && fromUser !== soulName) && 
@@ -275,8 +275,8 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         !(deletedTo === "allTo" && fromUser !== soulName)
         ){
             return data();
-        }*/
-        return data();
+        }
+        //return data();
     }
     
 }
