@@ -560,7 +560,6 @@ export class ConnectM2 {
 
         reader.onload = () => {
             const imageData = reader.result as ArrayBuffer;
-            // Enviando a imagem para o servidor como um ArrayBuffer
             this.socket.emit("setProfileImage", { image: imageData, type: imagem.type , name: imagem.name});
         };
 
