@@ -179,21 +179,22 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
             return <>{message.message}</>
         } else if (messageGroup && messageGroup.message.length > 0){
             return <>{messageGroup.message}</>
-        } else {
-            if(deletedTo === "justAll"){
-                return
-            } else if(deletedTo === "justFrom" && soulName === userSoul) {
-                return
-            } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
-                return
-            } else if(deletedTo === "all") {
-                return msgDeleted(fromUser, userSoul);
-            } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
-                return msgDeleted(fromUser, userSoul);
-            } else if(deletedTo === "allTo" && userSoul !== soulName) {
-                return msgDeleted(fromUser, userSoul);
-            }
+        } 
+       
+        if(deletedTo === "justAll"){
+            return
+        } else if(deletedTo === "justFrom" && soulName === userSoul) {
+            return
+        } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
+            return
+        } else if(deletedTo === "all") {
+            return msgDeleted(fromUser, userSoul);
+        } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
+            return msgDeleted(fromUser, userSoul);
+        } else if(deletedTo === "allTo" && userSoul !== soulName) {
+            return msgDeleted(fromUser, userSoul);
         }
+        
     }
     const data = () => (
         <div className='messageRenderContainer' data-createdin={createdIn} onClick={()=>{
@@ -256,6 +257,7 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
     }, [deletedTo])
 
     
+    /*
     if(isGroup && toUsers){
         if(
         !(deletedTo === "justAll") && 
@@ -268,15 +270,38 @@ export default function MessageLabel({message, messageGroup, soulName, createdTi
         }
     } else if(!isGroup){
         if(
-        !(deletedTo === "justAll") && 
-        !(deletedTo === "justFrom" && fromUser === userSoul) && 
+        deletedTo !== "justAll" && 
+        (deletedTo !== "justFrom" && fromUser === userSoul) && 
         !(deletedTo === "justTo" && fromUser !== soulName) && 
         !(deletedTo === "allFrom" && fromUser === userSoul) && 
-        !(deletedTo === "allTo" && fromUser !== soulName)
+        !(deletedTo === "allTo" && fromUser === soulName)
         ){
             return data();
+        } else {
+            return (
+                <div className="flex flex-col items-center justify-center bg-slate-400 text-white font-bold gap-2">
+                    <p>deletedTo: {deletedTo}</p>
+                    <p>fromUser: {fromUser}</p>
+                    <p>soulName: {soulName}</p>
+                    <p>userSoul: {userSoul}</p>
+                </div>
+            )
         }
-        //return data();
-    }
     
+        //return data();
+    }*/ 
+
+    if(isGroup && toUsers) {
+        if(deletedTo === "none" || deletedTo === "all" || (deletedTo === "allFrom" && fromUser !== userSoul) || (deletedTo === "allTo" && fromUser !== soulName) ||
+        (deletedTo === "justFrom" && fromUser !== userSoul) ||
+        (deletedTo === "justTo" && fromUser !== soulName)){
+            return data();
+        }
+    } else if(!isGroup) {
+        if(deletedTo === "none" || deletedTo === "all" || (deletedTo === "allFrom" && fromUser !== userSoul) || (deletedTo === "allTo" && fromUser !== soulName) ||
+        (deletedTo === "justFrom" && fromUser !== userSoul) ||
+        (deletedTo === "justTo" && fromUser !== soulName)){
+            return data();
+        }
+    }
 }

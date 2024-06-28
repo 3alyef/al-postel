@@ -207,7 +207,7 @@ export class ConnectM2 {
             
         })
         this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContentFromServer[]})=>{
-            
+            console.log('previousGroupMsgs', el)
             if(el.messageData.length > 0) {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
@@ -381,32 +381,19 @@ export class ConnectM2 {
                     const msgs = newV.get(userSoulName);
                     //console.log("msgsBF",msgs);
                     if (msgs) {
-                        const updatedMessages = msgs.filter((msg) => {
+                        const updatedMessages = msgs.map((msg) => {
                             if (msg.createdIn === createdIn) {
                                 msg.deletedTo = deletedTo;
-                                if (deletedTo === "all") {
+        
+                                if (deletedTo === "all" || 
+                                    deletedTo === "allFrom" || 
+                                    deletedTo === "allTo" || 
+                                    (msg.toUser === userSoulName && deletedTo === "justFrom") || 
+                                    (msg.fromUser === userSoulName && deletedTo === "justTo")) {
                                     msg.message = "";
-                                } else if (deletedTo === "justFrom" && msg.fromUser === this.soulName) {
-                                    return false;
-                                } else if (deletedTo === "justTo" && msg.toUser === this.soulName) {
-                                    return false;
-                                } else if (deletedTo === "allFrom") {
-                                    if(msg.fromUser === this.soulName){
-                                        return false;
-                                    } else {
-                                        msg.message = ""
-                                    }
-                                } else if (deletedTo === "allTo") {
-                                    if(msg.toUser === this.soulName){
-                                        return false;
-                                    } else {
-                                        msg.message = ""
-                                    }
-                                } else if (deletedTo === "justAll") {
-                                    return false;
                                 }
                             }
-                            return true;
+                            return msg;
                         });
                         newV.set(userSoulName, updatedMessages);
                     }
