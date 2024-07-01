@@ -7,19 +7,22 @@ import useLongPress from "@/hooks/useLongPress.hook";
 import { RiForbid2Line } from "react-icons/ri";
 
 interface propsMessageLabel {
-    message: propsMessagesContent;
+    messageGroup: propsMessagesGroupContent;
     soulName: string;
     createdTime: string;
     userSoul: string;
     serverIo: ConnectM2;
-    setMessagesContent: Dispatch<SetStateAction<Map<string, propsMessagesContent[]>>>;
+    setMessagesGroupContent: Dispatch<SetStateAction<Map<string, propsMessagesGroupContent[]>>>
     roomsListByUserSoul: Map<string, string>;
+    participantsBgColor: Map<string, Map<string, string>>;
+    groupName:string;
     participantsData: Map<string, propsRoom>;
     setMsgCreatedInDelete: Dispatch<SetStateAction<string[]>>;
     createdIn: string;
     msgCreatedInDelete: string[];
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
-    fromUser: string; 
+    deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
+    fromUser: string;
+    toUsers: string[] 
 }
 export const msgDeleted = (fromUser: string, userSoul: string, type2?:boolean )=> (
     <span className="flex items-center gap-1" 
@@ -28,15 +31,13 @@ export const msgDeleted = (fromUser: string, userSoul: string, type2?:boolean )=
     </span>
 )
 
-export default function MessageLabel({message, soulName, createdTime, userSoul, serverIo, setMessagesContent, roomsListByUserSoul, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo, fromUser}: propsMessageLabel){
+export default function MessageLabelGroup({messageGroup, soulName, createdTime, userSoul, serverIo,setMessagesGroupContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo, fromUser, toUsers}: propsMessageLabel){
     const [selectArea, setSelectArea] = useState<boolean>(false)
     //
     
     const longPressEvent = useLongPress({
         onLongPress: ()=>{
-            //setDeleteMsgScreen(!deleteMsgScreen);
             if(selectArea) {
-                //console.log('ja esta')
                 setMsgCreatedInDelete(
                     (prev)=>{
                         const newV = prev.filter(created => created !== createdIn);
@@ -44,11 +45,9 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
                     }
                 )
             } else {
-                //console.log('nao esta')
                 setMsgCreatedInDelete(prev => [...prev, createdIn])
             }
             
-            //funcDeleteMsgScreen();
             setSelectArea(!selectArea);
         },
         onClick: ()=>{            
@@ -61,6 +60,29 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
     });
 
     ///
+    const [bgColor, setBgColor] = useState<string>('');
+    const [dataUser, setDataUser] = useState<propsRoom>();
+    useEffect(()=>{
+        console.log()
+        if(messageGroup && messageGroup.fromUser){
+            setDataUser(()=>{
+                let data = participantsData.get(messageGroup.fromUser);
+                return data
+            })
+        }
+    },[participantsData])
+    useEffect(()=>{
+        if(messageGroup && messageGroup.message && groupName){
+            let group = participantsBgColor.get(groupName);
+            if(group){
+                let bgC = group.get(messageGroup.fromUser);
+                if(bgC){
+                    setBgColor(bgC)
+                }
+               
+            }
+        }
+    }, [participantsBgColor])
 
     function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen"){
         if(viewStatus === 'onServer'){
@@ -75,37 +97,14 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
     }
 
     useEffect(()=>{
-        
-        if(message && message.viewStatus && !(message.viewStatus === "seen") && message.fromUser !== userSoul){
 
-            const room = roomsListByUserSoul.get(soulName)
-            if(room){
-                serverIo.msgSeenUpdate({fromUser: message.fromUser, toUser: message.toUser, createdIn: message.createdIn, room, viewStatus: 'seen'})
-            
-                setMessagesContent((previous) => {
-                    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
-                    newMessages.forEach((value, key)=>{
-                        if(key === message.fromUser){
-                            const updatedMessages: propsMessagesContent[] = value.map((msg) => {
-                                if (msg.createdIn === message.createdIn) {
-                                    return { ...msg, viewStatus: 'seen' };
-                                }
-                                return msg;
-                            });
-            
-                            newMessages.set(key, updatedMessages);
-                        }
-                    })
-                    return newMessages
-                });
-            }
-            
+        if(messageGroup){
+            console.log('messageGroup', messageGroup)
         }
-    
         
-    }, [message, soulName, serverIo, /*setMessagesContent,*/userSoul]);
+    }, [messageGroup, soulName, serverIo, setMessagesGroupContent, userSoul]);
 
-   
+    
     function divDeleteML(){
         setMsgCreatedInDelete(
             (prev)=>{
@@ -122,19 +121,19 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
     }, [msgCreatedInDelete]);
     
     const msg = () => {
-        if((message && message.message.length > 0)){
-            return <>{message.message}</>
-        }
+        if (messageGroup && messageGroup.message.length > 0){
+            return <>{messageGroup.message}</>
+        } 
        
         if(deletedTo === "justAll"){
             return
         } else if(deletedTo === "justFrom" && soulName === userSoul) {
             return
-        } else if(deletedTo === "justTo" && (soulName !== userSoul)){
+        } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
             return
         } else if(deletedTo === "all") {
             return msgDeleted(fromUser, userSoul);
-        } else if(deletedTo === "allFrom" && (userSoul !== soulName)){
+        } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
             return msgDeleted(fromUser, userSoul);
         } else if(deletedTo === "allTo" && userSoul !== soulName) {
             return msgDeleted(fromUser, userSoul);
@@ -149,9 +148,29 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
             }
         }}>
             <div className={`messageRender min-w-[25%] 
-            ${(message && message.fromUser === userSoul) ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
+            ${messageGroup && messageGroup.fromUser === userSoul ? "messageRenderBgSender" : "messageRenderBgReceive self-end"}`}
             {...longPressEvent}
             >
+                {
+                    messageGroup && messageGroup.fromUser !== userSoul  && messageGroup.message && (
+                        <>
+                            <div className="text-white font-normal w-[100%] flex justify-between gap-[.75em] px-[.3em]">
+                                <p className="ltr font-semibold"
+                                style={(bgColor && messageGroup && messageGroup.message) ? {
+                                    color: bgColor,
+                                    textShadow: "0px 0px 20px black"
+                                } : undefined}
+                                >
+                                    ~ {dataUser && dataUser.first_name}
+                                </p>
+                                <p>
+                                    {dataUser && dataUser.email}
+                                </p>
+                            </div>
+                        </>
+                    )
+                }
+                
                 <p className="msgContainer ltr">
                     {
                         msg()
@@ -161,10 +180,9 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
                 {
-                    !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
+                    /*!(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
                     && !(deletedTo === "allTo" || deletedTo === "allFrom") && 
-                    
-                    message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)
+                    message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)*/
                 }
                 </p>
             </div>
@@ -175,47 +193,12 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
         </div>
     )
 
-    /*useEffect(()=>{
+    useEffect(()=>{
         console.log("deletedTo === allTo && fromUser !== soulName", deletedTo === "allTo" && fromUser !== soulName)
         console.log("deletedTo", deletedTo);
         console.log("deletedTo === justTo && toUsers.includes(fromUser)", toUsers && deletedTo === "justTo" && toUsers.includes(fromUser))
-    }, [deletedTo])*/
-
-    
-    /*
-    if(isGroup && toUsers){
-        if(
-        !(deletedTo === "justAll") && 
-        !(deletedTo === "justFrom" && fromUser === userSoul) && 
-        !(deletedTo === "justTo" && toUsers.includes(fromUser)) && 
-        !(deletedTo === "allFrom" && fromUser === userSoul) && 
-        !(deletedTo === "allTo" && toUsers.includes(fromUser))
-        ){
-            return data();
-        }
-    } else if(!isGroup){
-        if(
-        deletedTo !== "justAll" && 
-        (deletedTo !== "justFrom" && fromUser === userSoul) && 
-        !(deletedTo === "justTo" && fromUser !== soulName) && 
-        !(deletedTo === "allFrom" && fromUser === userSoul) && 
-        !(deletedTo === "allTo" && fromUser === soulName)
-        ){
-            return data();
-        } else {
-            return (
-                <div className="flex flex-col items-center justify-center bg-slate-400 text-white font-bold gap-2">
-                    <p>deletedTo: {deletedTo}</p>
-                    <p>fromUser: {fromUser}</p>
-                    <p>soulName: {soulName}</p>
-                    <p>userSoul: {userSoul}</p>
-                </div>
-            )
-        }
-    
-        //return data();
-    }*/ 
- 
+    }, [deletedTo])
+   
     if(deletedTo === "none" || deletedTo === "all" || (deletedTo === "allFrom" && fromUser !== userSoul) || (deletedTo === "allTo" && fromUser !== soulName) ||
     (deletedTo === "justFrom" && fromUser !== userSoul) ||
     (deletedTo === "justTo" && fromUser !== soulName)){

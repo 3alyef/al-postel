@@ -14,6 +14,8 @@ import OptionsSwitch from "../optionsSwitch/optionsSwitch";
 import EmojisList from "../emojisList/emojisList";
 import { propsGroups } from "@/interfaces/groups.interface";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
+import GroupMsgs, { deleteMsgsGroup } from "../groupMsgs/groupMsgs";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -229,9 +231,12 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     async function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo") {
         if (msgCreatedInDelete.length > 0) {
-            if (!showDeleteAll) {
+            if(isGroup){
+                await deleteMsgsGroup({deletedTo, messagesContainerByGroup, msgCreatedInDelete, room: soulNameNow, serverIo, userSoul});
+            }
+            if (!showDeleteAll) { // Se nao for delete para todos
                 if (isGroup) {
-                    const justToMsgs = messagesContainerByGroup.filter(msg =>
+                    /*const justToMsgs = messagesContainerByGroup.filter(msg =>
                         msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
                     );
     
@@ -250,7 +255,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         if (msg) {
                             await deleteMsgFunc(deletedTo, crdIn, msg.fromUser, undefined, msg.toUsers);
                         }
-                    }
+                    }*/
+
                 } else {
                     const justToMsgs = messagesContainerByRoom.filter(msg =>
                         msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
@@ -277,16 +283,19 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 for (const crdIn of msgCreatedInDelete) {
                     let fromUser = '';
                     let toUser = '';
-                    let toUsers: string[] = [];
     
-                    if (isGroup) {
+                    if (!isGroup) {
+                        /*
+                        if(isGroup){
                         const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
                         if (msg) {
                             fromUser = msg.fromUser;
                             toUsers = msg.toUsers;
                             await deleteMsgFunc(deletedTo, crdIn, fromUser, undefined, toUsers);
                         }
-                    } else {
+                        }*/
+                        
+                    
                         const msg = messagesContainerByRoom.find(el => el.createdIn === crdIn);
                         if (msg) {
                             fromUser = msg.fromUser;
@@ -300,9 +309,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }
     
     
-    useEffect(()=>{
-        console.log("messagesContainerByRoom", messagesContainerByRoom)
-    }, [messagesContainerByRoom])
+
     return(
         <> 
             {((groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup)) && (
@@ -415,41 +422,27 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                                 soulName={soulNameNow} createdTime={createdTime} message={el} userSoul={userSoul} serverIo={serverIo}
                                                 setMessagesContent={setMessagesContent}
                                                 roomsListByUserSoul={roomsListByUserSoul} key={el.createdIn}
-                                                setMessagesGroupsContent={setMessagesGroupContent} participantsBgColor={participantsBgColor}
                                                 participantsData={participantsData}
                                                 setMsgCreatedInDelete={setMsgCreatedInDelete}
                                                 createdIn={el.createdIn}
                                                 msgCreatedInDelete={msgCreatedInDelete}
                                                 deletedTo={el.deletedTo}
-                                                fromUser={el.fromUser}
-                                                isGroup={false} />
+                                                fromUser={el.fromUser} />
                                             );
                                         })
                                     )}
-                                    {groupsScreenProps?.userSoul && isGroup && (
-                                        messagesContainerByGroup.map((msg) => {
-                                            const createdDate = new Date(msg.createdIn);
-                                            const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                                            
-                                            return (
-                                                <MessageLabel
-                                                soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}
-                                                userSoul={userSoul} serverIo={serverIo}
-                                                setMessagesContent={setMessagesContent}
-                                                roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
-                                                setMessagesGroupsContent={setMessagesGroupContent}
-                                                participantsBgColor={participantsBgColor}
-                                                groupName={soulNameNow} 
-                                                participantsData={participantsData}
-                                                setMsgCreatedInDelete={setMsgCreatedInDelete}
-                                                createdIn={msg.createdIn}
-                                                msgCreatedInDelete={msgCreatedInDelete} deletedTo={msg.deletedTo}
-                                                fromUser={msg.fromUser}
-                                                isGroup={true}
-                                                toUsers={msg.toUsers}/>
-                                            )
-                                        })
-                                    )}
+                                    {
+                                        groupsScreenProps?.userSoul && isGroup && 
+                                        <GroupMsgs messagesContainerByGroup={messagesContainerByGroup}
+                                        msgCreatedInDelete={msgCreatedInDelete}
+                                        participantsBgColor={participantsBgColor}
+                                        participantsData={participantsData} roomsListByUserSoul={roomsListByUserSoul}
+                                        serverIo={serverIo}
+                                        setMessagesGroupContent={setMessagesGroupContent}
+                                        setMsgCreatedInDelete={setMsgCreatedInDelete}
+                                        soulNameNow={soulNameNow}
+                                        userSoul={userSoul}/>
+                                    }
                                     <div ref={messagesEndRef}/>
                                 </div>
                             </div>

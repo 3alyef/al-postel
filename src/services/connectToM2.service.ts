@@ -27,7 +27,7 @@ export interface sendMsg {
 }
 export interface sendMsgGroup {
     fromUser: string;
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
     toUsers: string[];
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     message: string;
@@ -212,7 +212,7 @@ export class ConnectM2 {
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
                     let msgContainerValue: propsMessagesGroupContent[] = [];
-                    el.messageData.map((msg) => {
+                    /*el.messageData.map((msg) => {
                         let deletedTo = msg.deletedTo;
                         if (deletedTo === "all" || 
                             (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
@@ -222,7 +222,7 @@ export class ConnectM2 {
                         }
                         
                         return msg;
-                    });
+                    });*/
         
                     el.messageData.forEach((msgContent)=>{
                         let viewStatus;
@@ -240,13 +240,9 @@ export class ConnectM2 {
 
                     newMessages.set(el.messageData[0].toGroup, msgContainerValue);
 
-                    //console.log("newMessages(previous): ", newMessages);
-                    //console.log("messageData: ", el.messageData)
                     return newMessages
                 })
-                //console.log("el: messageData", el.messageData.length >0 ? "yesssss":"no")
             }
-            //console.log("el: messageData", el)
         })
 
         this.socket.on("newMsg", (el: {messageData: propsMessagesContent, room: string})=>{
@@ -405,8 +401,6 @@ export class ConnectM2 {
         })
 
         this.socket.on("updateMsgDelGroupStatus", ({ createdIn, room, deletedTo }: DeleteGroupMsg) => {
-            //console.log("updateMsgDelGroupStatus: ", { createdIn, room, deletedTo });
-        
             this.setMessagesGroupContent((previous) => {
                 const newMessages = new Map(previous);
                 const msgsGp = newMessages.get(room);
@@ -414,12 +408,14 @@ export class ConnectM2 {
                 if (msgsGp) {
                     const updatedMessages = msgsGp.map((msg) => {
                         if (msg.createdIn === createdIn) {
-                            msg.deletedTo = deletedTo;
+                            //msg.deletedTo = deletedTo;
                             if (deletedTo === "all" || 
                                 (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
                                 (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
                                 deletedTo === "allFrom") {
-                                return { ...msg, message: "" };
+                                return { ...msg, message: "", deletedTo };
+                            } else {
+                                return {...msg, deletedTo}
                             }
                         }
                         return msg;
