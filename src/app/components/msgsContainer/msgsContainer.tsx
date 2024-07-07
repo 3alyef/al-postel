@@ -5,7 +5,7 @@ import { useEffect, useState, SetStateAction, Dispatch, useRef } from 'react';
 import Image from "next/image";
 import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { IoMdSend } from "react-icons/io";
-import { ConnectM2, sendMsgGroup } from "@/services/connectToM2.service";
+import { ConnectM2, sendMsgGroup, DeletedToType } from "@/services/connectToM2.service";
 import { sendMsg } from "@/services/connectToM2.service";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import MessageLabel from "../messageLabel/messageLabel";
@@ -15,7 +15,7 @@ import EmojisList from "../emojisList/emojisList";
 import { propsGroups } from "@/interfaces/groups.interface";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
-import GroupMsgs, { deleteMsgsGroup } from "../groupMsgs/groupMsgs";
+import GroupMsgs, { deleteMsgsGroup, mapToString, stringToMap } from "../groupMsgs/groupMsgs";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -101,13 +101,18 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                 serverIo.sendMsg(false, msgS);
             } 
             if (groupsScreenProps?.userSoul && isGroup) {
+                let toUsers = groupsScreenProps.groupParticipants;
+                let deletedTo: Map<string, DeletedToType> = new Map();
+                for(const user in toUsers){
+                    deletedTo.set(user, "none");
+                }
                 const msgS: sendMsgGroup = {
                     createdIn,
-                    deletedTo: "none",
+                    deletedTo: mapToString(deletedTo),
                     fromUser: userSoul,
                     message: msg,
                     toGroup: soulNameNow,
-                    toUsers: groupsScreenProps.groupParticipants,
+                    toUsers,
                     viewStatus: undefined
                 };
                 //console.log('msgS Group: ', msgS)
@@ -202,9 +207,21 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
 
     useEffect(()=>{
         function checkMessagesToDelete(messages: any[]): boolean {
-            let diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && 
-            ((msg.deletedTo !== "none" && msg.deletedTo !== "justTo" /*|| msg.deletedTo === ""*/) || msg.fromUser !== userSoul))
-            
+            let diverge: any[];
+            if(isGroup){
+                diverge = messages.filter((msg)=>{
+                    if(msgCreatedInDelete.includes(msg.createdIn)) {
+                        let deletedTo = new Map<string, DeletedToType>(stringToMap<string, DeletedToType>(msg.deletedTo));
+                    }
+                })
+            } else {
+                diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && 
+                (isGroup ? (
+                    Array.from(stringToMap(msg.deletedTo).values()).some(del => del !== "none" && del !== "justTo") || msg.fromUser !== userSoul
+                ) : (
+                    (msg.deletedTo !== "none" && msg.deletedTo !== "justTo") || msg.fromUser !== userSoul
+                )))
+            }
             return diverge.length > 0 ? false : true;
         };
     
@@ -215,12 +232,8 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }, [msgCreatedInDelete])
 
-    async function deleteMsgFunc(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo", createdIn: string, fromUser: string, toUser?:string, toUsers?:string[]) {
-        if(isGroup && toUsers){
-            let resp = await serverIo.deleteGroupMsg({createdIn, deletedTo, room: soulNameNow, fromUser, toUsers});
-
-            console.log("resp", resp)
-        } else {
+    async function deleteMsgFunc(deletedTo: DeletedToType, createdIn: string, fromUser: string, toUser:string) {
+        if(!isGroup){
             let roomName = roomsListByUserSoul.get(soulNameNow);
             if(roomName && toUser){
                 let resp = await serverIo.deleteDuoMsg({createdIn, deletedTo, room: roomName, fromUser, toUser});
@@ -229,38 +242,16 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         }
     }
 
-    async function deleteMsg(deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo") {
+    async function deleteMsg(deletedTo: DeletedToType) {
         if (msgCreatedInDelete.length > 0) {
             if(isGroup){
                 await deleteMsgsGroup({deletedTo, messagesContainerByGroup, msgCreatedInDelete, room: soulNameNow, serverIo, userSoul});
             }
             if (!showDeleteAll) { // Se nao for delete para todos
-                if (isGroup) {
-                    /*const justToMsgs = messagesContainerByGroup.filter(msg =>
-                        msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
-                    );
-    
-                    let justToCreatedIn: string[] = justToMsgs.map(msg => msg.createdIn);
-    
-                    for (const crdIn of justToCreatedIn) {
-                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
-                        if (msg) {
-                            await deleteMsgFunc("justTo", crdIn, msg.fromUser, undefined, msg.toUsers);
-                        }
-                    }
-    
-                    let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn));
-                    for (const crdIn of normalDelete) {
-                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
-                        if (msg) {
-                            await deleteMsgFunc(deletedTo, crdIn, msg.fromUser, undefined, msg.toUsers);
-                        }
-                    }*/
-
-                } else {
+                if (!isGroup) {
                     const justToMsgs = messagesContainerByRoom.filter(msg =>
                         msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul
-                    );
+                    ); // somente as msgs que nao foram enviados pelo user
     
                     let justToCreatedIn: string[] = justToMsgs.map(msg => msg.createdIn);
     
@@ -269,7 +260,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                         if (msg) {
                             await deleteMsgFunc("justTo", crdIn, msg.fromUser, msg.toUser);
                         }
-                    }
+                    } // aqui atualiza o status das mensagens que nao foram enviadas pelo usuario
     
                     let normalDelete = msgCreatedInDelete.filter(crdIn => !justToCreatedIn.includes(crdIn));
                     for (const crdIn of normalDelete) {
@@ -285,22 +276,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     let toUser = '';
     
                     if (!isGroup) {
-                        /*
-                        if(isGroup){
-                        const msg = messagesContainerByGroup.find(el => el.createdIn === crdIn);
-                        if (msg) {
-                            fromUser = msg.fromUser;
-                            toUsers = msg.toUsers;
-                            await deleteMsgFunc(deletedTo, crdIn, fromUser, undefined, toUsers);
-                        }
-                        }*/
-                        
-                    
                         const msg = messagesContainerByRoom.find(el => el.createdIn === crdIn);
                         if (msg) {
                             fromUser = msg.fromUser;
                             toUser = msg.toUser;
-                            await deleteMsgFunc(deletedTo, crdIn, fromUser, toUser, undefined);
+                            await deleteMsgFunc(deletedTo, crdIn, fromUser, toUser);
                         }
                     }
                 }

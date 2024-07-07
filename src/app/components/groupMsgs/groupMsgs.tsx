@@ -1,4 +1,4 @@
-import { ConnectM2 } from "@/services/connectToM2.service";
+import { ConnectM2, DeletedToType } from "@/services/connectToM2.service";
 import { propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
 import { Dispatch, SetStateAction } from "react";
@@ -23,6 +23,28 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
                     const createdDate = new Date(msg.createdIn);
                     const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     
+                    const deletedToMap = stringToMap<string, DeletedToType>(msg.deletedTo);
+
+                    let deletedTo: DeletedToType = "none";
+                    if(msg.fromUser === userSoul){
+                        deletedToMap.forEach((del, key) => {
+                            if (del === "all" || del === "allTo") {
+                                deletedTo = "all";
+                            } else if (del === "justTo" || del === "none") {
+                                deletedTo = "none";
+                            } else if (del === "allFrom" || del === "justFrom") {
+                                deletedTo = "allFrom";
+                            }
+                    
+                        });
+
+                    } else {
+                        const deletedToValue = deletedToMap.get(userSoul);
+                        if(deletedToValue){
+                            deletedTo = deletedToValue;
+                        }
+                    }
+                    
                     return (
                         <MessageLabelGroup
                         soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}
@@ -34,7 +56,7 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
                         participantsData={participantsData}
                         setMsgCreatedInDelete={setMsgCreatedInDelete}
                         createdIn={msg.createdIn}
-                        msgCreatedInDelete={msgCreatedInDelete} deletedTo={msg.deletedTo}
+                        msgCreatedInDelete={msgCreatedInDelete} deletedTo={deletedTo}
                         fromUser={msg.fromUser}
                         toUsers={msg.toUsers}/>
                     )
@@ -46,7 +68,7 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
 
 interface PropsDeleteMsgsGroup {
     room: string;
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    deletedTo: DeletedToType;
     msgCreatedInDelete: string[];
     messagesContainerByGroup: propsMessagesGroupContent[];
     serverIo: ConnectM2;
@@ -54,45 +76,90 @@ interface PropsDeleteMsgsGroup {
 }   
 
 export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msgCreatedInDelete, serverIo, room, userSoul }: PropsDeleteMsgsGroup) {
+    if(deletedTo === "all"){
+        for (const crdIn of msgCreatedInDelete){
+            const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
+            if(msg){
+                let deletedTo = transformDeletedToGroup(msg.deletedTo, "all");
+                let resp = await serverIo.deleteGroupMsg({createdIn: msg.createdIn, deletedTo, fromUser: msg.fromUser, room, toUsers: msg.toUsers });
 
-    let msgsGroup: propsMessagesGroupContent[] | undefined = messagesContainerByGroup.filter(msg => msgCreatedInDelete.includes(msg.createdIn));
-    let fromUser: string;
-    let toUsers: string[];
-    
-    if(msgsGroup.length > 0){
-        for(const msg of msgsGroup){
-            fromUser = msg.fromUser;
-            toUsers = msg.toUsers;
-
-            if(deletedTo === "all"){
-                await serverIo.deleteGroupMsg({createdIn: msg.createdIn, deletedTo: "all", fromUser, room, toUsers});
-            } else if(deletedTo === "justFrom"){
-                let newDeletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
-                if(fromUser === userSoul){
-                    if(msg.deletedTo === "none") {
-                        newDeletedTo = "justFrom";
-                    } else if(msg.deletedTo === "justFrom") {
-
-                    } else if(msg.deletedTo === "all") {
-                        
-                    } else if(msg.deletedTo === "allFrom") {
-                        
-                    }
-                } else if(toUsers.includes(userSoul)){
-                    if(msg.deletedTo === "none") {
-                        newDeletedTo = "justTo";
-                    } else if(msg.deletedTo === "justFrom") {
-
-                    } else if(msg.deletedTo === "all") {
-
-                    }  else if(msg.deletedTo === "allFrom") {
-                        
-                    }
-                }
-
+                console.log("resp", resp);
             }
+        }
+    } else {
+        const toMsgs = messagesContainerByGroup.filter(msg => msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul); // as msgs que não vieram do user
+        let toCreatedIn = toMsgs.map(msg => msg.createdIn);
+
+        for (const crdIn in toCreatedIn){
+            const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
+            if(msg) {
+                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, "justTo"), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
+
+                console.log("resp", resp);
+            }
+        }
+
+        let fromCreatedIn: string[] = msgCreatedInDelete.filter(crdIn => !toCreatedIn.includes(crdIn));
             
+        for (const crdIn of fromCreatedIn) {
+            const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
+            if (msg) {
+                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, deletedTo), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
+
+                console.log("resp", resp);
+            }
         }
     }
-    
+
+    return;
+}
+
+function transformDeletedToGroup(previousDeletedTo: string, newValue: DeletedToType): string {
+    let mapDeletedTo = stringToMap<string, DeletedToType>(previousDeletedTo);
+    mapDeletedTo.forEach((value, key)=>{
+        mapDeletedTo.set(key, changeDeletedTo(value, newValue));
+    })
+    return mapToString<string, DeletedToType>(mapDeletedTo);
+}
+
+// Converte Map ==> String_Map:
+export function mapToString<K, V>(map: Map<K, V>): string{
+    return JSON.stringify(Array.from(map.entries()));
+}
+
+// Converte String_Map ==> Map:
+export function stringToMap<K, V>(str: string): Map<K, V> {
+    const parsedEntries: [K, V][] = JSON.parse(str);
+    return new Map<K, V>(parsedEntries);
+}
+
+//
+export function changeDeletedTo(previous: DeletedToType, current: DeletedToType): DeletedToType {
+    let newValue: DeletedToType = "none";
+    //console.log("previous", previous);
+    //console.log("current", current);
+
+    if(previous === "none"){
+        newValue = current;
+    } else if(previous === "all"){
+        if(current === "justFrom"){
+            newValue = "allFrom"
+        } else {
+            newValue = "allTo";
+        }
+    } else if(previous === "allFrom" || previous === "allTo"){
+        newValue = "justAll"
+    } else if(previous === "justFrom"){
+        if(current === "justTo"){
+            newValue = "justAll";
+        }
+    } else if(previous === "justTo"){
+        if(current === "justFrom"){
+            newValue = "justAll";
+        } else if(current === "all"){
+            newValue = "allTo";
+        }
+    } 
+
+    return newValue;
 }

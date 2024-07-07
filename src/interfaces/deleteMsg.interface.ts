@@ -1,7 +1,9 @@
+import { DeletedToType } from "@/services/connectToM2.service";
+
 export interface DeleteGroupMsg {
     createdIn: string; 
     room: string; 
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    deletedTo: string;
     fromUser: string;
     toUsers: string[]
 }
@@ -9,7 +11,7 @@ export interface DeleteGroupMsg {
 export interface DeleteDuoMsg {
     createdIn: string; 
     room: string; 
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    deletedTo: DeletedToType;
     fromUser: string;
     toUser: string
 }

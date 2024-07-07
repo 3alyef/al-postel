@@ -20,7 +20,7 @@ interface propsMessageLabel {
     setMsgCreatedInDelete: Dispatch<SetStateAction<string[]>>;
     createdIn: string;
     msgCreatedInDelete: string[];
-    deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
+    deletedTo: string;
     fromUser: string;
     toUsers: string[] 
 }
@@ -124,7 +124,6 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
         if (messageGroup && messageGroup.message.length > 0){
             return <>{messageGroup.message}</>
         } 
-       
         if(deletedTo === "justAll"){
             return
         } else if(deletedTo === "justFrom" && soulName === userSoul) {

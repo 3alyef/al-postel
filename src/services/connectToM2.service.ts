@@ -13,10 +13,11 @@ export interface msgStatus {
     createdIn: string;
     viewStatus: "onServer" | "delivered" | "seen";
 }
+export type DeletedToType = "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
 
 export interface sendMsg {
     fromUser: string;
-    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    deletedTo: DeletedToType;
     viewStatus?: "onServer" | "delivered" | "seen";
     toUser: string;
     toRoom?: string;
@@ -27,7 +28,7 @@ export interface sendMsg {
 }
 export interface sendMsgGroup {
     fromUser: string;
-    deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
+    deletedTo: string;
     toUsers: string[];
     viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
     message: string;
@@ -401,6 +402,7 @@ export class ConnectM2 {
         })
 
         this.socket.on("updateMsgDelGroupStatus", ({ createdIn, room, deletedTo }: DeleteGroupMsg) => {
+            console.log("msg DelStatus update: ", deletedTo);
             this.setMessagesGroupContent((previous) => {
                 const newMessages = new Map(previous);
                 const msgsGp = newMessages.get(room);
@@ -409,14 +411,15 @@ export class ConnectM2 {
                     const updatedMessages = msgsGp.map((msg) => {
                         if (msg.createdIn === createdIn) {
                             //msg.deletedTo = deletedTo;
-                            if (deletedTo === "all" || 
+                            /*if (deletedTo === "all" || 
                                 (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
                                 (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
                                 deletedTo === "allFrom") {
                                 return { ...msg, message: "", deletedTo };
                             } else {
                                 return {...msg, deletedTo}
-                            }
+                            }*/
+                            return {...msg, deletedTo};
                         }
                         return msg;
                     });
