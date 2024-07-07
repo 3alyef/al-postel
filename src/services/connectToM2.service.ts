@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
 import { viewStatusJsonToMap } from "./deserialization.service";
 import { DeleteDuoMsg, DeleteGroupMsg } from "@/interfaces/deleteMsg.interface";
+import { stringToMap } from "@/app/components/groupMsgs/groupMsgs";
 
 export interface msgStatus {
     fromUser: string;
@@ -357,10 +358,6 @@ export class ConnectM2 {
         })
 
         this.socket.on("updateMsgDelDuoStatus", ({createdIn, room, deletedTo}: DeleteDuoMsg)=>{
-            //
-            //console.log("updateMsgDelDuoStatus", {createdIn , room , deletedTo});
-            //
-
             let userSoulName: string = '';
             setRoomsListByUserSoul((prev)=>{
                 prev.forEach((value, key)=>{
@@ -370,13 +367,11 @@ export class ConnectM2 {
                 })
                 return new Map(prev);
             })
-            //console.log("userSoulName", userSoulName)
             if(userSoulName.length > 0){
                 this.setMessagesContent((prev)=>{
                     const newV = new Map(prev);
                     
                     const msgs = newV.get(userSoulName);
-                    //console.log("msgsBF",msgs);
                     if (msgs) {
                         const updatedMessages = msgs.map((msg) => {
                             if (msg.createdIn === createdIn) {
@@ -394,7 +389,6 @@ export class ConnectM2 {
                         });
                         newV.set(userSoulName, updatedMessages);
                     }
-                    console.log("msgsAF",msgs);
                     return newV
                 })
             }
@@ -410,16 +404,28 @@ export class ConnectM2 {
                 if (msgsGp) {
                     const updatedMessages = msgsGp.map((msg) => {
                         if (msg.createdIn === createdIn) {
-                            //msg.deletedTo = deletedTo;
-                            /*if (deletedTo === "all" || 
-                                (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
-                                (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
-                                deletedTo === "allFrom") {
-                                return { ...msg, message: "", deletedTo };
-                            } else {
-                                return {...msg, deletedTo}
-                            }*/
-                            return {...msg, deletedTo};
+                            if (msg.createdIn === createdIn) {
+                                let deletedToMap = stringToMap<string, DeletedToType>(deletedTo);
+                                deletedToMap.forEach((del, Soul)=>{
+                                    if(msg.message.length > 0){
+                                        if(del === "all" || del === "allFrom" || del === "allTo"){
+
+                                            msg.message = "";
+                                        } else if(Soul === this.soulName && del === "justFrom"){
+
+                                            msg.message = "";
+                                        } else if(msg.fromUser === this.soulName && del === "justTo") {
+
+                                            msg.message = "";
+                                        }
+                                    }
+                                    
+                                })
+
+                                msg.deletedTo = deletedTo;
+                            }
+                            //{...msg, deletedTo}
+                            return msg;
                         }
                         return msg;
                     });

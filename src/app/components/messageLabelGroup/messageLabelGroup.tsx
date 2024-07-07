@@ -1,8 +1,8 @@
 "use client";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
-import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
+import { propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ConnectM2 } from "@/services/connectToM2.service";
+import { ConnectM2, DeletedToType } from "@/services/connectToM2.service";
 import useLongPress from "@/hooks/useLongPress.hook";
 import { RiForbid2Line } from "react-icons/ri";
 
@@ -20,7 +20,7 @@ interface propsMessageLabel {
     setMsgCreatedInDelete: Dispatch<SetStateAction<string[]>>;
     createdIn: string;
     msgCreatedInDelete: string[];
-    deletedTo: string;
+    deletedToMSG: DeletedToType;
     fromUser: string;
     toUsers: string[] 
 }
@@ -31,10 +31,15 @@ export const msgDeleted = (fromUser: string, userSoul: string, type2?:boolean )=
     </span>
 )
 
-export default function MessageLabelGroup({messageGroup, soulName, createdTime, userSoul, serverIo,setMessagesGroupContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedTo, fromUser, toUsers}: propsMessageLabel){
-    const [selectArea, setSelectArea] = useState<boolean>(false)
+export default function MessageLabelGroup({messageGroup, soulName, createdTime, userSoul, serverIo,setMessagesGroupContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedToMSG, fromUser, toUsers}: propsMessageLabel){
+    const [selectArea, setSelectArea] = useState<boolean>(false);
+    const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
+    useEffect(()=>{
+        console.log("prev", deletedTo, "deletedToMSG change", deletedToMSG)
+        setDeletedTo(deletedToMSG);
+    }, [deletedToMSG]);
+ 
     //
-    
     const longPressEvent = useLongPress({
         onLongPress: ()=>{
             if(selectArea) {
@@ -102,7 +107,7 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
             console.log('messageGroup', messageGroup)
         }
         
-    }, [messageGroup, soulName, serverIo, setMessagesGroupContent, userSoul]);
+    }, [messageGroup, serverIo, setMessagesGroupContent, userSoul]);
 
     
     function divDeleteML(){
@@ -120,22 +125,17 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
         }
     }, [msgCreatedInDelete]);
     
-    const msg = () => {
+    const msg = (deletedTo: DeletedToType) => {
         if (messageGroup && messageGroup.message.length > 0){
             return <>{messageGroup.message}</>
-        } 
-        if(deletedTo === "justAll"){
-            return
-        } else if(deletedTo === "justFrom" && soulName === userSoul) {
-            return
-        } else if(deletedTo === "justTo" && (soulName !== userSoul || toUsers?.includes(soulName))){
-            return
         } else if(deletedTo === "all") {
             return msgDeleted(fromUser, userSoul);
-        } else if(deletedTo === "allFrom" && (userSoul !== soulName || toUsers?.includes(soulName))){
+        } else if(deletedTo === "allFrom") {
             return msgDeleted(fromUser, userSoul);
-        } else if(deletedTo === "allTo" && userSoul !== soulName) {
+        } else if(deletedTo === "allTo") {
             return msgDeleted(fromUser, userSoul);
+        } else {
+            return
         }
         
     }
@@ -172,7 +172,7 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
                 
                 <p className="msgContainer ltr">
                     {
-                        msg()
+                        msg(deletedTo)
                     }
                 </p>
                 
@@ -189,19 +189,16 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
             onClick={divDeleteML}>
 
             </div>
+            <div className="text-white font-bold">DeletedTo: {deletedTo}</div>
         </div>
     )
-
-    useEffect(()=>{
-        console.log("deletedTo === allTo && fromUser !== soulName", deletedTo === "allTo" && fromUser !== soulName)
-        console.log("deletedTo", deletedTo);
-        console.log("deletedTo === justTo && toUsers.includes(fromUser)", toUsers && deletedTo === "justTo" && toUsers.includes(fromUser))
-    }, [deletedTo])
    
     if(deletedTo === "none" || deletedTo === "all" || (deletedTo === "allFrom" && fromUser !== userSoul) || (deletedTo === "allTo" && fromUser !== soulName) ||
     (deletedTo === "justFrom" && fromUser !== userSoul) ||
     (deletedTo === "justTo" && fromUser !== soulName)){
         return data();
+    } else {
+        return <div className="text-white font-bold">DeletedTo: {deletedTo}</div>
     }
     
 }

@@ -103,7 +103,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             if (groupsScreenProps?.userSoul && isGroup) {
                 let toUsers = groupsScreenProps.groupParticipants;
                 let deletedTo: Map<string, DeletedToType> = new Map();
-                for(const user in toUsers){
+                for(const user of toUsers){
                     deletedTo.set(user, "none");
                 }
                 const msgS: sendMsgGroup = {
@@ -209,18 +209,11 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         function checkMessagesToDelete(messages: any[]): boolean {
             let diverge: any[];
             if(isGroup){
-                diverge = messages.filter((msg)=>{
-                    if(msgCreatedInDelete.includes(msg.createdIn)) {
-                        let deletedTo = new Map<string, DeletedToType>(stringToMap<string, DeletedToType>(msg.deletedTo));
-                    }
-                })
+                diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && (Array.from(stringToMap(msg.deletedTo).values()).some(del => del !== "none" && del !== "justTo") || msg.fromUser !== userSoul
+                ))
             } else {
-                diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && 
-                (isGroup ? (
-                    Array.from(stringToMap(msg.deletedTo).values()).some(del => del !== "none" && del !== "justTo") || msg.fromUser !== userSoul
-                ) : (
-                    (msg.deletedTo !== "none" && msg.deletedTo !== "justTo") || msg.fromUser !== userSoul
-                )))
+                diverge = messages.filter((msg)=> msgCreatedInDelete.includes(msg.createdIn) && (msg.deletedTo !== "none" && msg.deletedTo !== "justTo") || msg.fromUser !== userSoul
+                )
             }
             return diverge.length > 0 ? false : true;
         };

@@ -1,7 +1,8 @@
+"use client";
 import { ConnectM2, DeletedToType } from "@/services/connectToM2.service";
 import { propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
 import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface propsGroupMsgs {
     messagesContainerByGroup: propsMessagesGroupContent[];
@@ -16,6 +17,10 @@ interface propsGroupMsgs {
     msgCreatedInDelete: string[]
 }
 export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSoul, serverIo, roomsListByUserSoul, setMessagesGroupContent, msgCreatedInDelete, participantsBgColor, participantsData, setMsgCreatedInDelete}: propsGroupMsgs) {
+    //const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
+    /*useEffect(()=>{
+
+    }, [messagesContainerByGroup])*/
     return (
         <>
             {
@@ -24,18 +29,19 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
                     const createdTime = createdDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     
                     const deletedToMap = stringToMap<string, DeletedToType>(msg.deletedTo);
-
                     let deletedTo: DeletedToType = "none";
+                    
                     if(msg.fromUser === userSoul){
-                        deletedToMap.forEach((del, key) => {
+                        deletedToMap.forEach((del) => {
                             if (del === "all" || del === "allTo") {
                                 deletedTo = "all";
                             } else if (del === "justTo" || del === "none") {
-                                deletedTo = "none";
+                                deletedTo = "none"
                             } else if (del === "allFrom" || del === "justFrom") {
                                 deletedTo = "allFrom";
+                            } else if(del === "justAll") {
+                                deletedTo = "justAll"
                             }
-                    
                         });
 
                     } else {
@@ -56,7 +62,7 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
                         participantsData={participantsData}
                         setMsgCreatedInDelete={setMsgCreatedInDelete}
                         createdIn={msg.createdIn}
-                        msgCreatedInDelete={msgCreatedInDelete} deletedTo={deletedTo}
+                        msgCreatedInDelete={msgCreatedInDelete} deletedToMSG={deletedTo}
                         fromUser={msg.fromUser}
                         toUsers={msg.toUsers}/>
                     )
@@ -76,6 +82,7 @@ interface PropsDeleteMsgsGroup {
 }   
 
 export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msgCreatedInDelete, serverIo, room, userSoul }: PropsDeleteMsgsGroup) {
+    console.log("deletedTo", deletedTo)
     if(deletedTo === "all"){
         for (const crdIn of msgCreatedInDelete){
             const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
@@ -90,7 +97,8 @@ export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msg
         const toMsgs = messagesContainerByGroup.filter(msg => msgCreatedInDelete.includes(msg.createdIn) && msg.fromUser !== userSoul); // as msgs que não vieram do user
         let toCreatedIn = toMsgs.map(msg => msg.createdIn);
 
-        for (const crdIn in toCreatedIn){
+        for (const crdIn of toCreatedIn){
+            //console.log("of", crdIn)
             const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
             if(msg) {
                 let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, "justTo"), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
