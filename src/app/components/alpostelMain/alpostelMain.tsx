@@ -22,7 +22,8 @@ export interface propsMessagesGroupContent {
     _id?: string;
     fromUser: string;
     deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
-    viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
+    //Map<string,  "onServer" | "delivered" | "seen"> === string (viewStatus)
+    viewStatus: string;
     toUsers: string[];
     message: string;
     toGroup: string;

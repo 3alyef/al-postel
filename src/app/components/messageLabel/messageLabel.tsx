@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ConnectM2 } from "@/services/connectToM2.service";
 import useLongPress from "@/hooks/useLongPress.hook";
 import { RiForbid2Line } from "react-icons/ri";
+import { FaClockRotateLeft } from "react-icons/fa6";
 
 interface propsMessageLabel {
     message: propsMessagesContent;
@@ -62,8 +63,10 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
 
     ///
 
-    function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen"){
-        if(viewStatus === 'onServer'){
+    function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen" | "none"){
+        if(viewStatus === "none") {
+            return <span className="text-[1.25em]"><FaClockRotateLeft /></span>
+        }else if(viewStatus === 'onServer'){
             return<span className="text-[1.25em]"> <BsCheck /></span>
         }
         if(viewStatus === 'delivered') {
@@ -103,7 +106,7 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
         }
     
         
-    }, [message, soulName, serverIo, /*setMessagesContent,*/userSoul]);
+    }, [message, soulName, serverIo, userSoul]);
 
    
     function divDeleteML(){
@@ -183,6 +186,7 @@ export default function MessageLabel({message, soulName, createdTime, userSoul, 
 
     
     /*
+    setMessagesContent,*
     if(isGroup && toUsers){
         if(
         !(deletedTo === "justAll") && 

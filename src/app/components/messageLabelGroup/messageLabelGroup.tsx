@@ -5,6 +5,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ConnectM2, DeletedToType } from "@/services/connectToM2.service";
 import useLongPress from "@/hooks/useLongPress.hook";
 import { RiForbid2Line } from "react-icons/ri";
+import { FaClockRotateLeft } from "react-icons/fa6";
+import viewStatusGroup from "@/services/ViewStatus_group.service";
 
 interface propsMessageLabel {
     messageGroup: propsMessagesGroupContent;
@@ -33,13 +35,41 @@ export const msgDeleted = (fromUser: string, userSoul: string, type2?:boolean )=
 
 export default function MessageLabelGroup({messageGroup, soulName, createdTime, userSoul, serverIo,setMessagesGroupContent, roomsListByUserSoul, participantsBgColor, groupName, participantsData, setMsgCreatedInDelete, msgCreatedInDelete, createdIn, deletedToMSG, fromUser, toUsers}: propsMessageLabel){
     const [selectArea, setSelectArea] = useState<boolean>(false);
-    const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
+    const [deletedTo, setDeletedTo] = useState<DeletedToType>("none");
+
+    useEffect(()=>{
+        let vs= viewStatusGroup.generateViewStatus(messageGroup.viewStatus);
+        if(messageGroup && messageGroup.viewStatus && !(messageGroup.viewStatus === "seen") && messageGroup.fromUser !== userSoul){
+
+            const room = roomsListByUserSoul.get(soulName)
+            if(room){
+                serverIo.msgSeenUpdate({fromUser: message.fromUser, toUser: message.toUser, createdIn: message.createdIn, room, viewStatus: 'seen'})
+            
+                setMessagesGroupContent((previous) => {
+                    const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
+                    newMessages.forEach((value, key)=>{
+                        if(key === message.fromUser){
+                            const updatedMessages: propsMessagesContent[] = value.map((msg) => {
+                                if (msg.createdIn === message.createdIn) {
+                                    return { ...msg, viewStatus: 'seen' };
+                                }
+                                return msg;
+                            });
+            
+                            newMessages.set(key, updatedMessages);
+                        }
+                    })
+                    return newMessages
+                });
+            }
+        }
+    }, [messageGroup, soulName, serverIo, userSoul]);
+
+   
     useEffect(()=>{
         console.log("prev", deletedTo, "deletedToMSG change", deletedToMSG)
         setDeletedTo(deletedToMSG);
     }, [deletedToMSG]);
- 
-    //
     const longPressEvent = useLongPress({
         onLongPress: ()=>{
             if(selectArea) {
@@ -63,8 +93,6 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
         },
         ms: 500, // 500ms for long press detection
     });
-
-    ///
     const [bgColor, setBgColor] = useState<string>('');
     const [dataUser, setDataUser] = useState<propsRoom>();
     useEffect(()=>{
@@ -89,15 +117,26 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
         }
     }, [participantsBgColor])
 
-    function typeOfCheck(viewStatus: "onServer" | "delivered" | "seen"){
-        if(viewStatus === 'onServer'){
+    function typeOfCheck(viewStatus: Map<string, "delivered" | "seen"> | "onServer" | "none"){
+        if(viewStatus === "none") {
+            return <span className="text-[1.25em]"><FaClockRotateLeft /></span>
+        } else if(viewStatus === 'onServer'){
             return<span className="text-[1.25em]"> <BsCheck /></span>
-        }
-        if(viewStatus === 'delivered') {
-            return <span className="text-[1.25em]"><BsCheckAll/></span>
-        }
-        if(viewStatus === 'seen'){
-            return <span className="text-[1.25em] text-[#0c5dba]"><BsCheckAll/></span>
+        } else {
+            let isDeliveredOSeen: "delivered" | "seen" = "delivered";
+            viewStatus.forEach((deliveredOSeen)=>{
+                if(deliveredOSeen === "delivered"){
+                    isDeliveredOSeen = "delivered";
+                } else {
+                    isDeliveredOSeen = "seen";
+                }
+            })
+            if(isDeliveredOSeen === 'delivered') {
+                return <span className="text-[1.25em]"><BsCheckAll/></span>
+            }
+            if(isDeliveredOSeen === 'seen'){
+                return <span className="text-[1.25em] text-[#0c5dba]"><BsCheckAll/></span>
+            }
         }
     }
 
@@ -179,9 +218,9 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
                 {
-                    /*!(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
+                    !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
                     && !(deletedTo === "allTo" || deletedTo === "allFrom") && 
-                    message && message.viewStatus && message.fromUser === userSoul && typeOfCheck(message.viewStatus)*/
+                    messageGroup && messageGroup.viewStatus && messageGroup.fromUser === userSoul && typeOfCheck(messageGroup.viewStatus)
                 }
                 </p>
             </div>
@@ -197,8 +236,6 @@ export default function MessageLabelGroup({messageGroup, soulName, createdTime, 
     (deletedTo === "justFrom" && fromUser !== userSoul) ||
     (deletedTo === "justTo" && fromUser !== soulName)){
         return data();
-    } else {
-        return <div className="text-white font-bold">DeletedTo: {deletedTo}</div>
     }
     
 }
