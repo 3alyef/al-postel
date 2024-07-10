@@ -1,4 +1,4 @@
-import { propsMessagesContent, propsMessagesGroupContent, propsMessagesGroupContentFromServer, propsRoom } from "@/app/components/alpostelMain/alpostelMain";
+import { propsMessagesContent, propsMessagesGroupContent,  propsRoom } from "@/app/components/alpostelMain/alpostelMain";
 import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
@@ -9,10 +9,20 @@ import { stringToMap } from "@/app/components/groupMsgs/groupMsgs";
 
 export interface msgStatus {
     fromUser: string;
-    toUser: string;
+    toUser?: string;
+    toUsers?: string[];
     room: string;
     createdIn: string;
-    viewStatus: "onServer" | "delivered" | "seen";
+    viewStatus: "onServer" | "delivered" | "seen" | string;
+}
+
+export interface msgStatusResponse {
+    fromUser: string;
+    deletedTo: "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
+    viewStatus?: "onServer" | "delivered" | "seen";
+    toUser: string;
+    message: string;
+    createdIn:  string
 }
 export type DeletedToType = "none" | "justTo" | "justAll" | "justFrom" | "all" | "allFrom" | "allTo";
 
@@ -31,7 +41,7 @@ export interface sendMsgGroup {
     fromUser: string;
     deletedTo: string;
     toUsers: string[];
-    viewStatus?: "onServer" | Map<string, "delivered" | "seen">;
+    viewStatus: string;
     message: string;
     toGroup: string;
     createdIn: string
@@ -208,39 +218,14 @@ export class ConnectM2 {
             }
             
         })
-        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContentFromServer[]})=>{
+        this.socket.on("previousGroupMsgs", (el: {messageData: propsMessagesGroupContent[]})=>{
             console.log('previousGroupMsgs', el)
             if(el.messageData.length > 0) {
+                console.log("نحر")
                 this.setMessagesGroupContent((prev)=>{
                     const newMessages: Map <string, propsMessagesGroupContent[]> = new Map<string, propsMessagesGroupContent[]>(prev);
-                    let msgContainerValue: propsMessagesGroupContent[] = [];
-                    /*el.messageData.map((msg) => {
-                        let deletedTo = msg.deletedTo;
-                        if (deletedTo === "all" || 
-                            (deletedTo === "justFrom" && msg.fromUser === this.soulName) || 
-                            (deletedTo === "justTo" && msg.toUsers.includes(this.soulName)) || 
-                            deletedTo === "allFrom") {
-                            return { ...msg, message: "" };
-                        }
-                        
-                        return msg;
-                    });*/
-        
-                    el.messageData.forEach((msgContent)=>{
-                        let viewStatus;
-                        if(msgContent.viewStatus){
-                            viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
-                        }
-                        
-                        let newV: propsMessagesGroupContent = {
-                            ...msgContent,
-                            viewStatus,
-                            deletedTo: msgContent.deletedTo
-                        }
-                        msgContainerValue.push(newV)
-                    })
-
-                    newMessages.set(el.messageData[0].toGroup, msgContainerValue);
+                    
+                    newMessages.set(el.messageData[0].toGroup, el.messageData);
 
                     return newMessages
                 })
@@ -262,7 +247,7 @@ export class ConnectM2 {
             
         })
 
-        this.socket.on("msgStatus", (data: msgStatus)=>{
+        this.socket.on("msgStatus", (data: msgStatusResponse)=>{
             //console.log('msgStatus', data)
             this.setMessagesContent((previous) => {
                 const newMessages: Map <string, propsMessagesContent[]> = new Map<string, propsMessagesContent[]>(previous);
@@ -281,7 +266,7 @@ export class ConnectM2 {
                 return newMessages
             });
         })
-
+        //-------------------->>>>>>>>>>>>>>
         this.socket.on("setTypingState", ({state, userSoulFrom}:{state: boolean, userSoulFrom: string})=>{
             //console.log('setTypingState', {state, userSoulFrom})
             
@@ -338,7 +323,7 @@ export class ConnectM2 {
             }
         })
 
-        this.socket.on("msgGroupStatus", (msgData: {createdIn: string, toGroup: string, viewStatus: "onServer" | Map<string, | "delivered" | "seen">})=>{
+        this.socket.on("msgGroupStatus", (msgData: {createdIn: string, toGroup: string, viewStatus: string})=>{
             if(msgData.createdIn, msgData.toGroup){
                 this.setMessagesGroupContent((previous)=>{
                     let newDataValue: "onServer" | Map<string, propsMessagesGroupContent[]> = new Map(previous);
@@ -411,10 +396,10 @@ export class ConnectM2 {
                                         if(del === "all" || del === "allFrom" || del === "allTo"){
 
                                             msg.message = "";
-                                        } else if(Soul === this.soulName && del === "justFrom"){
+                                        } else if( msg.fromUser === this.soulName && del === "justFrom"){
 
                                             msg.message = "";
-                                        } else if(msg.fromUser === this.soulName && del === "justTo") {
+                                        } else if(Soul === this.soulName && del === "justTo" && msg.fromUser !== this.soulName) {
 
                                             msg.message = "";
                                         }
@@ -539,9 +524,15 @@ export class ConnectM2 {
         });
     }
 
-    public msgSeenUpdate(data: msgStatus){
-        this.socket.emit("msgSeenUpdate", {...data})
+    public msgSeenUpdate(data: msgStatus, isGroup?:boolean){
+        if(!isGroup){
+            this.socket.emit("msgSeenUpdate", {...data})
+        } else {
+            this.socket.emit("msgSeenUpdateGroup", {...data})
+        }
+        
     }
+
 
     public setTypingState({state, userSoulFrom, userSoulTo}:{state: boolean, userSoulFrom: string, userSoulTo: string}) {
         this.socket.emit("setTypingState", {state, userSoulFrom, userSoulTo})
@@ -606,3 +597,20 @@ export class ConnectM2 {
     }
 
 }
+
+
+/*
+
+el.messageData.forEach((msgContent)=>{
+let viewStatus: string;
+if(msgContent.viewStatus){
+viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
+}
+
+let newV: propsMessagesGroupContent = {
+...msgContent,
+viewStatus,
+deletedTo: msgContent.deletedTo
+}
+msgContainerValue.push(newV)
+}) */

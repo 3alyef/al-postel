@@ -17,9 +17,9 @@ interface propsGroupMsgs {
     msgCreatedInDelete: string[]
 }
 export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSoul, serverIo, roomsListByUserSoul, setMessagesGroupContent, msgCreatedInDelete, participantsBgColor, participantsData, setMsgCreatedInDelete}: propsGroupMsgs) {
-    //const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
-    /*useEffect(()=>{
-
+    /*const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
+    useEffect(()=>{
+        setDeletedTo()
     }, [messagesContainerByGroup])*/
     return (
         <>
@@ -53,18 +53,18 @@ export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSo
                     
                     return (
                         <MessageLabelGroup
-                        soulName={soulNameNow} createdTime={createdTime} messageGroup={msg}
-                        userSoul={userSoul} serverIo={serverIo}
+                        groupAdress={soulNameNow} 
+                        createdTime={createdTime} 
+                        messageGroup={msg}
+                        userSoul={userSoul} 
+                        serverIo={serverIo}
                         roomsListByUserSoul={roomsListByUserSoul} key={msg.createdIn}
                         setMessagesGroupContent={setMessagesGroupContent}
                         participantsBgColor={participantsBgColor}
                         groupName={soulNameNow} 
                         participantsData={participantsData}
                         setMsgCreatedInDelete={setMsgCreatedInDelete}
-                        createdIn={msg.createdIn}
-                        msgCreatedInDelete={msgCreatedInDelete} deletedToMSG={deletedTo}
-                        fromUser={msg.fromUser}
-                        toUsers={msg.toUsers}/>
+                        msgCreatedInDelete={msgCreatedInDelete} deletedToMSG={deletedTo}/>
                     )
                 })
             }
@@ -87,7 +87,7 @@ export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msg
         for (const crdIn of msgCreatedInDelete){
             const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
             if(msg){
-                let deletedTo = transformDeletedToGroup(msg.deletedTo, "all");
+                let deletedTo = transformDeletedToGroup(msg.deletedTo, "all", userSoul, msg.fromUser);
                 let resp = await serverIo.deleteGroupMsg({createdIn: msg.createdIn, deletedTo, fromUser: msg.fromUser, room, toUsers: msg.toUsers });
 
                 console.log("resp", resp);
@@ -101,7 +101,7 @@ export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msg
             //console.log("of", crdIn)
             const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
             if(msg) {
-                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, "justTo"), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
+                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, "justTo", userSoul, msg.fromUser), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
 
                 console.log("resp", resp);
             }
@@ -112,7 +112,7 @@ export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msg
         for (const crdIn of fromCreatedIn) {
             const msg = messagesContainerByGroup.find(msg => msg.createdIn === crdIn);
             if (msg) {
-                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, deletedTo), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
+                let resp = await serverIo.deleteGroupMsg({createdIn: crdIn, deletedTo: transformDeletedToGroup(msg.deletedTo, deletedTo, userSoul, msg.fromUser), room, fromUser: msg.fromUser , toUsers: msg.toUsers});
 
                 console.log("resp", resp);
             }
@@ -122,10 +122,12 @@ export async function deleteMsgsGroup({ deletedTo, messagesContainerByGroup, msg
     return;
 }
 
-function transformDeletedToGroup(previousDeletedTo: string, newValue: DeletedToType): string {
+function transformDeletedToGroup(previousDeletedTo: string, newValue: DeletedToType, userSoul: string, fromUser: string): string {
     let mapDeletedTo = stringToMap<string, DeletedToType>(previousDeletedTo);
     mapDeletedTo.forEach((value, key)=>{
-        mapDeletedTo.set(key, changeDeletedTo(value, newValue));
+        if(key === userSoul || userSoul === fromUser) {
+            mapDeletedTo.set(key, changeDeletedTo(value, newValue));
+        }
     })
     return mapToString<string, DeletedToType>(mapDeletedTo);
 }
@@ -144,9 +146,9 @@ export function stringToMap<K, V>(str: string): Map<K, V> {
 //
 export function changeDeletedTo(previous: DeletedToType, current: DeletedToType): DeletedToType {
     let newValue: DeletedToType = "none";
-    //console.log("previous", previous);
-    //console.log("current", current);
-
+    console.log("previous", previous);
+    console.log("current", current);
+    
     if(previous === "none"){
         newValue = current;
     } else if(previous === "all"){

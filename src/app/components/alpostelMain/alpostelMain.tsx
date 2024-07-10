@@ -29,16 +29,7 @@ export interface propsMessagesGroupContent {
     toGroup: string;
     createdIn:  string
 }
-export interface propsMessagesGroupContentFromServer {
-    _id?: string;
-    fromUser: string;
-    deletedTo: "none" | "justFrom" | "all" | "allFrom" | string;
-    viewStatus?: string;
-    toUsers: string[];
-    message: string;
-    toGroup: string;
-    createdIn:  string
-}
+
 
 export interface propsMessagesContent {
     _id?: string;

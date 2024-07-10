@@ -16,6 +16,7 @@ import { propsGroups } from "@/interfaces/groups.interface";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
 import GroupMsgs, { deleteMsgsGroup, mapToString, stringToMap } from "../groupMsgs/groupMsgs";
+import { ViewStatusMapSub } from "@/services/ViewStatus_group.service";
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -103,8 +104,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             if (groupsScreenProps?.userSoul && isGroup) {
                 let toUsers = groupsScreenProps.groupParticipants;
                 let deletedTo: Map<string, DeletedToType> = new Map();
+                let viewStatus: Map<string, ViewStatusMapSub> = new Map();
                 for(const user of toUsers){
                     deletedTo.set(user, "none");
+                    viewStatus.set(user, "none");
                 }
                 const msgS: sendMsgGroup = {
                     createdIn,
@@ -113,7 +116,7 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                     message: msg,
                     toGroup: soulNameNow,
                     toUsers,
-                    viewStatus: undefined
+                    viewStatus: mapToString(viewStatus)
                 };
                 //console.log('msgS Group: ', msgS)
                 serverIo.sendMsg(true, undefined, msgS);
