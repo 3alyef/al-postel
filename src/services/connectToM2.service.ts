@@ -3,7 +3,6 @@ import { propsGroups, propsGroupsR } from "@/interfaces/groups.interface";
 import { costumName, DataUser } from "@/interfaces/searchByEmail.interface";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
-import { viewStatusJsonToMap } from "./deserialization.service";
 import { DeleteDuoMsg, DeleteGroupMsg } from "@/interfaces/deleteMsg.interface";
 import { stringToMap } from "@/app/components/groupMsgs/groupMsgs";
 
@@ -600,19 +599,3 @@ export class ConnectM2 {
 
 }
 
-
-/*
-
-el.messageData.forEach((msgContent)=>{
-let viewStatus: string;
-if(msgContent.viewStatus){
-viewStatus = viewStatusJsonToMap(msgContent.viewStatus);
-}
-
-let newV: propsMessagesGroupContent = {
-...msgContent,
-viewStatus,
-deletedTo: msgContent.deletedTo
-}
-msgContainerValue.push(newV)
-}) */

@@ -30,7 +30,6 @@ export interface propsMessagesGroupContent {
     createdIn:  string
 }
 
-
 export interface propsMessagesContent {
     _id?: string;
     fromUser: string;

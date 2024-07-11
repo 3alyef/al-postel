@@ -6,7 +6,7 @@ export default async function Login({
 }: { params: { locale: Locale } }) {
   const dictionary = await getDictionary(locale);
   const _isSemitic: boolean = locale === "he";
-
+ 
   return (
       <> 
         <section className="commomSectionMenu">

@@ -1,22 +1,13 @@
-"use client"
+"use client";
 
-import { desactiveScreens } from "@/services/desactiveScreens.service";
 import { useEffect, useState, SetStateAction, Dispatch, useRef } from 'react';
-import Image from "next/image";
 import { propsMessagesContent, propsMessagesGroupContent, propsRoom } from "../alpostelMain/alpostelMain";
-import { IoMdSend } from "react-icons/io";
-import { ConnectM2, sendMsgGroup, DeletedToType } from "@/services/connectToM2.service";
-import { sendMsg } from "@/services/connectToM2.service";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { ConnectM2, DeletedToType } from "@/services/connectToM2.service";
 import MessageLabel from "../messageLabel/messageLabel";
-import TextareaMsg from "../textareaMsg/textareaMsg";
-import OptionsSwitch from "../optionsSwitch/optionsSwitch";
-import EmojisList from "../emojisList/emojisList";
 import { propsGroups } from "@/interfaces/groups.interface";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import MessageLabelGroup from "../messageLabelGroup/messageLabelGroup";
-import GroupMsgs, { deleteMsgsGroup, mapToString, stringToMap } from "../groupMsgs/groupMsgs";
-import { ViewStatusMapSub } from "@/services/ViewStatus_group.service";
+import GroupMsgs, { deleteMsgsGroup, stringToMap } from "../groupMsgs/groupMsgs";
+import HeaderMsgShow from './components/header/header';
+import FooterMsgShow from './components/footer/footer';
 
 interface propsMsgContainer {
     screenMsg: Map<string, propsRoom>;
@@ -40,35 +31,18 @@ interface propsMsgContainer {
     participantsData: Map<string, propsRoom>
 }
 export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, serverIo, userSoul, soulNameNow, setMessagesContent, setSoulNameNow, roomsListByUserSoul, typingStateRoom, friendsOnline, isGroup, screenMsgGroup, messageGroupContent, setMessagesGroupContent, participantsBgColor, groupsDataById, updateRooms, participantsData}: propsMsgContainer){
-    const [onProfile, setOnProfile] = useState<boolean>(false);
+    
     const [screenProps, setScreenProps] = useState<propsRoom>();
     const [groupsScreenProps, setGroupsScreenProps] = useState<propsGroups>();
-    const [menu, setMenu] = useState<boolean>(false);
-    const [msg, setMsg] = useState<string>("");
     const [messagesContainerByRoom, setMessagesContainerByRoom] = useState<propsMessagesContent[]>([]);
-    const [messagesContainerByGroup, setMessagesContainerByGroup] = useState<propsMessagesGroupContent[]>([])
-    const [isTyping, setIsTyping] = useState<boolean>(false)
+    const [messagesContainerByGroup, setMessagesContainerByGroup] = useState<propsMessagesGroupContent[]>([]);
     const [friendIsTyping, setFriendIsTyping] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false)
-    const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
-    const [imageURL, setImageURL] = useState<string>();
+    const [isOnlineFriend, setIsOnlineFriend] = useState<boolean>(false);
     const [deleteMsgScreen, setDeleteMsgScreen] = useState<boolean>(false);
     const [msgCreatedInDelete, setMsgCreatedInDelete] = useState<string[]>([]);
     const [showDeleteAll, setShowDeleteAll] = useState<boolean>(false)
-    useEffect(()=>{
-        if(isGroup){
-            let groupData = groupsDataById.get(soulNameNow);
-            if(groupData) {
-                setImageURL(groupData.imageData.userImage)
-            }
-        } else {
-            let roomData = updateRooms.get(soulNameNow);
-            if(roomData) {
-                setImageURL(roomData[0].imageData.userImage)
-            }
-        }
-    }, [groupsScreenProps, screenProps, groupsDataById, updateRooms, soulNameNow])
+    
     useEffect(()=>{
         if(isGroup){
             const msgArray = Array.from(screenMsgGroup.values());
@@ -83,48 +57,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         
        
     }, [screenMsgGroup, screenMsg, isGroup]);
-    const onFocus = ()=>{
-        setOnFocusStyle(true);
-        
-    }
-
-    function sendMsg(event: React.FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        //console.log(msg, "/*/*/*/", groupsScreenProps)
-        if(msg.length > 0 ) {
-            const dateInf = new Date(); 
-            const createdIn = dateInf.toISOString();
-            
-            if(screenProps?.userSoul && !isGroup){
-                const roomNameNow = roomsListByUserSoul.get(soulNameNow);
-                const msgS: sendMsg = {fromUser: userSoul, deletedTo: "none", message: msg, toUser: screenProps.userSoul, createdIn, toRoom: roomNameNow};
-                //console.log("msgS",msgS);
-                serverIo.sendMsg(false, msgS);
-            } 
-            if (groupsScreenProps?.userSoul && isGroup) {
-                let toUsers = groupsScreenProps.groupParticipants;
-                let deletedTo: Map<string, DeletedToType> = new Map();
-                let viewStatus: Map<string, ViewStatusMapSub> = new Map();
-                for(const user of toUsers){
-                    deletedTo.set(user, "none");
-                    viewStatus.set(user, "none");
-                }
-                const msgS: sendMsgGroup = {
-                    createdIn,
-                    deletedTo: mapToString(deletedTo),
-                    fromUser: userSoul,
-                    message: msg,
-                    toGroup: soulNameNow,
-                    toUsers,
-                    viewStatus: mapToString(viewStatus)
-                };
-                //console.log('msgS Group: ', msgS)
-                serverIo.sendMsg(true, undefined, msgS);
-            }
-            setMsg('');
-            setIsTyping(false);
-        }
-    }
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -142,15 +74,10 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
     }, [])
     useEffect(() => {
         const updateMessages = () => {
-            
             const roomNameNow = roomsListByUserSoul.get(soulNameNow);
-            // console.log("roomNameNow", roomNameNow)
             if(roomNameNow && !isGroup){
-                //console.log('magsContainer => roomNameNow', roomNameNow)
                 const messagesForRoom = messagesContent.get(soulNameNow);
                 if (messagesForRoom) {
-                    //console.log("Before sorting:", messagesForRoom);
-                    //console.log('messagesForRoom', messagesForRoom)
                     setMessagesContainerByRoom(messagesForRoom);
                 } else {
                     setMessagesContainerByRoom([])
@@ -175,23 +102,6 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
         console.log("messagesContent", messagesContent)
     }, [soulNameNow, messagesContent, messageGroupContent]);
 
-    function onBlur(){
-        setOnFocusStyle(false);
-        setIsTyping(false);
-    }
-
-    useEffect(()=>{
-        if(!isTyping && msg.length > 0){
-            setIsTyping(true)
-        }
-    }, [msg])
-
-
-    useEffect(()=>{
-        //console.log('isTyping', isTyping);
-        serverIo.setTypingState({state: isTyping, userSoulFrom: userSoul, userSoulTo: soulNameNow});
-    }, [isTyping])
-    
     useEffect(()=>{
         const friendState = typingStateRoom.get(soulNameNow);
         if(typeof friendState === 'boolean'){
@@ -283,108 +193,27 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
             }
         }
     }
-    
-    
-
     return(
         <> 
             {((groupsScreenProps?.userSoul && isGroup) || (screenProps?.userSoul && !isGroup)) && (
                 <div className="flex flex-col relative">
                     <div className="contactsContainer messagesContainer flex flex-col w-full h-full">
-                        <div className="headerBarContacts headerBarMsgs py-[5px]">
-                            {msgCreatedInDelete.length > 0 ? (
-                                <div className="flex items-center justify-between w-[100%]">
-                                    <div className="flex justify-between items-center gap-[1em]">
-                                        <div className=" flex items-center cursor-pointer" onClick={()=>{
-                                            setMsgCreatedInDelete([])
-                                        }}>
-                                            <div className=" sectionDisplayOk text-white " >
-                                                {_isSemitic ? (
-                                                    <FaArrowRight />
-                                                ):
-                                                (
-                                                    <FaArrowLeft />
-                                                )}
-                                        
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h1 className="text-white
-                                            font-[400] text-[19px]">
-                                                {msgCreatedInDelete.length}
-                                            </h1>
-                                        </div>
-                                    </div>
-                                    <div className="binMsgsBtn flex justify-center items-center">
-                                        <h2 className="binMsgs" onClick={()=>{
-                                            setDeleteMsgScreen(!deleteMsgScreen)
-                                        }}>
-                                            <RiDeleteBin6Line />
-                                        </h2>
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className=" flex items-center gap-[.5em] cursor-pointer" onClick={()=>{
-                                        setSoulNameNow('')
-                                    }}>
-                                        <div className=" sectionDisplayOk text-white " style={{display: 'none'}}>
-                                            {_isSemitic ? (
-                                                <FaArrowRight />
-                                            ):
-                                            (
-                                                <FaArrowLeft />      
-                                            )}
-                                        
-                                        </div>
-                                        
-                                        <div className="profilePhotoMainContacts"
-                                        onClick={()=>{
-                                            desactiveScreens(
-                                                {
-                                                    root: onProfile,
-                                                    competitors: [menu],
-                                                    setCompetitors: [setMenu],
-                                                    setRoot: setOnProfile,
-                                                    setOnMessages: setOnProfile
-                                                }
-                                            )
-                                        }}>
-                                            <Image alt="me" src={imageURL || "/imgs/assets/person.png"} fill/>
-                                        </div>
-                                        <div className="onlineAndTyping" style={{scale: isOnlineFriend ? '0.9' : '1'}}>
-                                            <span className="nameUserSpan">
-                                                {screenProps ? (screenProps.costumName.custom_name || screenProps.first_name):
-                                                (groupsScreenProps &&
-                                                groupsScreenProps.groupName)
-                                                }
-                                            </span>
-                                            {
-                                                !groupsScreenProps && (
-                                                    <span className="digOrOn">
-                                                    {isOnlineFriend ?           (friendIsTyping ?   'Digitando...' : 'Online') : false
-                                                    }
-                                                    </span>
-                                                ) 
-                                            }
-                                            
-                                        </div>
-                                    </div>
-                                    <div className="settingsContacts">
-                                        <OptionsSwitch _isSemitic={_isSemitic} onClickSettings={()=>desactiveScreens(
-                                            {
-                                                root: menu, 
-                                                competitors: [onProfile],  
-                                                setCompetitors: [setOnProfile], 
-                                                setRoot: setMenu,
-                                                setOnMessages: setMenu
-                                            }
-                                        ) }/>
-                                    </div>
-                                </>
-                            )}
-                                
-                        </div>
+                        <HeaderMsgShow
+                        _isSemitic={_isSemitic}
+                        deleteMsgScreen={deleteMsgScreen}
+                        friendIsTyping={friendIsTyping}
+                        groupsScreenProps={groupsScreenProps}
+                        isOnlineFriend={isOnlineFriend}
+                        msgCreatedInDelete={msgCreatedInDelete}
+                        screenProps={screenProps} 
+                        setDeleteMsgScreen={setDeleteMsgScreen}
+                        setMsgCreatedInDelete={setMsgCreatedInDelete}
+                        setSoulNameNow={setSoulNameNow}
+                        groupsDataById={groupsDataById} 
+                        isGroup={isGroup}
+                        soulNameNow={soulNameNow}
+                        updateRooms={updateRooms}/>
+
                         <div className="mainContacts mainMsgs">
                             <div className="fixed py-1 h-[72%] intermediateDivMsgs"> 
                                 <div className="main" >
@@ -423,19 +252,16 @@ export default function MsgsContainer({screenMsg, messagesContent, _isSemitic, s
                                 </div>
                             </div>
                         </div>
-                        <div className=" footerBarMsgs">
-                            <form onSubmit={sendMsg} className="footerBarContacts formFooterBar flex w-[57%] items-center justify-between py-2">
-                                <EmojisList/>
-                                <div className="messageInput">
-                                    <TextareaMsg value={msg} setValue={setMsg} _isRequired={true} _isSemitic={_isSemitic} messageError="" onFocusFunction={onFocus} onFocusStyle={onFocusStyle} processErrorStyle={false} setOnFocusStyle={setOnFocusStyle} text="Mensagem" costumerClass="text-white" onBlur={onBlur}/>
-                                </div>  
-                                <button className="sendMsg flex items-center justify-center" type="submit">
-                                    <IoMdSend className="text-white w-[75%] h-[75%]"
-                                    style={{rotate: _isSemitic ? '180deg':'0deg'}}/>
-                                </button>
-                            </form>
-                                
-                        </div>
+
+                        <FooterMsgShow
+                        _isSemitic={_isSemitic}
+                        groupsScreenProps={groupsScreenProps}
+                        isGroup={isGroup}
+                        roomsListByUserSoul={roomsListByUserSoul}
+                        screenProps={screenProps}
+                        serverIo={serverIo}
+                        soulNameNow={soulNameNow}
+                        userSoul={userSoul}/>
                     </div>
                 </div>
             )}

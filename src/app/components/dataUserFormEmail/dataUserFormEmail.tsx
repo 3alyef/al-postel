@@ -2,7 +2,7 @@
 
 import { Locale } from "@/i18n";
 import FormEmailLogin from "../formEmailLogin/formEmailLogin";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface propsDataUserFormEmail  {
     locale: Locale;
@@ -19,6 +19,31 @@ export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Acc
         setOnFocusStyle(true);
         //console.log('oi')
     }
+    useEffect(()=>{
+        const startSystem = async () => {
+            try {
+                let body = JSON.stringify({ data: new Date() });
+                const response = await fetch(`${process.env.NEXT_PUBLIC_M1_URL}/startSystem`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+            
+                const data = await response.json();
+                console.log(data.msg);
+                } catch (error) {
+                console.error('There was an error!', error);
+                }
+        };
+        
+        startSystem();
+    }, [])
     
     return (
         <>

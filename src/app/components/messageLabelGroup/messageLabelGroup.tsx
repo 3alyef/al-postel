@@ -13,9 +13,9 @@ export default function MessageLabelGroup({messageGroup, groupAdress, createdTim
         setDeletedTo(deletedToMSG);
     }, [deletedToMSG])
     useEffect(()=>{
-        //if(messageGroup.fromUser !== userSoul){ Vai atualizar para o proprio sender que ele "visualizou" sua propria message
-        viewStatusGroup.generateViewStatus({viewStatus: messageGroup.viewStatus, setMessagesGroupContent, userSoul, fromUser: messageGroup.fromUser, room: groupAdress, serverIo: serverIo, createdIn: messageGroup.createdIn, toUsers: messageGroup.toUsers});
-        //}
+        if(messageGroup.fromUser !== userSoul){ 
+            viewStatusGroup.generateViewStatus({viewStatus: messageGroup.viewStatus, setMessagesGroupContent, userSoul, fromUser: messageGroup.fromUser, room: groupAdress, serverIo: serverIo, createdIn: messageGroup.createdIn, toUsers: messageGroup.toUsers});
+        }
     }, [messageGroup, groupAdress, serverIo, userSoul]);
     if(
     deletedTo === "none" 
