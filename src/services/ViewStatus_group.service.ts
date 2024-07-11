@@ -17,13 +17,14 @@ interface GenerateViewStatus {
 }
 class ViewStatusGroup {
     public generateViewStatus({viewStatus, setMessagesGroupContent, userSoul, fromUser, room, serverIo,  toUsers, createdIn}: GenerateViewStatus){
+        //console.log("previousViewStatus: ", viewStatus);
+        //console.log("groupAdress (room): ", room)
         let viewStatusMap = stringToMap<string, ViewStatusMapSub>(viewStatus);
         let prevView = viewStatusMap.get(userSoul); 
-        let viewStatusString = mapToString(viewStatusMap);
         if(prevView) {
-            if(prevView !== "seen" && userSoul !== fromUser) {
+            if(prevView !== "seen") {
                 viewStatusMap.set(userSoul, "seen");
-                serverIo.msgSeenUpdate({createdIn, fromUser, room, toUsers, viewStatus: viewStatusString}, true)
+                serverIo.msgSeenUpdate({createdIn, fromUser, room, toUsers, viewStatus: mapToString(viewStatusMap)}, true)
             }
         }
        

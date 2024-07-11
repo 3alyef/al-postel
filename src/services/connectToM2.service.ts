@@ -324,9 +324,11 @@ export class ConnectM2 {
         })
 
         this.socket.on("msgGroupStatus", (msgData: {createdIn: string, toGroup: string, viewStatus: string})=>{
+            console.log("msgData: ", msgData);
+
             if(msgData.createdIn, msgData.toGroup){
                 this.setMessagesGroupContent((previous)=>{
-                    let newDataValue: "onServer" | Map<string, propsMessagesGroupContent[]> = new Map(previous);
+                    let newDataValue = new Map(previous);
 
                     let group = newDataValue.get(msgData.toGroup);
                     if(group){

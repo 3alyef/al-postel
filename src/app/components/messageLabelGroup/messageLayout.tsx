@@ -6,6 +6,8 @@ import { DeletedToType } from "@/services/connectToM2.service";
 import { msgDeleted } from "../messageLabel/messageLabel";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
 import { FaClockRotateLeft } from "react-icons/fa6";
+import { mapToString } from "../groupMsgs/groupMsgs";
+import { ViewStatusMap } from "@/services/ViewStatus_group.service";
 
 interface PropsMessageLayout {
     createdIn: string;
@@ -19,13 +21,13 @@ interface PropsMessageLayout {
     participantsData: Map<string, propsRoom>;
     participantsBgColor: Map<string, Map<string, string>>;
     groupAdress: string;
+    viewStatus: string;
 }
 
-export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCreatedInDelete, fromUser, userSoul, message, deletedTo, createdTime, participantsData, participantsBgColor, groupAdress}: PropsMessageLayout){
+export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCreatedInDelete, fromUser, userSoul, message, deletedTo, createdTime, participantsData, participantsBgColor, groupAdress, viewStatus}: PropsMessageLayout){
     const [selectArea, setSelectArea] = useState<boolean>(false);
     const [bgColor, setBgColor] = useState<string>('');
     const [dataUser, setDataUser] = useState<propsRoom>();
-    
     const longPressEvent = useLongPress({
         onLongPress: ()=>{
             if(selectArea) {
@@ -170,7 +172,10 @@ export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCrea
             onClick={divDeleteML}>
     
             </div>
-            <div className="text-white font-bold">DeletedTo: {deletedTo}</div>
+            <div className="text-white font-bold flex flex-col">
+                <span>DeletedTo: {deletedTo}</span>
+                <span>ViewStatus: {viewStatus}</span>
+            </div>
         </div>
     )
 

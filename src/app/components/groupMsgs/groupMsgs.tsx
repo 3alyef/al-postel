@@ -17,10 +17,6 @@ interface propsGroupMsgs {
     msgCreatedInDelete: string[]
 }
 export default function GroupMsgs({messagesContainerByGroup, soulNameNow, userSoul, serverIo, roomsListByUserSoul, setMessagesGroupContent, msgCreatedInDelete, participantsBgColor, participantsData, setMsgCreatedInDelete}: propsGroupMsgs) {
-    /*const [deletedTo, setDeletedTo] = useState<DeletedToType>("none")
-    useEffect(()=>{
-        setDeletedTo()
-    }, [messagesContainerByGroup])*/
     return (
         <>
             {
