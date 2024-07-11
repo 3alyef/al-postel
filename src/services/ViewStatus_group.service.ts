@@ -2,8 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { mapToString, stringToMap } from '../app/components/groupMsgs/groupMsgs';
 import { propsMessagesGroupContent } from '@/app/components/alpostelMain/alpostelMain';
 import { ConnectM2 } from './connectToM2.service';
-export type ViewStatusMapSub = "onServer" | "delivered" | "seen" | "none"
-export type ViewStatusMap = Map<string, ViewStatusMapSub>;
+export type ViewStatusMapSub = "onServer" | "delivered" | "seen" | "none";
 // Map<string,  "onServer" | "delivered" | "seen"> === string (viewStatus)
 interface GenerateViewStatus {
     createdIn: string;

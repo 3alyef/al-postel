@@ -6,8 +6,8 @@ import { DeletedToType } from "@/services/connectToM2.service";
 import { msgDeleted } from "../messageLabel/messageLabel";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
 import { FaClockRotateLeft } from "react-icons/fa6";
-import { mapToString } from "../groupMsgs/groupMsgs";
-import { ViewStatusMap } from "@/services/ViewStatus_group.service";
+import { mapToString, stringToMap } from '../groupMsgs/groupMsgs';
+import { ViewStatusMapSub } from "@/services/ViewStatus_group.service";
 
 interface PropsMessageLayout {
     createdIn: string;
@@ -74,8 +74,26 @@ export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCrea
         }
         
     }
-    function typeOfCheck(viewStatus: Map<string, "delivered" | "seen"> | "onServer" | "none"){
-        if(viewStatus === "none") {
+    function typeOfCheck(viewStatus: Map<string, ViewStatusMapSub> ){
+        let newViewStatus: ViewStatusMapSub = "none";
+        viewStatus.forEach((deliveredOSeen, Soul)=>{
+            //console.log("deliveredOSeen", deliveredOSeen)
+            if(Soul !== fromUser){
+                newViewStatus = deliveredOSeen;
+            } 
+        })
+        //console.log("viewStatus", viewStatus)
+        //console.log("newViewStatus", newViewStatus)
+        if(newViewStatus === "none"){
+            return <span className="text-[1em] mx-[.25em]"><FaClockRotateLeft/></span>
+        } else if(newViewStatus === "onServer") {
+            return<span className="text-[1.25em]"> <BsCheck/></span>
+        } else if(newViewStatus === "delivered"){
+            return <span className="text-[1.25em]"><BsCheckAll/></span>
+        } else {
+            return <span className="text-[1.25em] text-[#0c5dba]"><BsCheckAll/></span>
+        }
+        /*if(viewStatus === "none") {
             return <span className="text-[1.25em]"><FaClockRotateLeft /></span>
         } else if(viewStatus === 'onServer'){
             return<span className="text-[1.25em]"> <BsCheck /></span>
@@ -94,7 +112,7 @@ export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCrea
             if(isDeliveredOSeen === 'seen'){
                 return <span className="text-[1.25em] text-[#0c5dba]"><BsCheckAll/></span>
             }
-        }
+        }*/
     }
     useEffect(()=>{
         console.log()
@@ -162,9 +180,9 @@ export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCrea
                 <p className="msgCreatedIn flex justify-between w-full">{createdTime}
                 
                 {
-                    /* !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === soulName)
+                    !(deletedTo === "all") && !(deletedTo === "allTo" && fromUser === groupAdress)
                     && !(deletedTo === "allTo" || deletedTo === "allFrom") && 
-                    messageGroup && messageGroup.viewStatus && messageGroup.fromUser === userSoul && typeOfCheck(messageGroup.viewStatus)*/
+                    viewStatus && fromUser === userSoul && typeOfCheck(stringToMap<string, ViewStatusMapSub>(viewStatus))
                 }
                 </p>
             </div>
@@ -172,10 +190,10 @@ export default function MessageLayout({createdIn, msgCreatedInDelete, setMsgCrea
             onClick={divDeleteML}>
     
             </div>
-            <div className="text-white font-bold flex flex-col">
+            {/*<div className="text-white font-bold flex flex-col">
                 <span>DeletedTo: {deletedTo}</span>
                 <span>ViewStatus: {viewStatus}</span>
-            </div>
+            </div>*/}
         </div>
     )
 
