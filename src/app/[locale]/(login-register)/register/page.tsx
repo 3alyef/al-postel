@@ -1,6 +1,5 @@
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
-import DataUserFormEmail from "@/app/components/dataUserFormEmail/dataUserFormEmail";
 import RegisterName from "@/app/components/registerName/registerName";
 export default async function Login({
   params: { locale }

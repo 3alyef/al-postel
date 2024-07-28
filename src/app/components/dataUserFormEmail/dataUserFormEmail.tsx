@@ -38,7 +38,7 @@ export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Acc
                 const data = await response.json();
                 console.log(data.msg);
                 } catch (error) {
-                console.error('There was an error!', error);
+                    console.error('There was an error!', error);
                 }
         };
         

@@ -75,7 +75,7 @@ export function AlpostelMain({_isSemitic}:propsAlpostelMain) {
     };
     useEffect(() => {
         const tokenToM2 = localStorage.getItem("tokenToM2");
-        const m2URL = localStorage.getItem("linkM2");
+        const m2URL = process.env.NEXT_PUBLIC_M1_URL;
         
         if (tokenToM2 && m2URL) {
             const server = new ConnectM2(m2URL, tokenToM2, setMessagesContent, setMessagesGroupContent);

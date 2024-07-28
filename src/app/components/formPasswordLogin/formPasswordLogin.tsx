@@ -32,7 +32,6 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         const email = localStorage.getItem("userEmailToLogin")
         const password = passwordValue;
         if(email){
-          
             const response: tokenAuthenticate | {message: string} = await dataLoginToM1({email, password});
             if("message" in response){
                 // error
@@ -42,7 +41,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
             } else {
                 if(response.auth && response.token){
                     localStorage.setItem("tokenToM2", response.token);
-                    localStorage.setItem("linkM2", response.URL_M2)
+                    //localStorage.setItem("linkM2", response.URL_M2);
                     redirectToAlpostel();
                     
                 }
