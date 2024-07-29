@@ -84,7 +84,7 @@ export default function FormEmailLogin({locale, textLabelEmail, _isSemitic, forg
                         >{createAccount}</div>
                     </Link>
                 </div>
-                <div className="btnNextAccount w-[35%]">
+                <div className="btnNextAccount w-[40%]">
                     <input type="submit" value={next} className="nextBtnAccount"/>
                 </div>
                 

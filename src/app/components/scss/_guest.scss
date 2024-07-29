@@ -1,0 +1,16 @@
+.buttonGuest {
+    cursor: pointer;
+    font-weight: 600;
+}
+.buttonGuest:hover {
+    background-color: #3d373742;
+}
+.buttonGuest:active {
+    background-color: #0000007a;
+}
+
+@media (max-width: 500px) {
+    .testOptionsSpan {
+        display: none;
+    }
+}

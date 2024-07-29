@@ -17,6 +17,7 @@
 @import "./emojisList";
 @import "./photoIcon";
 @import "./deleteMsgScreen";
+@import "./guest";
 .rtl {
     direction: rtl;
 }
@@ -41,6 +42,15 @@
     background-color: #888888d0; /* cor de fundo do polegar */
     border-radius: 5px; /* borda arredondada do polegar */
 }
-    
+
+footer {
+    font-weight: 400;
+}
+
+// Token
+
+.main_Login span > span:first-child {
+    border-color: #8BABC0 !important;
+}
 
 

@@ -1,4 +1,4 @@
-import DefaultBackground from "@/app/components/defaultBackground/defaultBackgound";
+import DefaultBackground from "@/app/components/defaultBackground/defaultBackground";
 import { Locale } from "@/i18n";
 import { getDictionary } from "@/lib/get-dictionary";
 
@@ -12,7 +12,7 @@ export default async function RootLayout({
     <body
     className="min-h-[100vh] bg-black flex flex-col "
     >
-      <DefaultBackground _isSemitic={_isSemitic}>
+      <DefaultBackground _isSemitic={_isSemitic} locale={locale} tests={false}>
         <main className="alPostelMain relative">
           {children}
         </main>
