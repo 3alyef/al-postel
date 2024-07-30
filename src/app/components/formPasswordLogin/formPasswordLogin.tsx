@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputText from "../inputText/inputText";
 import { Locale } from "@/i18n";
-import { dataLoginToM1, tokenAuthenticate } from "@/services/dataLoginToM1.service";
+import { dataLoginToM1, TokenAuthenticate } from "@/services/dataLoginToM1.service";
 import { useRouter } from "next/navigation";
 interface propsFormRegister {
     locale: Locale;
@@ -32,7 +32,7 @@ export default function FormPasswordLogin({locale, formCostumerClass, _isSemitic
         const email = localStorage.getItem("userEmailToLogin")
         const password = passwordValue;
         if(email){
-            const response: tokenAuthenticate | {message: string} = await dataLoginToM1({email, password});
+            const response: TokenAuthenticate | {message: string} = await dataLoginToM1({email, password});
             if("message" in response){
                 // error
                 if(response.message === "Password Invalid!"){
