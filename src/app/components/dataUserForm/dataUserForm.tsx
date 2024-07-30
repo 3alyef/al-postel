@@ -14,10 +14,11 @@ interface propsDataUser {
     Forgot_password: string;
     Next: string;
     messageError: string;
-    setPasswordScreen: Dispatch<SetStateAction<boolean>>
+    setPasswordScreen: Dispatch<SetStateAction<boolean>>;
+    setLoading: Dispatch<SetStateAction<boolean>>
 }
 
-export default function DataUserForm({locale, _isSemitic, Enter_your_password, Create_Account, Forgot_password, Next, messageError, setPasswordScreen}: propsDataUser){
+export default function DataUserForm({locale, _isSemitic, Enter_your_password, Create_Account, Forgot_password, Next, messageError, setPasswordScreen, setLoading}: propsDataUser){
     const [profileImage, setProfileImage] = useState<string>('/imgs/logo.png');
     const [email, setEmail] = useState<string>('');
     const router = useRouter();
@@ -34,7 +35,7 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
         setOnFocusStyle(true);
         //console.log('oi, password')
 
-        const ok:boolean = await verifyAll({locale, emailValue: email, setProcessErrorStyle: setBannerReturn, isPassword: true, setPasswordScreen});
+        const ok:boolean = await verifyAll({locale, emailValue: email, setProcessErrorStyle: setBannerReturn, isPassword: true, setPasswordScreen, setLoading});
         //console.log(ok)
         if(!ok){
             //console.log("tera de reiniciar")

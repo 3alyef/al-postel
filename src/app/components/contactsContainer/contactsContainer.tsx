@@ -292,22 +292,25 @@ export default function ContactsContainer({_isSemitic, serverIo, updateRooms, se
                     </div>
                     {onAlPostelLogo && (
                         <div className="personaGroupOpt">
-                            <div className="addGroupIcon" onClick={()=>{
-                                if(!addGroupIcon){
-                                    setAddGroupIcon(true)
-                                    setAddPersonaIcon(false)
-                                }
-                            }}>
-                                <MdOutlineGroupAdd />
-                            </div>
-                            <div className="addPersonaIcon" onClick={()=>{
+                            {addPersonaIcon ? (
+                                <div className="addGroupIcon" onClick={()=>{
+                                    if(!addGroupIcon){
+                                        setAddGroupIcon(true)
+                                        setAddPersonaIcon(false)
+                                    }
+                                }}>
+                                    <MdOutlineGroupAdd />
+                                </div>
+                                ) : (
+                                <div className="addPersonaIcon" onClick={()=>{
                                 if(!addPersonaIcon){
                                     setAddPersonaIcon(true)
                                     setAddGroupIcon(false)
                                 }
-                            }}>
-                                <MdPersonAddAlt1 />
-                            </div>
+                                }}>
+                                    <MdPersonAddAlt1 />
+                                </div>
+                            )}
                         </div>
                     )}
                     

@@ -25,7 +25,7 @@ export default function RedirectGuest({
             <div className="main_Login">
                 <div className="barLogin">
                     <div className="flex flex-col w-[20em] max-w[100vw] min-h-[100vh] absolute top-0 items-center justify-center">
-                        <div className="flex" style={{justifyContent: "center", alignItems: "center"}}>
+                        <div className="ringLoaderToken flex" style={{justifyContent: "center", alignItems: "center"}}>
                             <RingLoader
                             color="#0034b9ad"
                             size={125}

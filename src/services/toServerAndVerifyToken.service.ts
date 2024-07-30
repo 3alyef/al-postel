@@ -10,21 +10,23 @@ interface PropsVerifyAll {
     setProcessErrorStyle: Dispatch<SetStateAction<boolean>>;
     isPassword: boolean;
     setPasswordScreen: Dispatch<SetStateAction<boolean>>;
+    setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export const verifyAll = async ({emailValue, isPassword, locale, setProcessErrorStyle, setPasswordScreen}: PropsVerifyAll): Promise<boolean> => {
+export const verifyAll = async ({emailValue, isPassword, locale, setProcessErrorStyle, setPasswordScreen, setLoading}: PropsVerifyAll): Promise<boolean> => {
     /*const token = localStorage.getItem(emailValue); // Obtém o token do armazenamento local
     if (token) {
         return await verifyToken({locale, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen, token}); // Se houver token, verifica-o
     } else {*/
-        return await registerToken({locale, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen}); // Se não houver token, registra um novo 
+        setLoading(true);
+        return await registerToken({locale, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen, setLoading}); // Se não houver token, registra um novo 
     //}
 }
 
-const registerToken = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle}: PropsVerifyAll) => {
+const registerToken = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle, setLoading}: PropsVerifyAll) => {
     const emailDataUser: tokenGetImageByEmail | null = await checkEmail(emailValue); // Verifica o e-mail para obter um novo token
     if (emailDataUser) {
-        return await verifyToken({locale, token: emailDataUser.token, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen}); // Verifica o token obtido
+        return await verifyToken({locale, token: emailDataUser.token, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen, setLoading}); // Verifica o token obtido
     } else {
         //setPasswordScreen(false);
         setProcessErrorStyle(true);
@@ -33,7 +35,7 @@ const registerToken = async ({emailValue, isPassword, locale, setPasswordScreen,
 }
 
 
-const verifyToken = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle, token}: PropsVerifyAll & {token: string}): Promise<boolean> => {
+const verifyToken = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle, token, setLoading}: PropsVerifyAll & {token: string}): Promise<boolean> => {
     try {
         const tokenDecrypted = await validateToken(token); // Valida o token
         if ("decryptedToken" in tokenDecrypted) { // Se o token for válido
@@ -47,17 +49,18 @@ const verifyToken = async ({emailValue, isPassword, locale, setPasswordScreen, s
                 localStorage.removeItem("imagemUserToPreLogin")
             }
             setPasswordScreen(true);
+            setLoading(false);
             return true 
         } else {
-            return await handleTokenError({locale, emailValue, setProcessErrorStyle, error: tokenDecrypted.error, isPassword, setPasswordScreen}); // Se houver um erro de token
+            return await handleTokenError({locale, emailValue, setProcessErrorStyle, error: tokenDecrypted.error, isPassword, setPasswordScreen, setLoading}); // Se houver um erro de token
         }
     } catch (error) {
         // Registra qualquer erro no console
-        return await handleTokenError({locale, emailValue, setProcessErrorStyle, error: "Internal server error", isPassword, setPasswordScreen}); // Trata erros internos do servidor
+        return await handleTokenError({locale, emailValue, setProcessErrorStyle, error: "Internal server error", isPassword, setPasswordScreen, setLoading}); // Trata erros internos do servidor
     }
 }
 
-const handleTokenError = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle, error}: PropsVerifyAll & {error: string} ): Promise<boolean> => {
+const handleTokenError = async ({emailValue, isPassword, locale, setPasswordScreen, setProcessErrorStyle, error, setLoading}: PropsVerifyAll & {error: string} ): Promise<boolean> => {
     if (error === "Token expirado" || error === "Token inválido") { // Se o token expirou ou é inválido
         console.log("entrou no retry...")
         localStorage.removeItem(emailValue); // Remove o token do armazenamento local
@@ -65,7 +68,7 @@ const handleTokenError = async ({emailValue, isPassword, locale, setPasswordScre
             //setPasswordScreen(false)
             return false;
         }
-        return await verifyAll({locale, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen}); // Verifica novamente o token <====
+        return await verifyAll({locale, emailValue, setProcessErrorStyle, isPassword, setPasswordScreen, setLoading}); // Verifica novamente o token <====
     } else {
         setProcessErrorStyle(true);// Define o estilo de erro
         //setPasswordScreen(false) 

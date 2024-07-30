@@ -19,6 +19,7 @@ interface PropsFormRegister {
     setPasswordScreen: Dispatch<SetStateAction<boolean>>;
     emailValue: string;
     setEmailValue: Dispatch<SetStateAction<string>>;
+    setLoading: Dispatch<SetStateAction<boolean>>
 }
 
 export default function FormEmailLogin({
@@ -34,13 +35,14 @@ export default function FormEmailLogin({
     onFocusFunction,
     setPasswordScreen,
     emailValue,
-    setEmailValue
+    setEmailValue,
+    setLoading
 }: PropsFormRegister) {
     const [processErrorStyle, setProcessErrorStyle] = useState<boolean>(false);
 
     const dataToLogin2 = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await verifyAll({ locale, emailValue, setProcessErrorStyle, isPassword: false, setPasswordScreen });
+        await verifyAll({ locale, emailValue, setProcessErrorStyle, isPassword: false, setPasswordScreen, setLoading });
     };
 
     return (
