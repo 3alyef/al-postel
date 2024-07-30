@@ -3,12 +3,8 @@ import { useRouter } from "next/navigation";
 import { Locale } from "@/i18n";
 import Image from "next/image";
 import { IoMdArrowDropdown } from "react-icons/io";
-export default function EmailLoginProfile({locale, profileImage, email}:{locale: Locale, profileImage: string, email: string}){
+export default function EmailLoginProfile({locale, profileImage, email, returnLogin}:{locale: Locale, profileImage: string, email: string, returnLogin: ()=>void}){
     const router = useRouter();
-
-    const returnLogin = ()=>{
-        router.push(`/${locale}/login`); 
-    }
 
     //const ImagemProfile = localStorage.getItem("userImagemProfile");
     // TODO: Decriptar o token e depositar a imagem na variavel ImagemProfile

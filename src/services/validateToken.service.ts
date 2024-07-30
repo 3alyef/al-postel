@@ -18,7 +18,7 @@ export async function validateToken(token: string): Promise<{ decryptedToken: ge
         const contain: { decryptedToken: getImageByEmail } | { error: string } = await response.json();
 
         if ('error' in contain) {
-            console.log("TOKEN INVALIDO!!!!!!", contain.error)
+            console.log("Generating new token", contain.error)
             throw { error: contain.error };
         }
 

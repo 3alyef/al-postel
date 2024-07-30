@@ -1,8 +1,6 @@
-"use client"
-
 import { Locale } from "@/i18n";
 import FormEmailLogin from "../formEmailLogin/formEmailLogin";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface propsDataUserFormEmail  {
     locale: Locale;
@@ -11,10 +9,14 @@ interface propsDataUserFormEmail  {
     Create_Account: string;
     Forgot_your_email: string; 
     Next: string;
-    could_not_find_your_Al_PostEl_account: string
+    could_not_find_your_Al_PostEl_account: string;
+    setPasswordScreen: Dispatch<SetStateAction<boolean>>;
+    emailValue:string;
+    setEmailValue: Dispatch<SetStateAction<string>>
 }
-export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Account, Forgot_your_email, Next, could_not_find_your_Al_PostEl_account}: propsDataUserFormEmail){
+export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Account, Forgot_your_email, Next, could_not_find_your_Al_PostEl_account, setPasswordScreen, emailValue, setEmailValue}: propsDataUserFormEmail){
     const [onFocusStyle, setOnFocusStyle] = useState<boolean>(false);
+    
     const onFocus = ()=>{
         setOnFocusStyle(true);
         //console.log('oi')
@@ -48,7 +50,7 @@ export default function DataUserFormEmail({locale, _isSemitic, Email, Create_Acc
     return (
         <>
             <FormEmailLogin locale={locale} textLabelEmail={Email} _isSemitic={_isSemitic} createAccount={Create_Account} forgotEmail={Forgot_your_email} next={Next}
-            could_not_find_your_Al_PostEl_account={could_not_find_your_Al_PostEl_account} onFocusFunction={onFocus} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle}/>  
+            could_not_find_your_Al_PostEl_account={could_not_find_your_Al_PostEl_account} onFocusFunction={onFocus} onFocusStyle={onFocusStyle} setOnFocusStyle={setOnFocusStyle} setPasswordScreen={setPasswordScreen} emailValue={emailValue} setEmailValue={setEmailValue}/>  
         </>
     )
 }

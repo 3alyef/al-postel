@@ -2,7 +2,7 @@
 import { Locale } from "@/i18n";
 import EmailLoginProfile from "../emailLoginProfile/emailLoginProfile";
 import FormPasswordLogin from "../formPasswordLogin/formPasswordLogin";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { verifyAll } from "@/services/toServerAndVerifyToken.service";
 import { GlobalVariables } from "../global/global";
@@ -13,10 +13,11 @@ interface propsDataUser {
     Create_Account: string;
     Forgot_password: string;
     Next: string;
-    messageError: string
+    messageError: string;
+    setPasswordScreen: Dispatch<SetStateAction<boolean>>
 }
 
-export default function DataUserForm({locale, _isSemitic, Enter_your_password, Create_Account, Forgot_password, Next, messageError}: propsDataUser){
+export default function DataUserForm({locale, _isSemitic, Enter_your_password, Create_Account, Forgot_password, Next, messageError, setPasswordScreen}: propsDataUser){
     const [profileImage, setProfileImage] = useState<string>('/imgs/logo.png');
     const [email, setEmail] = useState<string>('');
     const router = useRouter();
@@ -25,14 +26,15 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
     const [bannerReturn, setBannerReturn] = useState<boolean>(false);// Para erro no servidor M1/M2 ou token de senha expirado
 
     const returnLogin = ()=>{
-        router.push(`/${locale}/login`); 
+        //router.push(`/${locale}/login`); 
+        setPasswordScreen(false)
     }
 
     const onFocus = async ()=>{
         setOnFocusStyle(true);
         //console.log('oi, password')
 
-        const ok:boolean = await verifyAll(locale, email, setBannerReturn, true);
+        const ok:boolean = await verifyAll({locale, emailValue: email, setProcessErrorStyle: setBannerReturn, isPassword: true, setPasswordScreen});
         //console.log(ok)
         if(!ok){
             //console.log("tera de reiniciar")
@@ -57,10 +59,10 @@ export default function DataUserForm({locale, _isSemitic, Enter_your_password, C
             setEmail(userEmailLocalStorage)
         }
     }, [])
-    return(
+    return (
         <>
             <div className="w-[100%] costumerToMediaQueryPerfilEmail">
-                <EmailLoginProfile locale={locale} email={email} profileImage={profileImage}/>
+                <EmailLoginProfile locale={locale} email={email} profileImage={profileImage} returnLogin={returnLogin}/>
             </div>
             <FormPasswordLogin locale={locale} formCostumerClass="w-[85%] min-h-[65px]" _isSemitic={_isSemitic} textLabelPassword={Enter_your_password}
             createAccount={Create_Account} 
