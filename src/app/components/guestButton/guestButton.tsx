@@ -35,14 +35,14 @@ export default function GuestButton({locale, setLink1, setLink2, setOnLinks, set
         <span className="testOptionsSpan">
             {
                 optionsOn ? (
-                    <div className="flex justify-evenly items-center w-[55%] font-[400]">
+                    <div className="flex justify-start items-center w-[100%] font-[400] gap-[.75em] px-1">
                         <h3>Opção para Teste:</h3>
                         <button className="buttonGuest p-[6px] rounded-md" onClick={activeGuest}>
                             Gerar Seção
                         </button>
                     </div>
                 ) : (
-                    <button onClick={()=> setOptionsOn(true)} className="buttonGuest w-[2em] p-[6px] rounded-[100%]">
+                    <button onClick={()=> setOptionsOn(true)} className="buttonGuest w-[2em] p-[6px] rounded-[100%] _animation_questionMark">
                         ?
                     </button>
                 )
